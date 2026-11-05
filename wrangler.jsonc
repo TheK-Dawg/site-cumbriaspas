@@ -1,0 +1,12 @@
+// Standard LMB static-assets Worker. Cumbria Spas preview #2: workers.dev only, no custom domain.
+{
+  "name": "site-cumbriaspires-preview2",
+  "account_id": "95d517ae0ca508fcbf5918233c713182",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "workers_dev": true
+}

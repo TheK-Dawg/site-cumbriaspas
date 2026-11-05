@@ -1,0 +1,17 @@
+---
+/**
+ * Real Google Maps embed, lazy iframe, no overlay. The plan has no Google
+ * Business Profile, so every map is an AREA map of the page's locality.
+ */
+interface Props { query: string; label: string; zoom?: number; class?: string }
+const { query, label, zoom = 12, class: cls = '' } = Astro.props;
+const src = `https://www.google.com/maps?q=${encodeURIComponent(query)}&z=${zoom}&output=embed`;
+---
+<div class:list={['map', cls]} data-map-area>
+  <iframe src={src} title={`Map of ${label}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+</div>
+
+<style>
+  .map { border-radius: var(--radius-lg); overflow: hidden; background: var(--tint); aspect-ratio: 4 / 3; }
+  .map iframe { width: 100%; height: 100%; border: 0; display: block; }
+</style>

@@ -1,0 +1,18 @@
+---
+/**
+ * 404. Routes back into the one-page site. Utility page: no sticky bar.
+ */
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { services } from '../data/site';
+---
+
+<Base title="Page Not Found | Cumbria Spas" description="That page is not here. Wood fired spas, Arctic Spas hot tubs, saunas and hot tub servicing are all on the Cumbria Spas front page." page="404" utility={true}>
+  <LegalPage h1="That page is not here" lead="The address may have been typed wrongly or the page may have moved. Everything is on the front page." kind="error">
+    <h2>What we do</h2>
+    <ul>
+      {services.map((s) => <li><a href={`/${s.anchor === '#quote' ? '#services' : s.anchor}`}>{s.name}</a></li>)}
+    </ul>
+    <p>Or go to <a href="/">the front page</a>, or <a href="/#contact">contact us</a>.</p>
+  </LegalPage>
+</Base>

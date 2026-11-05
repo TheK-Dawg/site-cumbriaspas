@@ -1,0 +1,22 @@
+---
+/**
+ * THANK YOU. Noindex, no sticky bar, no form.
+ */
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { business } from '../data/site';
+---
+
+<Base title="Enquiry Sent | Cumbria Spas" description="Thanks for your enquiry to Cumbria Spas. We will get back to you about wood fired spas, Arctic Spas hot tubs, saunas or hot tub servicing." page="thank-you" utility={true}>
+  <LegalPage h1="Thanks, we will be in touch soon" lead="Your enquiry has reached Cumbria Spas. Here is how to reach us in the meantime." kind="thank-you">
+    <h2>Want to talk now?</h2>
+    <ul>
+      <li>Call <a href={business.phoneHref}>{business.phone}</a></li>
+      <li>Email <a href={`mailto:${business.email}`}>{business.email}</a></li>
+      <li><a href={business.whatsapp} target="_blank" rel="noopener">Message us on WhatsApp</a></li>
+    </ul>
+    <h2>Try before you buy</h2>
+    <p>Want to try a hot tub before you buy? Just ask when we get back to you.</p>
+    <p>Or go back to <a href="/">the front page</a>.</p>
+  </LegalPage>
+</Base>

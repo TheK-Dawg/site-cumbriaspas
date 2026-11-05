@@ -1,0 +1,252 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/figtree';
+
+/* ------------------------------------------------------------------
+   Tokens. The v3 register (light page, brand blue, deep-blue panels, ice-blue
+   tint cards, soft rounded surfaces, pill controls, floating pill header)
+   themed to Cumbria Spas from his logo: the "cumbria" navy #253C5E and the
+   "spas" light blue #4FAADF, with a bright orange on every call to action.
+   The token names keep the boilerplate's "teal" labels so every component
+   picks the new palette up unchanged.
+   ------------------------------------------------------------------ */
+:root {
+  --page: #f4f8fb;
+  --card: #fdfefe;
+  --tint: #e2eef5;
+  --tint-2: #cfe2ec;
+  --teal: #253c5e;      /* logo navy: links and badges on light (10.4:1 on --page) */
+  --teal-deep: #1c2f4b; /* deeper logo navy: dark panels, footer, servicing slab */
+  --teal-ink: #121f33;  /* deepest navy ground behind the hero gradient */
+  --ink: #0d1d27;
+  /* Accent: a bright orange on every button fill, carrying DARK text (law:
+     no white on accent): #1a1208 on #ff7a1a is 7.1:1, and on the darkened
+     hover fill #f26a0a it is 6.0:1. The deep shade draws focus rings on the
+     light page (4.4:1); on the dark navy grounds a lighter tint takes over. */
+  --accent: #ff7a1a;
+  --accent-deep: #c25200;
+  --accent-hover: #f26a0a;
+  --accent-light: #ffa25e;
+  --on-accent: #1a1208;
+  /* Secondary accent: the logo's "spas" light blue, paired with the orange.
+     Fills (chips, step badges, panel details) carry the deepest navy, never
+     white: #121f33 on #4faadf is 6.4:1 (the logo navy itself only reaches
+     4.3:1 there). As text on the light page it is too pale, so link hovers
+     use the same-hue deep shade (5.3:1); on the navy grounds the true light
+     blue carries hovers and icons (5.2:1 on --teal-deep). */
+  --sky: #4faadf;
+  --sky-deep: #1c6ca3;
+  --on-sky: #121f33;
+  --on-dark: #f2f7fa;
+  --muted-dark: rgb(242 247 250 / 0.76);
+  --faint-dark: rgb(242 247 250 / 0.5);
+  --on-light: #0d1d27;
+  --muted-light: rgb(13 29 39 / 0.68);
+  --faint-light: rgb(13 29 39 / 0.45);
+  --line-dark: rgb(255 255 255 / 0.14);
+  --line-light: rgb(28 47 75 / 0.12);
+
+  --font-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --radius: 14px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --pill: 999px;
+
+  --container: 1280px;
+  --gutter: clamp(20px, 4vw, 56px);
+  --header-h: 84px;
+  --inset: 16px; /* the light page gutter the rounded slabs sit inside on desktop */
+
+  /* Section padding: three values, tied to energy (rest / medium / high). */
+  --pad-rest: clamp(80px, 9vw, 120px);
+  --pad-med: clamp(60px, 7vw, 96px);
+  --pad-high: clamp(52px, 6vw, 80px);
+
+  /* Type scale (workhorse pack: 1.2 mobile / 1.333 desktop). Six sizes. */
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-lg: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
+  --text-xl: clamp(1.375rem, 1.2rem + 0.9vw, 1.875rem);
+  --text-2xl: clamp(1.75rem, 1.3rem + 1.9vw, 2.625rem);
+  --text-display: clamp(2.125rem, 1.35rem + 3.3vw, 4rem); /* 34px -> 64px */
+
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --shadow-card: 0 10px 30px rgb(37 60 94 / 0.08);
+  --shadow-float: 0 18px 50px rgb(37 60 94 / 0.16);
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--on-light);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4 { font-weight: 700; margin: 0; letter-spacing: -0.02em; line-height: 1.12; }
+h1 { line-height: 1.04; }
+p { margin: 0; }
+button { font: inherit; }
+/* Pages without the hero slab (legal, utility) clear the fixed header themselves. */
+.page-top { padding-top: calc(var(--header-h) + 48px); }
+
+/* One-page anchor nav: sections land clear of the fixed header. */
+section[id] { scroll-margin-top: calc(var(--header-h) + 4px); }
+
+.container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); width: 100%; }
+
+/* Rounded slabs: the template's inset panels. Full-bleed on phones. */
+.slab { border-radius: var(--radius-xl); margin-inline: var(--inset); }
+@media (max-width: 760px) { .slab { margin-inline: 0; border-radius: var(--radius-lg); } }
+
+/* Section head: h2 left, lead right (the template's two-column header row). No eyebrows (law). */
+.sh { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 20px 64px; align-items: end; margin-bottom: 44px; }
+.sh__h2 { font-size: var(--text-2xl); max-width: 22ch; text-wrap: balance; }
+.sh__lead { color: var(--muted-light); max-width: 50ch; font-size: var(--text-base); }
+.on-dark .sh__lead { color: var(--muted-dark); }
+.sh--centre { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+.sh--centre .sh__h2, .sh--centre .sh__lead { max-width: 30ch; }
+@media (max-width: 900px) { .sh { grid-template-columns: 1fr; gap: 14px; margin-bottom: 32px; } }
+
+/* Buttons: the template's pill. Primary carries the orange accent everywhere. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 14px 26px;
+  border-radius: var(--pill);
+  border: 1.5px solid transparent;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease), color 0.2s var(--ease), transform 0.2s var(--ease);
+  position: relative;
+  overflow: hidden;
+  --btn-sheen: rgb(255 255 255 / 0.38);
+}
+.btn:active { transform: translateY(1px); }
+/* Dark text on the accent, kept dark on the darkened hover fill. No glow, no shadow bloom. */
+.btn-primary { background: var(--accent); color: var(--on-accent); --btn-sheen: rgb(255 255 255 / 0.32); }
+.btn-primary:hover, .btn-primary:focus-visible { background: var(--accent-hover); color: var(--on-accent); }
+.btn, .btn:hover, .btn:focus-visible { box-shadow: none; }
+.btn-ghost { background: transparent; color: var(--on-dark); border-color: rgb(255 255 255 / 0.55); }
+.btn-ghost:hover { background: rgb(255 255 255 / 0.1); border-color: rgb(255 255 255 / 0.85); }
+.btn-ghost-ink { background: transparent; color: var(--teal-deep); border-color: rgb(37 60 94 / 0.35); --btn-sheen: rgb(37 60 94 / 0.1); }
+.btn-ghost-ink:hover { background: rgb(37 60 94 / 0.06); border-color: rgb(37 60 94 / 0.7); }
+.btn-teal { background: var(--teal-deep); color: var(--on-dark); }
+.btn-teal:hover { background: var(--teal-ink); }
+
+/* HOUSE RULE: every button carries the sheen, a continuous 4.2 s diagonal sweep,
+   siblings staggered 700 ms, hover/focus fires a 600 ms quick sweep, and the
+   whole thing is off under reduced motion. Pure CSS, one pseudo-element. */
+.btn::after,
+[data-sticky-cta] a::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  bottom: -60%;
+  left: -75%;
+  width: 45%;
+  background: linear-gradient(90deg, transparent 0%, var(--btn-sheen, rgb(255 255 255 / 0.38)) 50%, transparent 100%);
+  transform: skewX(-22deg) translateX(0);
+  opacity: 0;
+  pointer-events: none;
+  animation: btn-sheen-loop 4200ms var(--ease) infinite;
+  animation-delay: var(--sheen-delay, 0ms);
+}
+[data-sticky-cta] a { position: relative; overflow: hidden; }
+.btn:nth-of-type(2), .btn:nth-child(2), [data-sticky-cta] a:nth-child(2) { --sheen-delay: 700ms; }
+.btn:nth-of-type(3), .btn:nth-child(3) { --sheen-delay: 1400ms; }
+.btn:hover::after,
+.btn:focus-visible::after,
+[data-sticky-cta] a:hover::after,
+[data-sticky-cta] a:focus-visible::after { animation: btn-sheen 600ms var(--ease); }
+@keyframes btn-sheen-loop {
+  0%   { opacity: 0; transform: skewX(-22deg) translateX(0); }
+  3%   { opacity: 1; }
+  20%  { opacity: 1; }
+  24%  { opacity: 0; transform: skewX(-22deg) translateX(360%); }
+  100% { opacity: 0; transform: skewX(-22deg) translateX(360%); }
+}
+@keyframes btn-sheen {
+  0%   { opacity: 0; transform: skewX(-22deg) translateX(0); }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { opacity: 0; transform: skewX(-22deg) translateX(360%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn::after, .btn:hover::after, .btn:focus-visible::after,
+  [data-sticky-cta] a::after, [data-sticky-cta] a:hover::after, [data-sticky-cta] a:focus-visible::after { animation: none; }
+}
+
+/* LAW: paired buttons are always EQUAL WIDTH. Side by side, every button in a
+   row gets one equal 1fr column sized to the widest label; on phones the
+   pair stacks full-width (still equal). */
+.btn-row { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 12px; align-items: center; width: max-content; max-width: 100%; }
+.btn-row .btn { width: 100%; }
+@media (max-width: 640px) {
+  .btn-row { display: flex; flex-direction: column; align-items: stretch; width: 100%; }
+  .btn-row .btn { width: 100%; }
+}
+
+/* Scroll reveal: opted in with data-motion="reveal". JS adds is-in. */
+[data-motion='reveal'] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-motion='reveal'].is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-motion='reveal'] { opacity: 1; transform: none; transition: none; }
+}
+
+.skip-link {
+  position: absolute; left: 12px; top: -60px; z-index: 200;
+  background: var(--accent); color: var(--on-accent); padding: 10px 14px; border-radius: var(--pill);
+}
+.skip-link:focus { top: 12px; }
+
+:focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 3px; }
+.on-dark :focus-visible { outline-color: var(--accent-light); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Prose (legal pages, article bodies, service sections). */
+.prose { max-width: 68ch; }
+.prose p { margin: 0 0 1.1em; }
+.prose h2 { font-size: var(--text-xl); margin: 1.9em 0 0.6em; }
+.prose h3 { font-size: var(--text-lg); margin: 1.5em 0 0.5em; }
+.prose ul, .prose ol { margin: 0 0 1.2em; padding-left: 1.2em; }
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+.prose li { margin-bottom: 0.4em; }
+.prose a { color: var(--teal); font-weight: 600; text-decoration: none; }
+.prose a:hover { color: var(--sky-deep); }
+.prose strong { font-weight: 700; }
+/* A button inside prose keeps its own colours (the prose link rule must not win). */
+.prose a.btn { text-decoration: none; }
+.prose a.btn-primary { color: var(--on-accent); }
+.prose a.btn-primary:hover { color: var(--on-accent); }
+
+/* Typographic list arrow (no icon set on this build). */
+.tick-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.tick-list li { display: flex; align-items: baseline; gap: 12px; }
+.tick-list li::before { content: '→'; color: var(--sky-deep); font-weight: 700; flex-shrink: 0; }
+.on-dark .tick-list li::before { color: var(--sky); }

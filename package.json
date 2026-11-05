@@ -1,0 +1,25 @@
+{
+  "name": "site-cumbriaspires-preview2",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cumbria Spas: one-page homepage preview #2 on the v3 layout (247plumbersnorwich.uk build). Cloudflare Worker static assets.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "check": "node scripts/check.mjs",
+    "deploy:dry": "wrangler deploy --dry-run",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@fontsource-variable/figtree": "^5.2.5",
+    "astro": "^7.1.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.4",
+    "tailwindcss": "^4.1.4",
+    "wrangler": "^3.99.0"
+  }
+}

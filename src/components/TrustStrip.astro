@@ -1,0 +1,45 @@
+---
+/**
+ * TRUST STRIP (prove). Takes the reviews band's slot: his site carries no
+ * reviews, so four verifiable facts sit in a white card overlapping the hero
+ * foot, with the two brands he sells beside them.
+ */
+interface Item { k: string; v: string }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+---
+<section class="ts section-trust on-light" data-section="trust">
+  <div class="container">
+    <div class="ts__card" data-motion="reveal">
+      <ul class="ts__list">
+        {items.map((i) => (
+          <li class="ts__item">
+            <span class="ts__k">{i.k}</span>
+            <span class="ts__v">{i.v}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="ts__brands">
+        <span class="ts__brands-label">Brands we sell</span>
+        <img src="/images/arctic-artic-20spas-20logo.jpg" alt="Arctic Spas" width="600" height="171" loading="lazy" decoding="async" />
+        <img src="/images/wood-big-20logo.jpg" alt="Kubilų pasaulis wood fired spas" width="960" height="400" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ts { background: var(--page); padding: 12px 0 0; }
+  .ts__card { background: var(--card); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 26px 30px; display: grid; grid-template-columns: 1fr auto; gap: 24px 40px; align-items: center; }
+  .ts__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px 28px; }
+  .ts__item { display: flex; flex-direction: column; gap: 4px; }
+  .ts__k { font-size: 1.1875rem; font-weight: 800; color: var(--teal-deep); letter-spacing: -0.015em; line-height: 1.2; }
+  .ts__v { font-size: 0.875rem; color: var(--muted-light); line-height: 1.4; }
+  .ts__brands { display: flex; align-items: center; gap: 18px; padding-left: 32px; }
+  .ts__brands-label { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint-light); max-width: 7ch; line-height: 1.3; }
+  .ts__brands img { height: 44px; width: auto; mix-blend-mode: multiply; }
+  .ts__brands img + img { height: 52px; }
+  @media (max-width: 1180px) { .ts__card { grid-template-columns: 1fr; } .ts__brands { padding-top: 18px; border-top: 1px solid var(--line-light); } }
+  @media (max-width: 760px) { .ts__list { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ts__card { padding: 22px 20px; } }
+  @media (max-width: 420px) { .ts__brands { flex-wrap: wrap; gap: 12px; } .ts__brands-label { max-width: none; width: 100%; } .ts__brands img { height: 38px; } .ts__brands img + img { height: 44px; } }
+</style>

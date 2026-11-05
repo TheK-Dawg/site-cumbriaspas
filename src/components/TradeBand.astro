@@ -1,0 +1,44 @@
+---
+/**
+ * TRADE OFFER BAND (convert). A bright, clean slab in the site's button accent
+ * (--accent, lifting a touch lighter across the band) carrying dark ink, the
+ * same pairing as every orange button, photo right, for the holiday park and
+ * small site offer. The button flips to the deep brand blue so it reads on
+ * the orange. Spaced like every other slab (the --inset gap above and below).
+ */
+interface Props { heading: string; body: string[]; chips: string[]; image: string; imageAlt: string }
+const { heading, body, chips, image, imageAlt } = Astro.props;
+---
+<section class="tb section-trade" id="trade" data-section="trade">
+  <div class="tb__slab slab on-light">
+    <div class="tb__inner container">
+      <div class="tb__copy" data-motion="reveal">
+        <h2 class="tb__h2">{heading}</h2>
+        {body.map((p) => <p class="tb__p">{p}</p>)}
+        <ul class="tb__chips">
+          {chips.map((c) => <li>{c}</li>)}
+        </ul>
+        <div class="btn-row">
+          <a href="#quote" class="btn btn-teal" data-cta="trade-quote" data-service="Trade / holiday park enquiry">Ask for Trade Prices</a>
+        </div>
+      </div>
+      <figure class="tb__photo" data-motion="reveal" style="--reveal-delay: 80ms">
+        <img src={image} alt={imageAlt} width="1239" height="654" loading="lazy" decoding="async" />
+      </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tb { padding: 0 0 var(--inset); background: var(--page); }
+  .tb__slab { background: linear-gradient(120deg, var(--accent) 0%, #ff8a33 55%, #ff9a4d 100%); color: var(--on-accent); padding: var(--pad-med) 0; position: relative; overflow: hidden; }
+  .tb__slab::before { content: ''; position: absolute; right: 30%; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: rgb(255 255 255 / 0.12); pointer-events: none; }
+  .tb__inner { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 40px 64px; align-items: center; position: relative; }
+  .tb__h2 { font-size: var(--text-2xl); max-width: 20ch; text-wrap: balance; margin-bottom: 16px; }
+  .tb__p { color: var(--on-accent); max-width: 52ch; margin-bottom: 12px; }
+  .tb__chips { list-style: none; margin: 18px 0 26px; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .tb__chips li { background: var(--sky); color: var(--on-sky); border-radius: var(--pill); padding: 8px 14px; font-size: 0.875rem; font-weight: 700; }
+  .tb__photo { margin: 0; border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 4 / 3; box-shadow: 0 30px 60px rgb(120 50 0 / 0.28); }
+  .tb__photo img { width: 100%; height: 100%; object-fit: cover; object-position: 70% center; }
+  @media (max-width: 960px) { .tb__inner { grid-template-columns: 1fr; } .tb__photo { aspect-ratio: 16 / 10; } }
+</style>

@@ -1,0 +1,40 @@
+---
+/**
+ * CTA BAND (convert). The v3 full-bleed photo slab with a centred white card
+ * floating over it. Used once, for Try Before You Buy: Quick Quote Online
+ * (primary) and a call button (secondary), equal width. No visit phrasing.
+ */
+import { business } from '../data/site';
+interface Props { heading: string; line: string; image: string; imageAlt: string; imagePos?: string }
+const { heading, line, image, imageAlt, imagePos = 'center' } = Astro.props;
+---
+<section class="cb section-cta" id="try-before-you-buy" data-section="cta">
+  <div class="cb__slab slab" data-motion="scrub">
+    <img class="cb__bg" src={image} alt={imageAlt} width="896" height="1003" loading="lazy" decoding="async" style={`object-position: ${imagePos}`} />
+    <div class="cb__scrim" aria-hidden="true"></div>
+    <div class="container cb__inner">
+      <div class="cb__card on-light" data-motion="reveal">
+        <h2 class="cb__h2">{heading}</h2>
+        <p class="cb__line">{line}</p>
+        <div class="btn-row cb__btns">
+          <a href="#quote" class="btn btn-primary" data-cta="band-quote">Quick Quote Online</a>
+          <a href={business.phoneHref} class="btn btn-ghost-ink" data-cta="band-call">Call {business.phone}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cb { padding: 0 0 var(--inset); background: var(--page); }
+  .cb__slab { position: relative; overflow: hidden; min-height: 560px; display: flex; align-items: flex-end; }
+  .cb__bg { position: absolute; inset: -60px 0 0 0; width: 100%; height: calc(100% + 60px); object-fit: cover; transform: translateY(calc(var(--progress, 0) * 60px)); }
+  .cb__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(18 31 51 / 0.1) 0%, rgb(18 31 51 / 0.55) 100%); }
+  .cb__inner { position: relative; display: flex; justify-content: center; padding-top: 140px; }
+  .cb__card { background: rgb(253 254 254 / 0.97); border-radius: var(--radius-xl) var(--radius-xl) 0 0; padding: clamp(32px, 4vw, 56px) clamp(24px, 5vw, 80px) clamp(28px, 3vw, 44px); text-align: center; max-width: 780px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .cb__h2 { font-size: var(--text-2xl); max-width: 22ch; text-wrap: balance; margin-bottom: 14px; color: var(--teal-deep); }
+  .cb__line { color: var(--muted-light); max-width: 54ch; margin-bottom: 26px; }
+  .cb__btns { justify-content: center; }
+  @media (max-width: 640px) { .cb__slab { min-height: 500px; } .cb__inner { padding-top: 110px; } .cb__btns { width: 100%; } }
+  @media (prefers-reduced-motion: reduce) { .cb__bg { transform: none; } }
+</style>

@@ -1,0 +1,41 @@
+---
+/**
+ * GALLERY (prove). A plain grid of rounded thumbnails: four across on
+ * desktop, two on phones. Every photo opens the one root Lightbox. Used for
+ * his sauna photos; the first tile spans two rows as the lead image.
+ */
+interface Item { src: string; alt: string }
+interface Props { id?: string; heading: string; note: string; items: Item[]; cta?: string; service?: string }
+const { id = 'gallery', heading, note, items, cta = 'Get a Quote', service } = Astro.props;
+---
+<section class="gl section-gallery on-light" id={id} data-section={id}>
+  <div class="container">
+    <div class="sh" data-motion="reveal">
+      <div><h2 class="sh__h2">{heading}</h2></div>
+      <p class="sh__lead">{note}</p>
+    </div>
+    <ul class="gl__grid" data-gallery>
+      {items.map((g, i) => (
+        <li class:list={[i === 0 && 'gl__lead']} data-motion="reveal" style={`--reveal-delay: ${(i % 4) * 60}ms`}>
+          <button type="button" class="gl__item" data-lightbox aria-label={`Open larger: ${g.alt}`}>
+            <img src={g.src} alt={g.alt} width="900" height="900" loading="lazy" decoding="async" />
+          </button>
+        </li>
+      ))}
+    </ul>
+    <div class="gl__foot" data-motion="reveal">
+      <a href="#quote" class="btn btn-primary" data-cta={`${id}-quote`} data-service={service}>{cta}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gl { background: var(--page); padding: var(--pad-med) 0; }
+  .gl__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .gl__lead { grid-row: span 2; grid-column: span 2; }
+  .gl__item { display: block; width: 100%; height: 100%; aspect-ratio: 1 / 1; padding: 0; border: 0; overflow: hidden; border-radius: var(--radius-lg); background: var(--tint); cursor: zoom-in; }
+  .gl__item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+  .gl__item:hover img { transform: scale(1.05); }
+  .gl__foot { display: flex; justify-content: center; margin-top: 32px; }
+  @media (max-width: 900px) { .gl__grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .gl__lead { grid-row: auto; } .gl__lead .gl__item { aspect-ratio: 4 / 3; } .gl__item { border-radius: var(--radius); } .gl__foot .btn { width: 100%; } }
+</style>

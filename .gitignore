@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+shots/
+media/_src/
+media/_meta.json
+_ref/
+.wrangler/
+scripts/_probe/
+.env
+.env.*
+!.env.example
+.tmp-photos/
+media/raw/
+ref/*.png
+ref/*.jpg

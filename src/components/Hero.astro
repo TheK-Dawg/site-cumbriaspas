@@ -1,0 +1,140 @@
+---
+/**
+ * HERO (convert). The v3 rounded brand slab with the floating header inside
+ * it: H1, one line, the CTA pair (Quick Quote Online + his number as a tel:
+ * button), then the trust bullets directly under the CTAs (his site has no
+ * reviews, so no rating strip). On every viewport his photos are a full-bleed
+ * background that cross-fades slowly between slides (subtle zoom) under one
+ * fixed dark overlay, so the white copy reads the same over every slide and
+ * every cross-fade. Reduced motion: first slide only, static. Flush with the
+ * viewport top.
+ */
+import { business } from '../data/site';
+interface Slide { src: string; alt: string; pos?: string }
+interface Props {
+  h1: string;
+  lead: string;
+  slides: Slide[];
+  trust?: string[];
+}
+const { h1, lead, slides, trust = [] } = Astro.props;
+---
+<section class="hero section-hero on-dark" data-section="hero">
+  <div class="hero__slab slab" data-hero-watch>
+    <div class="hero__bg" data-hero-slides>
+      {slides.map((s, i) => (
+        <img
+          src={s.src}
+          alt={i === 0 ? s.alt : ''}
+          class:list={['hero__slide', { 'is-active': i === 0 }]}
+          width="1239" height="654" decoding="async"
+          fetchpriority={i === 0 ? 'high' : 'low'}
+          style={`object-position: ${s.pos ?? 'center'}`}
+        />
+      ))}
+    </div>
+    <div class="hero__inner container">
+      <div class="hero__copy">
+        <h1 class="hero__h1" data-motion="reveal">{h1}</h1>
+        <p class="hero__lead" data-motion="reveal" style="--reveal-delay: 60ms">{lead}</p>
+        <div class="btn-row hero__btns" data-motion="reveal" style="--reveal-delay: 120ms">
+          <a href="#quote" class="btn btn-primary" data-cta="hero-quote">Quick Quote Online</a>
+          <a href={business.phoneHref} class="btn btn-ghost" data-cta="hero-call" aria-label={`Call ${business.name} on ${business.phone}`}>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
+            {business.phone}
+          </a>
+        </div>
+        {trust.length > 0 && (
+          <ul class="hero__trust" data-motion="reveal" style="--reveal-delay: 240ms">
+            {trust.map((t) => (
+              <li>
+                <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="currentColor" opacity="0.18"/><path d="M5.8 10.4l2.7 2.6 5.7-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Slow cross-fade between his photos. Skipped entirely under reduced
+  // motion (first slide stays, static); paused while the tab is hidden.
+  const wrap = document.querySelector<HTMLElement>('[data-hero-slides]');
+  const slides = wrap ? Array.from(wrap.querySelectorAll<HTMLImageElement>('.hero__slide')) : [];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (slides.length > 1 && !reduce) {
+    let i = 0;
+    window.setInterval(() => {
+      if (document.hidden) return;
+      const next = (i + 1) % slides.length;
+      const prev = slides[i];
+      slides[next].classList.add('is-active');
+      // Hold the outgoing slide at its zoomed scale while it fades out.
+      prev.classList.replace('is-active', 'is-leaving');
+      window.setTimeout(() => prev.classList.remove('is-leaving'), 1700);
+      i = next;
+    }, 5500);
+  }
+</script>
+
+<style>
+  .hero { padding: 0 0 var(--inset); background: var(--page); }
+  .hero__slab {
+    position: relative; overflow: hidden; margin-top: 0;
+    border-top-left-radius: 0; border-top-right-radius: 0;
+    background: var(--teal-ink);
+    color: var(--on-dark);
+    padding: calc(var(--header-h) + 40px) 0 0;
+  }
+  @media (min-width: 761px) { .hero__slab { margin-inline: var(--inset); border-radius: 0 0 var(--radius-xl) var(--radius-xl); } }
+  @media (min-width: 901px) { .hero__slab { min-height: min(86vh, 820px); display: flex; align-items: flex-end; } .hero__inner { width: 100%; } }
+
+  /* Full-bleed slides on every viewport. All slides sit under ONE overlay,
+     so contrast is the same on each slide and at every cross-fade point. */
+  .hero__bg { position: absolute; inset: 0; }
+  .hero__slide {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transition: opacity 1.6s ease-in-out;
+  }
+  .hero__slide.is-active { opacity: 1; animation: hero-zoom 7.5s ease-out both; }
+  .hero__slide.is-leaving { transform: scale(1.06); }
+  @keyframes hero-zoom { from { transform: scale(1); } to { transform: scale(1.06); } }
+  .hero__bg::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgb(14 24 40 / 0.82) 0%, rgb(14 24 40 / 0.66) 40%, rgb(12 21 35 / 0.88) 100%);
+  }
+  /* Desktop: copy sits left, so the overlay is heaviest behind it and eases
+     off to the right where the photo shows through. */
+  @media (min-width: 901px) {
+    .hero__bg::after {
+      background:
+        linear-gradient(90deg, rgb(12 21 35 / 0.9) 0%, rgb(14 24 40 / 0.78) 45%, rgb(14 24 40 / 0.42) 100%),
+        linear-gradient(180deg, rgb(14 24 40 / 0.35) 0%, transparent 30%, rgb(12 21 35 / 0.5) 100%);
+    }
+  }
+
+  .hero__inner { position: relative; }
+  .hero__copy { padding-bottom: clamp(48px, 6vw, 88px); max-width: 620px; }
+  .hero__h1 { font-size: var(--text-display); max-width: 15ch; text-wrap: balance; margin-bottom: 20px; }
+  .hero__lead { font-size: var(--text-lg); color: var(--muted-dark); max-width: 48ch; margin-bottom: 30px; line-height: 1.5; }
+  .hero__btns { margin-bottom: 28px; }
+  .hero__btns svg { flex-shrink: 0; }
+  /* Phones: the CTA pair stacks full-width (also set by .btn-row; restated
+     here so the hero never depends on the order the two rules load in). */
+  @media (max-width: 640px) {
+    .hero__btns { flex-direction: column; align-items: stretch; }
+    .hero__btns .btn { width: 100%; }
+  }
+  .hero__trust { list-style: none; margin: 0; padding: 22px 0 0; border-top: 1px solid var(--line-dark); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 24px; font-size: 0.9375rem; font-weight: 600; }
+  .hero__trust li { display: flex; align-items: center; gap: 10px; }
+  .hero__trust svg { flex-shrink: 0; color: var(--sky); }
+  @media (max-width: 900px) { .hero__copy { padding-bottom: 44px; } }
+  @media (max-width: 520px) { .hero__trust { grid-template-columns: 1fr; gap: 10px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__slide { transition: none; }
+    .hero__slide.is-active { animation: none; }
+  }
+</style>

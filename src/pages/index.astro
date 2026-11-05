@@ -1,0 +1,165 @@
+---
+/**
+ * HOME (Cumbria Spas preview #2, v3 layout). Spine: hero (trust bullets under
+ * the CTAs) → trust strip (his site has no reviews, so no review band) →
+ * services (his five) → about → try before you buy → wood fired spas →
+ * Arctic Spas → saunas gallery → servicing (nine steps) → trade offer →
+ * contact + quote form. Every fact and photo is from cumbriaspas.co.uk.
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import About from '../components/About.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Feature from '../components/Feature.astro';
+import Gallery from '../components/Gallery.astro';
+import Process from '../components/Process.astro';
+import TradeBand from '../components/TradeBand.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { business, saunaGallery, seo } from '../data/site';
+
+const serviceSteps = [
+  { title: 'Line flush added', body: 'A pipe and line flush goes into the water to lift the build-up from inside the pipework.' },
+  { title: 'Circulated for 45 minutes', body: 'The jets run the flush through every line for around 45 minutes before the tub is drained.' },
+  { title: 'Hot tub emptied', body: 'The tub is drained completely, taking the loosened residue out with the old water.' },
+  { title: 'Filters removed', body: 'The filters come out so the housings and the filters themselves can be dealt with properly.' },
+  { title: 'Filters cleaned', body: 'Filters are cleaned through, or replacement advised if they are past their best.' },
+  { title: 'Shell cleaned', body: 'The shell, waterline and seats are cleaned down while the tub is empty.' },
+  { title: 'Jets and fittings cleaned', body: 'Jets, headrests and fittings are cleaned so nothing is left to re-contaminate fresh water.' },
+  { title: 'Refilled', body: 'Filters go back in and the tub is refilled with fresh water.' },
+  { title: 'Chemicals balanced', body: 'The water chemistry is balanced so the tub is ready to use. The full service takes up to three hours.' },
+];
+---
+
+<Base title={seo.title} description={seo.description} page="home">
+  <Hero
+    h1="Wood fired spas and hot tubs for your garden or holiday home"
+    lead="At Cumbria Spas, we sell fantastic wood fired spas and hot tubs in various sizes and specifications. Our off grid wood fired spas don't need electricity, so are popular with lodge parks and glamping sites."
+    slides={[
+      { src: '/images/new-20top-20image.jpg', alt: 'Wood fired hot tub lit up at dusk beside a cottage, stove glowing', pos: '72% center' },
+      { src: '/images/arctic-artic-20spa-1-.jpg', alt: '', pos: '60% center' },
+      { src: '/images/chill-20garden-20home-20page.jpeg', alt: '', pos: '65% 45%' },
+      { src: '/images/saunas-IMG-20260529-WA0087.jpg', alt: '', pos: '60% 55%' },
+    ]}
+    trust={['Off grid spas, no electricity needed', 'Try before you buy', 'Trade prices for holiday parks', 'After sales service second to none']}
+  />
+
+  <TrustStrip
+    items={[
+      { k: `Since ${business.founded}`, v: 'Selling spas and hot tubs in Cumbria' },
+      { k: 'Off grid', v: 'Wood fired spas that need no electricity' },
+      { k: 'Arctic Spas', v: 'The amazing Arctic Spa range of hot tubs' },
+      { k: 'Kirkby In Furness', v: `${business.region}, ${business.postcode}` },
+    ]}
+  />
+
+  <ServicesGrid
+    heading="Hot tubs, spas and saunas, sold and looked after"
+    lead="Wood fired spas, small spas, the Arctic Spas range and saunas, plus hot tub maintenance and servicing so you can continue living the dream long after delivery."
+  />
+
+  <About
+    heading="A unique, private place to try a hot tub before you buy"
+    lead="Cumbria Spas was established in 2013 and sells wood fired spas and hot tubs in various sizes and specifications, suitable for your garden or holiday home."
+    image="/images/chill-20garden-20home-20page.jpeg"
+    imageAlt="Woman relaxing in a wood fired hot tub on a timber deck in a green garden"
+    cardTitle="Living the dream, with service second to none"
+    cardBody={[
+      'Established in 2013, Cumbria Spas offers a unique, private experience where customers can try a hot tub before they buy.',
+      'We offer trade prices for holiday parks and small sites, and our after sales service is second to none so that customers can continue living the dream.',
+    ]}
+    panelHeading="What Cumbria Spas offers"
+    chips={['Wood fired spas', 'Small spas', 'Arctic Spas hot tubs', 'Saunas', 'Hot tub servicing', 'Trade prices', 'Try before you buy']}
+  />
+
+  <CtaBand
+    heading="Find the right spa before you choose"
+    line="Tell us how you plan to use your hot tub and we will help you pick the right one. Send a quick quote and we will get back to you."
+    image="/images/newhome.png"
+    imageAlt="Charcoal wood fired hot tub on a patio with a palm in a planter"
+    imagePos="center 45%"
+  />
+
+  <Feature
+    id="wood-fired"
+    heading="Off grid hot tubs heated by a wood burning stove"
+    body={[
+      'Our off grid wood fired spas don\'t need electricity, so they are popular with lodge parks, glamping sites and holiday homes, as well as gardens.',
+      'We sell wood fired spas in various sizes and specifications from Kubilų pasaulis. Ask us for the brochure to see the full range.',
+    ]}
+    points={[
+      { h: 'Eco-Friendly', p: 'Heated by burning wood rather than drawing on mains electricity.' },
+      { h: 'Off-Grid Use', p: 'No electricity needed, so it can go where there is no supply.' },
+      { h: 'Aesthetic Appeal', p: 'Timber cladding and a stove chimney that suit a garden or lodge.' },
+      { h: 'Cost-Effective', p: 'No electric heater to run while the tub comes up to temperature.' },
+    ]}
+    note="Heating time: around 2 to 4 hours, depending on the tub and the weather."
+    image="/images/wood-tub.jpg"
+    imageAlt="Wood fired hot tub with stainless stove and steps on a gravel base"
+    imagePos="center 70%"
+    inset="/images/wood-big-20logo.jpg"
+    insetAlt="Kubilų pasaulis"
+    cta="Ask About Wood Fired Spas"
+    service="Wood Fired Spas"
+  />
+
+  <Feature
+    id="arctic-spas"
+    tone="tint"
+    flip
+    heading="The amazing Arctic Spa range of hot tubs"
+    body={[
+      'As well as our wood fired spas, Cumbria Spas also sells the amazing Arctic Spa range of hot tubs.',
+      'Ask about Spa Boy®, the Arctic Spas water care system that helps test and adjust the water for you.',
+    ]}
+    points={[
+      { h: 'Arctic Spas range', p: 'The Arctic Spa range of hot tubs, sold by Cumbria Spas.' },
+      { h: 'Spa Boy® water care', p: 'Helps test and adjust the water for you.' },
+    ]}
+    image="/images/arctic-artic-20spa-1-.jpg"
+    imageAlt="Arctic Spas hot tub with cedar cabinet set into a stone bed on a lawn"
+    imagePos="45% center"
+    inset="/images/arctic-artic-20spas-20logo.jpg"
+    insetAlt="Arctic Spas"
+    cta="Ask About Arctic Spas"
+    service="Arctic Spas"
+  />
+
+  <Gallery
+    id="saunas"
+    heading="Outdoor saunas for the garden, the deck or the holiday park"
+    note="Cube saunas with glass fronts, Harvia heaters and wood burning stoves. Tap any photo to see it full size."
+    items={saunaGallery}
+    cta="Ask About Saunas"
+    service="Saunas"
+  />
+
+  <Process
+    id="servicing"
+    heading="Revitalise your hot tub experience with a full service"
+    lead="Our full hot tub service flushes, empties, cleans and refills your tub, then balances the water so it is ready to enjoy again."
+    facts={['9-step service', 'Up to 3 hours on site', 'Flush runs ~45 minutes']}
+    steps={serviceSteps}
+    image="/images/small-IMG-20260611-WA0004.jpg"
+    imageAlt="Clean, empty spa shell showing the jets and seating"
+    cta="Book a Hot Tub Service"
+    service="Hot Tub Maintenance & Servicing"
+  />
+
+  <TradeBand
+    heading="Trade prices for holiday parks and small sites"
+    body={[
+      'Our off grid wood fired spas don\'t need electricity, which is why they are popular with lodge parks and glamping sites.',
+      'We offer trade prices for holiday parks and small sites, with the same after sales service second to none.',
+    ]}
+    chips={['Lodge parks', 'Glamping sites', 'Holiday homes', 'Small sites']}
+    image="/images/saunas-IMG-20260529-WA0087.jpg"
+    imageAlt="Wood fired hot tub and cube sauna side by side on a timber deck"
+  />
+
+  <QuoteForm
+    heading="Get a Quick Quote Online"
+    lead="Send the form and we will get back to you with a quote or to answer your questions."
+  />
+</Base>

@@ -1,0 +1,61 @@
+---
+/**
+ * STICKY CTA BAR (the 247 build's StickyCtaBar behaviour). Slides in once the
+ * visitor scrolls the hero out of view, slides away again while the hero or
+ * the quote form is on screen. Two segments in different colours with a gap:
+ * Quick Quote Online (accent, dark text) and his real number (deep brand
+ * blue, the number only), equal width. LAW: MOBILE ONLY. It never renders at
+ * 768px and up (display: none, and the script never arms it there); tablets
+ * and desktops keep the phone + Quick Quote in the header bar instead.
+ */
+import { business } from '../data/site';
+---
+<div class="sb" data-sticky-cta aria-hidden="true" inert>
+  <a class="sb__quote" href="#quote" data-cta="sticky-quote">Quick Quote Online</a>
+  <a class="sb__call" href={business.phoneHref} data-cta="sticky-call" aria-label={`Call ${business.name} on ${business.phone}`}>{business.phone}</a>
+</div>
+
+<style>
+  .sb {
+    position: fixed; inset: auto 0 0 0; z-index: 85;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: rgb(253 254 254 / 0.97); border-top: 1px solid var(--line-light);
+    transform: translateY(110%); visibility: hidden;
+    transition: transform 0.3s var(--ease), visibility 0s linear 0.3s;
+  }
+  .sb[data-show] { transform: none; visibility: visible; transition: transform 0.3s var(--ease), visibility 0s; }
+  .sb a {
+    display: flex; align-items: center; justify-content: center; min-height: 52px; padding: 14px 10px;
+    border-radius: var(--pill); font-size: 0.9375rem; font-weight: 700; line-height: 1.2; text-align: center; white-space: nowrap;
+    transition: background-color 0.2s var(--ease);
+  }
+  .sb a.sb__quote { background: var(--accent); color: var(--on-accent); --btn-sheen: rgb(255 255 255 / 0.32); }
+  .sb a.sb__quote:hover { background: var(--accent-hover); color: var(--on-accent); }
+  .sb a.sb__call { background: var(--teal-deep); color: var(--on-dark); font-variant-numeric: tabular-nums; }
+  .sb a.sb__call:hover { background: var(--teal-ink); }
+  /* Mobile only: nothing renders from 768px up. */
+  @media (min-width: 768px) { .sb, .sb[data-show] { display: none; } }
+  /* Phones: keep the footer's last line clear of the bar. */
+  @media (max-width: 767px) { :global(body) { padding-bottom: calc(72px + env(safe-area-inset-bottom)); } }
+  @media (prefers-reduced-motion: reduce) { .sb, .sb[data-show] { transition: none; } }
+</style>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const hero = document.querySelector<HTMLElement>('[data-hero-watch]') ?? document.querySelector<HTMLElement>('main > section:first-child');
+  const form = document.querySelector<HTMLElement>('form[data-quote-form]');
+  if (bar && hero) {
+    let heroVisible = true, formVisible = false;
+    const phone = window.matchMedia('(max-width: 767px)');
+    const sync = () => {
+      const show = phone.matches && !heroVisible && !formVisible;
+      bar.toggleAttribute('data-show', show);
+      bar.setAttribute('aria-hidden', String(!show));
+      bar.inert = !show;
+    };
+    new IntersectionObserver((en) => { heroVisible = en[0]?.isIntersecting ?? false; sync(); }, { threshold: 0.05 }).observe(hero);
+    if (form) new IntersectionObserver((en) => { formVisible = en[0]?.isIntersecting ?? false; sync(); }, { threshold: 0.05 }).observe(form);
+    phone.addEventListener('change', sync);
+  }
+</script>

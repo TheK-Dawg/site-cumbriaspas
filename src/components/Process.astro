@@ -1,0 +1,69 @@
+---
+/**
+ * PROCESS (explain). The v3 dark split slab: sticky copy, photo and CTA on
+ * the left, a stack of light numbered cards on the right. Here it carries his
+ * nine-step hot tub service, so the cards are compact (number, title, one
+ * line) with no per-step thumbnails, and two fact chips sit under the lead.
+ */
+interface Step { title: string; body: string }
+interface Props { id?: string; heading: string; lead: string; steps: Step[]; image: string; imageAlt: string; facts?: string[]; cta?: string; service?: string }
+const { id = 'process', heading, lead, steps, image, imageAlt, facts = [], cta = 'Book a Service', service } = Astro.props;
+---
+<section class="pr section-process" id={id} data-section={id}>
+  <div class="pr__slab slab on-dark">
+    <div class="pr__inner container">
+      <div class="pr__left">
+        <div class="pr__sticky">
+          <h2 class="pr__h2" data-motion="reveal">{heading}</h2>
+          <p class="pr__lead" data-motion="reveal" style="--reveal-delay: 120ms">{lead}</p>
+          {facts.length > 0 && (
+            <ul class="pr__facts" data-motion="reveal" style="--reveal-delay: 150ms">
+              {facts.map((f) => <li>{f}</li>)}
+            </ul>
+          )}
+          <figure class="pr__photo" data-motion="reveal" style="--reveal-delay: 180ms">
+            <img src={image} alt={imageAlt} width="1600" height="1200" loading="lazy" decoding="async" />
+          </figure>
+          <a href="#quote" class="btn btn-primary" data-cta={`${id}-quote`} data-service={service} data-motion="reveal" style="--reveal-delay: 240ms">{cta}</a>
+        </div>
+      </div>
+      <ol class="pr__steps">
+        {steps.map((s, i) => (
+          <li class="pr__step" data-motion="reveal" style={`--reveal-delay: ${(i % 3) * 60}ms`}>
+            <span class="pr__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div class="pr__step-body">
+              <h3 class="pr__step-h">{s.title}</h3>
+              <p class="pr__step-p">{s.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pr { padding: 0 0 var(--inset); background: var(--page); }
+  .pr__slab { background: var(--teal-deep); color: var(--on-dark); padding: var(--pad-med) 0; overflow: hidden; position: relative; }
+  .pr__slab::after { content: ''; position: absolute; left: -120px; bottom: -160px; width: 420px; height: 420px; border-radius: 50%; background: rgb(255 255 255 / 0.05); pointer-events: none; }
+  .pr__inner { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 40px 64px; align-items: start; position: relative; }
+  .pr__sticky { position: sticky; top: calc(var(--header-h) + 16px); display: flex; flex-direction: column; align-items: flex-start; }
+  .pr__h2 { font-size: var(--text-2xl); max-width: 18ch; text-wrap: balance; margin-bottom: 16px; }
+  .pr__lead { color: var(--muted-dark); max-width: 46ch; margin-bottom: 20px; }
+  .pr__facts { list-style: none; margin: 0 0 24px; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .pr__facts li { background: var(--sky); color: var(--on-sky); border-radius: var(--pill); padding: 8px 14px; font-size: 0.875rem; font-weight: 700; }
+  .pr__photo { margin: 0 0 26px; width: 100%; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 16 / 10; box-shadow: 0 24px 50px rgb(10 18 31 / 0.35); }
+  .pr__photo img { width: 100%; height: 100%; object-fit: cover; }
+  .pr__steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .pr__step { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; background: var(--tint); color: var(--on-light); border-radius: var(--radius-lg); padding: 18px 22px 18px 18px; }
+  .pr__step:nth-child(odd) { background: var(--card); }
+  .pr__num { width: 46px; height: 46px; border-radius: 50%; background: var(--sky); color: var(--on-sky); display: grid; place-items: center; font-weight: 800; font-size: 0.9375rem; letter-spacing: 0.02em; }
+  .pr__step:last-child .pr__num { background: var(--accent); color: var(--on-accent); }
+  .pr__step-h { font-size: 1.0625rem; margin-bottom: 3px; color: var(--teal-deep); }
+  .pr__step-p { color: var(--muted-light); font-size: 0.9375rem; line-height: 1.5; }
+  @media (max-width: 960px) {
+    .pr__inner { grid-template-columns: 1fr; }
+    .pr__sticky { position: static; }
+  }
+  @media (max-width: 640px) { .pr__step { gap: 14px; padding: 16px; } .pr__num { width: 40px; height: 40px; font-size: 0.875rem; } .pr__sticky .btn { width: 100%; } }
+</style>
