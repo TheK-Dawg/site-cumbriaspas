@@ -5,6 +5,9 @@
  * David gives them). The form sits directly under the hero and trust strip;
  * the areas section carries the page's one map embed. The email is shown as
  * text: the mailbox is not live yet. Links to the legal pages (law).
+ * Operator, 5 Nov 2026: one image/text split row (the service pages' Feature
+ * row, one instance only) between the trust strip and the form, which also
+ * gives the trust strip the page's usual section spacing above the form.
  */
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
@@ -12,9 +15,11 @@ import TrustStrip from '../components/TrustStrip.astro';
 import QuoteForm from '../components/QuoteForm.astro';
 import AreasCovered from '../components/AreasCovered.astro';
 import Gallery from '../components/Gallery.astro';
+import Feature from '../components/Feature.astro';
 import { business } from '../data/site';
 import { picks } from '../lib/media';
 const imgs = picks('contact', 2);
+const split = picks('about', 2)[1];
 const crumbs = [{ name: 'Home', href: '/' }, { name: 'Contact', href: '/contact/' }];
 ---
 
@@ -28,6 +33,26 @@ const crumbs = [{ name: 'Home', href: '/' }, { name: 'Contact', href: '/contact/
   />
 
   <TrustStrip />
+
+  <Feature
+    id="visit"
+    heading="Try a hot tub at the showroom, or see it on WhatsApp first"
+    body={[
+      `Cumbria Spas has sold, installed and serviced hot tubs since ${business.founded}. David, the owner, does the installs, the servicing and the repairs himself, so the person you speak to is the person who does the work.`,
+      'Visitors can try a tub at the showroom before buying. If you cannot visit, ask on WhatsApp: buyers are sent videos and photos of the actual tub, its buttons and its lights.',
+      'Read more <a href="/about/">about Cumbria Spas</a>, or see <a href="/services/">every Cumbria Spas service</a>.',
+    ]}
+    points={[
+      { h: 'Showroom', p: 'Try before you buy at Kirkby In Furness.' },
+      { h: 'Arctic Spas dealer', p: 'Each Arctic Spa installed with an Arctic engineer.' },
+      { h: 'Wood-fired and electric', p: 'The Kubilų pasaulis range of tubs and saunas.' },
+      { h: 'Repairs and servicing', p: 'Residential and commercial hot tubs.' },
+    ]}
+    image={split.src}
+    full={split.full}
+    imageAlt={split.alt}
+    cta="Quick Quote Online"
+  />
 
   <QuoteForm heading="Send a quick quote" lead="Buying a hot tub, booking a service or asking about trade prices: tell us what you need and Cumbria Spas will come back to you." />
 

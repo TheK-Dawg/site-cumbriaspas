@@ -31,7 +31,7 @@ const { heading, line, image, imageAlt, imagePos = 'center' } = Astro.props;
   .cb { padding: 0 0 var(--inset); background: var(--page); }
   .cb__slab { position: relative; overflow: hidden; min-height: 560px; display: flex; align-items: flex-end; }
   .cb__bg { position: absolute; inset: -60px 0 0 0; width: 100%; height: calc(100% + 60px); object-fit: cover; transform: translateY(calc(var(--progress, 0) * 60px)); }
-  .cb__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(18 31 51 / 0.1) 0%, rgb(18 31 51 / 0.55) 100%); }
+  .cb__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(14 33 63 / 0.1) 0%, rgb(14 33 63 / 0.55) 100%); }
   .cb__inner { position: relative; display: flex; justify-content: center; padding-top: 140px; }
   .cb__card { background: rgb(253 254 254 / 0.97); border-radius: var(--radius-xl) var(--radius-xl) 0 0; padding: clamp(32px, 4vw, 56px) clamp(24px, 5vw, 80px) clamp(28px, 3vw, 44px); text-align: center; max-width: 780px; width: 100%; display: flex; flex-direction: column; align-items: center; }
   .cb__h2 { font-size: var(--text-2xl); max-width: 22ch; text-wrap: balance; margin-bottom: 14px; color: var(--teal-deep); }

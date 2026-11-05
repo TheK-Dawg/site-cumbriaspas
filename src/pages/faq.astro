@@ -1,0 +1,69 @@
+---
+/**
+ * FAQ (standard v4 page, added 5 Nov 2026 on the operator's "missing pages"
+ * note). No new facts: a short group about the business from plan Section 1
+ * ("The business", chemicals and parts), then every hub's own questions from
+ * src/data/hub-content.ts, grouped by service. Prices stay on the Repair &
+ * Servicing page only, so any answer carrying a £ figure is left to that page.
+ * Accordions stay open (law); one FAQPage node for the lot.
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import FaqList from '../components/FaqList.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { business, hubs, hubHref, customersLine } from '../data/site';
+import { hubContent } from '../data/hub-content';
+import { picks } from '../lib/media';
+
+const imgs = picks('about', 2);
+const general = [
+  { q: 'How long has Cumbria Spas been going?', a: `Cumbria Spas was established in ${business.founded} and has delivered hot tubs to customers throughout the UK.` },
+  { q: 'Can I try a hot tub before I buy?', a: `Yes. Visitors can try a tub at the showroom at ${business.address} before buying.` },
+  { q: 'I cannot visit. How do I see the tub?', a: 'Ask on WhatsApp. Buyers are sent videos and photos of the actual tub, its buttons and its lights, so the decision is made with all the information.' },
+  { q: 'Who does the installs and the servicing?', a: 'David, the owner, does the installs, the servicing and the repairs himself. Each Arctic Spa is installed with one of Arctic\'s own engineers.' },
+  { q: 'Do you work with businesses as well as homes?', a: customersLine },
+  { q: 'Can I buy online?', a: 'There is no online checkout. Contact by the quote form, call now, or by WhatsApp, and Cumbria Spas will invoice you.' },
+  { q: 'Do you sell hot tub chemicals and parts?', a: 'Yes. Chemicals are sold in small quantities, down to a single pack, and shipped to you. Pumps, heaters and other parts are sourced, held and shipped for people who want to fit a part themselves.' },
+];
+const groups = [
+  { id: 'faq-general', heading: 'About Cumbria Spas', items: general },
+  ...hubs.map((h) => ({ id: `faq-${h.slug}`, heading: h.name, href: hubHref(h.slug), items: hubContent[h.slug].faqs.filter((f) => !/£/.test(f.q + f.a)) })),
+];
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'FAQ', href: '/faq/' }];
+const schema = [{
+  '@type': 'FAQPage', '@id': `${business.url}/faq/#faq`,
+  mainEntity: groups.flatMap((g) => g.items).map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+}];
+---
+
+<Base title="Hot Tub FAQ: Buying, Servicing and Saunas | Cumbria Spas" description="Questions about buying, installing and servicing hot tubs, saunas, pools and swim spas, answered by Cumbria Spas, Kirkby In Furness. Try before you buy." page="faq" crumbs={crumbs} schema={schema}>
+  <Hero
+    h1="Got a question about hot tubs? The Cumbria Spas FAQ"
+    lead="Buying, heating, installing and servicing, service by service. Anything else, contact by the quote form, call now, or by WhatsApp."
+    crumbs={crumbs}
+    slides={imgs.slice(0, 2).map((im) => ({ src: im.src, alt: im.alt }))}
+    trust={['Established in 2013', 'Try before you buy', 'Arctic Spas dealer', 'Residential and commercial']}
+  />
+
+  <TrustStrip />
+
+  <nav class="fj on-light" aria-label="FAQ sections">
+    <div class="container">
+      <ul class="fj__list">{groups.map((g) => <li><a href={`#${g.id}`}>{g.heading}</a></li>)}</ul>
+    </div>
+  </nav>
+
+  {groups.map((g) => (
+    <FaqList id={g.id} heading={`${g.heading}: questions`} lead={g.href ? undefined : 'The questions people ask before they get in touch.'} items={g.items} />
+  ))}
+
+  <QuoteForm heading="Still have a question?" lead="Ask it on the form and Cumbria Spas will come back to you." />
+</Base>
+
+<style>
+  .fj { background: var(--page); padding: var(--pad-high) 0 0; }
+  .fj__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .fj__list a { display: inline-block; padding: 8px 16px; border-radius: var(--pill); background: var(--tint); color: var(--teal-deep); font-weight: 700; font-size: 0.9375rem; }
+  .fj__list a:hover { background: var(--tint-2); }
+</style>

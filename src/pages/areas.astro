@@ -1,0 +1,60 @@
+---
+/**
+ * AREAS COVERED (standard v4 coverage page, added 5 Nov 2026 on the
+ * operator's "missing pages" note). The plan has no town pages, so this is
+ * the one areas page: the coverage wording from plan Section 1, the shared
+ * areas component (the showroom map and every plan town as plain text, in
+ * publish order) and the services. No town is a link until its resources
+ * publish; the published ones are linked from /resources/.
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import Feature from '../components/Feature.astro';
+import AreasCovered from '../components/AreasCovered.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import towns from '../data/towns.json';
+import { business, serviceCoverage, customersLine } from '../data/site';
+import { picks, pick } from '../lib/media';
+
+const imgs = picks('home', 2);
+const row = pick('hot-tub-installation', 0);
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Areas Covered', href: '/areas/' }];
+const schema = [{
+  '@type': 'CollectionPage', '@id': `${business.url}/areas/#areas`, name: 'Areas covered by Cumbria Spas', url: `${business.url}/areas/`,
+  about: towns.map((t) => ({ '@type': 'Place', name: t.town })),
+}];
+---
+
+<Base title="Areas Covered: Cumbria, Lancashire & North Yorkshire | Cumbria Spas" description={`Hot tub repairs and servicing across ${serviceCoverage}, and hot tubs delivered throughout the UK, from the Cumbria Spas showroom at Kirkby In Furness.`} page="areas" crumbs={crumbs} schema={schema}>
+  <Hero
+    h1="Where does Cumbria Spas work? Cumbria, Lancashire and North Yorkshire"
+    lead={`Repairs and servicing cover ${serviceCoverage}. Hot tubs are delivered to customers throughout the UK, and pools can go anywhere in the country.`}
+    crumbs={crumbs}
+    slides={imgs.slice(0, 2).map((im) => ({ src: im.src, alt: im.alt }))}
+    trust={[`${towns.length} towns listed`, 'Showroom at Kirkby In Furness', 'Delivered throughout the UK', 'Residential and commercial']}
+  />
+
+  <TrustStrip />
+
+  <Feature
+    id="coverage"
+    heading="From the showroom at Kirkby In Furness, outwards"
+    body={[
+      `The showroom is at ${business.address}, where visitors can try a tub before buying. Repairs and servicing cover ${serviceCoverage}.`,
+      'Hot tubs, spas and saunas are supplied further afield: Cumbria Spas has delivered hot tubs to customers throughout the UK, a wood-fired tub arrives by 4x4 and trailer and is lifted into place with a HIAB crane, and trade orders to holiday parks are delivered to the buyer\'s site.',
+      customersLine,
+    ]}
+    image={row.src}
+    full={row.full}
+    imageAlt={row.alt}
+    cta="Quick Quote Online"
+  />
+
+  <AreasCovered />
+
+  <ServicesGrid id="area-services" heading="What Cumbria Spas does across the area" lead="The same services in every town on the list." />
+
+  <QuoteForm heading="Ask about your area" lead="Tell us your postcode and what you need, and Cumbria Spas will come back to you." />
+</Base>

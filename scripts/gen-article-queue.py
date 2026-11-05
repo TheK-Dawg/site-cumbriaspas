@@ -29,7 +29,7 @@ for t in town_rows:
         n += 1
         stem = title_stem.get(h['hub'], h['service'])
         queue.append({'n': n, 'hub': h['hub'], 'town': t['town'], 'townSlug': t['slug'],
-                      'path': f"/{h['hub']}/{t['slug']}/", 'title': f"{stem} in {t['town']}",
+                      'path': f"/resources/{h['hub']}-{t['slug']}/", 'title': f"{stem} in {t['town']}",
                       'primaryPhrase': f"{h['primaryPhrase']} {t['town'].lower()}", 'status': 'queued'})
 
 cap = seed['articleCap']['maxArticles']

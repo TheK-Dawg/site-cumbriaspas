@@ -1,6 +1,6 @@
 /** Every canonical, indexable page, grouped by type: drives /sitemap/, /sitemap.xml and llms.txt. */
 import { hubs, hubHref } from '../data/site';
-import { publishedArticles } from './articles';
+import { publishedArticles, articleHref } from './articles';
 
 export interface RouteItem { href: string; name: string; group: string }
 
@@ -15,9 +15,12 @@ export async function allRoutes(): Promise<RouteItem[]> {
     { href: '/about/', name: 'About', group: 'Main pages' },
     { href: '/reviews/', name: 'Reviews', group: 'Main pages' },
     { href: '/contact/', name: 'Contact', group: 'Main pages' },
+    { href: '/faq/', name: 'FAQ', group: 'Main pages' },
+    { href: '/areas/', name: 'Areas Covered', group: 'Main pages' },
     { href: '/gallery/', name: 'Gallery', group: 'Main pages' },
+    { href: '/resources/', name: 'Resources', group: 'Resources' },
     { href: '/sitemap/', name: 'Sitemap', group: 'Main pages' },
-    ...articles.map((a) => ({ href: `/${a.data.hub}/${a.data.townSlug}/`, name: a.data.title, group: 'Resources' })),
+    ...articles.map((a) => ({ href: articleHref(a.data), name: a.data.title, group: 'Resources' })),
     { href: '/terms-and-conditions/', name: 'Terms and Conditions', group: 'Legal' },
     { href: '/privacy-policy/', name: 'Privacy Policy', group: 'Legal' },
   ];

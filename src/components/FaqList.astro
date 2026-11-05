@@ -5,10 +5,10 @@
  * the FAQPage node to its schema graph from the same list.
  */
 interface Faq { q: string; a: string }
-interface Props { heading: string; lead?: string; items: Faq[] }
-const { heading, lead, items } = Astro.props;
+interface Props { heading: string; lead?: string; items: Faq[]; id?: string }
+const { heading, lead, items, id = 'faq' } = Astro.props;
 ---
-<section class="fq section-faq on-light" id="faq" data-section="faq">
+<section class="fq section-faq on-light" id={id} data-section="faq">
   <div class="container fq__inner">
     <div class="fq__head" data-motion="reveal">
       <h2 class="fq__h2">{heading}</h2>
@@ -36,7 +36,7 @@ const { heading, lead, items } = Astro.props;
   .fq__h2 { font-size: var(--text-2xl); max-width: 16ch; text-wrap: balance; color: var(--teal-deep); }
   .fq__lead { color: var(--muted-light); max-width: 42ch; }
   .fq__list { display: flex; flex-direction: column; gap: 12px; }
-  .fq__item { background: var(--card); border-radius: var(--radius-lg); box-shadow: 0 4px 16px rgb(28 47 75 / 0.06); }
+  .fq__item { background: var(--card); border-radius: var(--radius-lg); box-shadow: 0 4px 16px rgb(23 53 94 / 0.06); }
   .fq__q { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 20px 24px; font-weight: 700; font-size: 1.0625rem; color: var(--teal-deep); }
   .fq__q::-webkit-details-marker { display: none; }
   .fq__q svg { flex-shrink: 0; color: var(--sky-deep); transition: transform 0.25s var(--ease); }

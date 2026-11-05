@@ -1,8 +1,9 @@
 ---
 /**
- * TOWN ARTICLE, "<hub> in <Town>" (the SEO engine's output; none are
- * published yet: generation runs after handoff). The article treatment (law):
- * breadcrumbs above the H1 (Home → hub → article), the top takeaways box, a
+ * TOWN ARTICLE, "<hub> in <Town>" (the SEO engine's output; the first three
+ * were written by hand on 5 Nov 2026, mass generation runs after handoff), at
+ * /resources/<hub>-<town-slug>/. The article treatment (law):
+ * breadcrumbs above the H1 (Home → Resources → article), the top takeaways box, a
  * two-column body with a sticky contents list and CTA rail, an image above
  * every H2 (inserted below from the article's own images, then its hub's
  * picks from the R2 pool), reader questions in their own
@@ -13,13 +14,13 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import FaqList from '../../components/FaqList.astro';
-import { publishedArticles } from '../../lib/articles';
+import { publishedArticles, articleSlug, articleHref } from '../../lib/articles';
 import { business, hubBySlug, hubHref, ctaLine } from '../../data/site';
 import { pick, picks } from '../../lib/media';
 
 export async function getStaticPaths() {
   const all = await publishedArticles();
-  return all.map((entry) => ({ params: { hub: entry.data.hub, town: entry.data.townSlug }, props: { entry } }));
+  return all.map((entry) => ({ params: { slug: articleSlug(entry.data) }, props: { entry } }));
 }
 
 const { entry } = Astro.props;
@@ -36,8 +37,9 @@ const body = (entry.rendered?.html ?? '').replace(/<h2\b/g, () => {
   const im = pool[n++ % pool.length];
   return `<figure><img src="${esc(im.src)}" alt="${esc(im.alt)}" loading="lazy" decoding="async" width="1600" height="900"></figure><h2`;
 });
-const url = new URL(`/${d.hub}/${d.townSlug}/`, Astro.site).href;
-const crumbs = [{ name: 'Home', href: '/' }, { name: hub.name, href: hubHref(d.hub) }, { name: d.title, href: `/${d.hub}/${d.townSlug}/` }];
+const href = articleHref(d);
+const url = new URL(href, Astro.site).href;
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Resources', href: '/resources/' }, { name: d.title, href }];
 const schema = [
   {
     '@type': 'Article', '@id': `${url}#article`, headline: d.title, description: d.description, mainEntityOfPage: url,
@@ -75,7 +77,7 @@ const schema = [
           <ul class="tick-list">{d.takeaways.map((t) => <li>{t}</li>)}</ul>
         </div>
         <div class="prose ab__prose" set:html={body} />
-        <p class="ab__hub">More on <a href={hubHref(d.hub)}>{hub.name.toLowerCase()} from Cumbria Spas</a>.</p>
+        <p class="ab__hub">More on <a href={hubHref(d.hub)}>{hub.name.toLowerCase()} from Cumbria Spas</a>, or browse <a href="/resources/">every Cumbria Spas resource</a>.</p>
       </article>
       <aside class="ab__side">
         <div class="ab__sticky">
@@ -90,7 +92,7 @@ const schema = [
             <p class="ab__cta-p">{ctaLine}</p>
             <a href="#quote" class="btn btn-primary" data-cta="article-rail-quote">Quick Quote Online</a>
             <a href={business.phoneHref} class="btn btn-ghost" data-cta="article-rail-call">Call {business.phone}</a>
-            <a href={business.whatsapp} class="btn btn-ghost" target="_blank" rel="noopener" data-cta="article-rail-whatsapp">WhatsApp</a>
+            <a href={business.whatsapp} class="btn btn-ghost" target="_blank" rel="noopener" data-cta="article-rail-whatsapp" data-mobile-only>WhatsApp</a>
           </div>
         </div>
       </aside>
@@ -133,5 +135,7 @@ const schema = [
   .ab__cta-h { font-weight: 800; font-size: 1.125rem; }
   .ab__cta-p { color: var(--muted-dark); font-size: 0.9375rem; margin-bottom: 4px; }
   .ab__cta .btn { width: 100%; }
+  /* WhatsApp buttons are for phones only (operator, 5 Nov 2026). */
+  @media (min-width: 768px) { .ab__cta [data-mobile-only] { display: none; } }
   @media (max-width: 1000px) { .ab__grid { grid-template-columns: 1fr; } .ab__sticky { position: static; } }
 </style>

@@ -1,4 +1,4 @@
-# Cumbria Spas article engine (wired, not yet generating)
+# Cumbria Spas article engine (wired; the first three articles published 5 Nov 2026)
 
 Budget: 9 hubs x 100 towns = 900 articles (`plan/seed.json` `articleCap`). Mass generation runs AFTER handoff
 (brief, 5 Nov 2026); the build ships the wiring and the queue only.
@@ -7,13 +7,17 @@ Budget: 9 hubs x 100 towns = 900 articles (`plan/seed.json` `articleCap`). Mass 
 - Queue, in publish order: `src/data/article-queue.json` (built from the seed by
   `python3 -I scripts/gen-article-queue.py plan/seed.json src/data`). Pinned towns first (Kirkby-in-Furness, Barrow in
   Furness, Kendal, Keswick, Bedale, Ballycastle), then nearest first; each town's nine hubs together.
-- An article is one Markdown file: `src/content/articles/<hub>/<town-slug>.md`, rendered at `/<hub>/<town-slug>/`
-  (home -> hub -> article: two clicks). Schema: `src/content.config.ts` (title, description <= 170 chars, hub, town,
+- An article is one Markdown file: `src/content/articles/<hub>/<town-slug>.md`, rendered at
+  `/resources/<hub>-<town-slug>/` (operator, 5 Nov 2026: the v4 resources pattern). Home -> Resources -> article and
+  home -> hub -> article are both two clicks. `/resources/` indexes every published article by hub. Schema: `src/content.config.ts` (title, description <= 170 chars, hub, town,
   townSlug, publishDate, takeaways 3-6, faqs, optional images from the R2 pool, optional youtube id).
 - A future `publishDate` or `draft: true` keeps a file unpublished, so a batch can be committed ahead and drip out on
   rebuilds (one to five a day).
-- Published articles join `/sitemap.xml`, `/sitemap/` and their hub's "resources by town" list automatically.
-- Template (`src/pages/[hub]/[town].astro`): breadcrumbs above the H1, top takeaways box, sticky contents list and CTA
+- Published articles join `/sitemap.xml`, `/sitemap/`, `/resources/` and their hub's "resources by town" list
+  automatically. Set the item's `status` to `published` in the queue when its file lands.
+- Published so far: `wood-fired-hot-tubs/kirkby-in-furness`, `hot-tub-repair-and-servicing/barrow-in-furness`,
+  `electric-hot-tubs/kendal` (hand-written examples of the rules below; the house standard for the batch).
+- Template (`src/pages/resources/[slug].astro`): breadcrumbs above the H1 (Home -> Resources -> article), top takeaways box, sticky contents list and CTA
   rail, an image above every H2 (the article's own `images`, then the hub's picks from `src/data/media.json`), FAQs at
   the bottom, Article + FAQPage schema around the one business node, link back to the hub.
 

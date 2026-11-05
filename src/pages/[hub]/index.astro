@@ -22,7 +22,7 @@ import QuoteForm from '../../components/QuoteForm.astro';
 import { hubs, business, hubHref } from '../../data/site';
 import { hubContent } from '../../data/hub-content';
 import { picks } from '../../lib/media';
-import { publishedArticles } from '../../lib/articles';
+import { publishedArticles, articleHref } from '../../lib/articles';
 
 export function getStaticPaths() {
   return hubs.map((h) => ({ params: { hub: h.slug } }));
@@ -88,7 +88,7 @@ const schema = [
       <div class="container">
         <h2 class="ra__h2">{hub.name} resources by town</h2>
         <ul class="ra__list">
-          {articles.map((a) => <li><a href={`/${a.data.hub}/${a.data.townSlug}/`}>{a.data.title}</a></li>)}
+          {articles.map((a) => <li><a href={articleHref(a.data)}>{a.data.title}</a></li>)}
         </ul>
       </div>
     </section>

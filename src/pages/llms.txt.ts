@@ -17,6 +17,9 @@ ${hubs.map((h) => `- [${h.name}](${u(hubHref(h.slug))}): ${h.blurb}`).join('\n')
 ## Pages
 - [About](${u('/about/')})
 - [Contact](${u('/contact/')})
+- [Resources](${u('/resources/')})
+- [FAQ](${u('/faq/')})
+- [Areas Covered](${u('/areas/')})
 - [Gallery](${u('/gallery/')})
 - [Sitemap](${u('/sitemap/')})
 `;

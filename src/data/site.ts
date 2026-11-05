@@ -15,6 +15,11 @@ export const business = {
   url: 'https://cumbriaspas.co.uk',
   // Shown as text only: the mailbox is not live yet (the operator sets it up).
   email: 'david@cumbriaspas.co.uk',
+  // TODO(phone): confirm with David. The plan's NAP (from David's own messages) gives 0744 5450908, ten digits
+  // after the 0, which is short for a UK mobile. The operator reads it as 07444 545090 (07444545090). Not changed
+  // without David's word. If he confirms the 11-digit number, update phone, phoneHref (tel:+447444545090) and
+  // whatsapp (https://wa.me/447444545090) here in one pass, then grep the repo for 5450908 (contact page copy,
+  // qa.mjs, the Whapi chat id in BUILD-REPORT.md). The wa.me and tel digits must always match the shown number.
   phone: '0744 5450908',
   phoneHref: 'tel:+447445450908',
   whatsapp: 'https://wa.me/447445450908',
@@ -74,6 +79,9 @@ export const pages = {
   about: { href: '/about/', name: 'About' },
   contact: { href: '/contact/', name: 'Contact' },
   gallery: { href: '/gallery/', name: 'Gallery' },
+  resources: { href: '/resources/', name: 'Resources' },
+  faq: { href: '/faq/', name: 'FAQ' },
+  areas: { href: '/areas/', name: 'Areas Covered' },
   services: { href: '/services/', name: 'Services' },
   sitemap: { href: '/sitemap/', name: 'Sitemap' },
   terms: { href: '/terms-and-conditions/', name: 'Terms and Conditions' },
@@ -88,6 +96,7 @@ export const nav = [
   { label: 'Parts', href: '/parts/' },
   { label: 'About', href: '/about/' },
   { label: 'Reviews', href: '/reviews/' },
+  { label: 'Resources', href: '/resources/' },
   { label: 'Contact', href: '/contact/' },
 ];
 
@@ -104,8 +113,9 @@ export const seo = {
   description: 'Wood-fired and electric hot tubs, Arctic Spas, saunas, swim spas and hot tub repair and servicing from Cumbria Spas, Kirkby In Furness. Try before you buy. Est. 2013.',
 };
 
-/** Footer credit (operator, 20 Oct 2026). No approved trade phrase: the generic one. */
-export const credit = { phrase: 'Local business websites', href: 'https://localmapbooster.com/' };
+/** Footer credit (operator, 20 Oct 2026). Trade phrase for this site (operator, 5 Nov 2026): keyword-relevant to hot
+ * tub businesses, never the generic "Local business websites". */
+export const credit = { phrase: 'Hot tub websites', href: 'https://localmapbooster.com/' };
 
 /**
  * LocalBusiness entity (operator, 22 Oct 2026, ENTITY-SAMEAS). No GBP place id,

@@ -70,10 +70,10 @@ const isService = hubs.some((h) => path.startsWith(hubHref(h.slug))) || path.sta
     pointer-events: auto;
     display: flex; align-items: center; gap: 28px; height: 64px;
     padding: 0 10px 0 18px; border-radius: var(--pill);
-    background: #ffffff; isolation: isolate; box-shadow: 0 8px 30px rgb(37 60 94 / 0.14);
+    background: #ffffff; isolation: isolate; box-shadow: 0 8px 30px rgb(31 65 111 / 0.14);
     transition: box-shadow 0.3s var(--ease), background-color 0.3s var(--ease);
   }
-  .hd[data-stuck] .hd__row { box-shadow: 0 10px 34px rgb(37 60 94 / 0.22); }
+  .hd[data-stuck] .hd__row { box-shadow: 0 10px 34px rgb(31 65 111 / 0.22); }
   .hd__brand { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; line-height: 1; }
   /* His logo is a white-ground JPG: multiply drops the white into the header bar, no frame. */
   .hd__logo { width: 56px; height: 56px; object-fit: contain; mix-blend-mode: multiply; }
@@ -92,7 +92,7 @@ const isService = hubs.some((h) => path.startsWith(hubHref(h.slug))) || path.sta
     transition: opacity 0.2s var(--ease), transform 0.2s var(--ease), visibility 0s linear 0.2s;
   }
   .hd__dd:hover .hd__dd-panel, .hd__dd:focus-within .hd__dd-panel { opacity: 1; visibility: visible; transform: none; transition: opacity 0.2s var(--ease), transform 0.2s var(--ease); }
-  .hd__dd-panel ul { list-style: none; margin: 0; padding: 10px; background: #ffffff; border-radius: var(--radius-lg); box-shadow: 0 18px 44px rgb(37 60 94 / 0.2); display: grid; gap: 2px; }
+  .hd__dd-panel ul { list-style: none; margin: 0; padding: 10px; background: #ffffff; border-radius: var(--radius-lg); box-shadow: 0 18px 44px rgb(31 65 111 / 0.2); display: grid; gap: 2px; }
   .hd__dd-panel a { display: block; padding: 9px 14px; border-radius: var(--radius); font-size: 0.9375rem; font-weight: 600; color: var(--teal-deep); white-space: nowrap; }
   .hd__dd-panel a:hover, .hd__dd-panel a:focus-visible, .hd__dd-panel a[aria-current='page'] { background: var(--tint); color: var(--sky-deep); }
   .hd__menu-h { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-light); padding: 16px 4px 4px; }
@@ -118,7 +118,7 @@ const isService = hubs.some((h) => path.startsWith(hubHref(h.slug))) || path.sta
     border-top: 1px solid var(--line-light);
     border-radius: 0 0 28px 28px;
     padding: 4px 18px 20px;
-    box-shadow: 0 24px 40px rgb(37 60 94 / 0.22);
+    box-shadow: 0 24px 40px rgb(31 65 111 / 0.22);
   }
   .hd[data-open] .hd__row { border-radius: 30px 30px 0 0; box-shadow: none; background: #ffffff; }
   .hd__menu-nav { display: flex; flex-direction: column; }

@@ -38,10 +38,13 @@ if (!remote) {
 }
 
 const hubs = ['wood-fired-hot-tubs', 'hot-tub-repair-and-servicing', 'electric-hot-tubs', 'hot-tub-installation', 'swimming-pools-and-swim-spas', 'saunas', 'arctic-spas-dealer', 'commercial-and-mosaic-tiled-spas', 'trade-and-holiday-park-hot-tubs'];
-const routes = ['/', ...hubs.map((h) => `/${h}/`), '/services/', '/chemicals/', '/parts/', '/reviews/', '/about/', '/contact/', '/gallery/', '/sitemap/', '/terms-and-conditions/', '/privacy-policy/', '/thank-you/', '/this-page-does-not-exist/'];
+const articles = ['/resources/wood-fired-hot-tubs-kirkby-in-furness/', '/resources/hot-tub-repair-and-servicing-barrow-in-furness/', '/resources/electric-hot-tubs-kendal/'];
+const routes = ['/', ...hubs.map((h) => `/${h}/`), '/services/', '/chemicals/', '/parts/', '/reviews/', '/about/', '/contact/', '/gallery/', '/resources/', ...articles, '/faq/', '/areas/', '/sitemap/', '/terms-and-conditions/', '/privacy-policy/', '/thank-you/', '/this-page-does-not-exist/'];
+// The footer must link these on every page (operator, 5 Nov 2026), plus every hub.
+const footerMust = [...hubs.map((h) => `/${h}/`), '/chemicals/', '/parts/', '/reviews/', '/about/', '/contact/', '/resources/', '/privacy-policy/', '/terms-and-conditions/'];
 const legal = new Set(['/terms-and-conditions/', '/privacy-policy/', '/sitemap/', '/thank-you/', '/this-page-does-not-exist/']);
 const noForm = legal;
-const noMapRoutes = new Set(['/reviews/', '/gallery/', '/terms-and-conditions/', '/privacy-policy/', '/sitemap/', '/this-page-does-not-exist/']);
+const noMapRoutes = new Set(['/reviews/', '/gallery/', '/faq/', ...articles, '/terms-and-conditions/', '/privacy-policy/', '/sitemap/', '/this-page-does-not-exist/']);
 
 const CTA = 'Contact by the quote form, call now, or by WhatsApp.';
 const MANUFACTURER = 'Cumbria Spas works in partnership with Kubilų pasaulis, the largest manufacturer in Lithuania of premium, luxury and custom hot tubs.';
@@ -114,7 +117,10 @@ for (const [vp, size] of [['desktop', { width: 1440, height: 900 }], ['mobile', 
         html: document.documentElement.outerHTML,
         cta: text.includes(CTA) || document.body.textContent.replace(/\s+/g, ' ').includes(CTA),
         manufacturer: document.body.textContent.replace(/\s+/g, ' ').includes(MANUFACTURER),
-        wa: (() => { const a = document.querySelector('a.wa'); return !!a && vis(a) && a.href.startsWith('https://wa.me/447445450908'); })(),
+        wa: (() => { const a = document.querySelector('a.wa'); return { present: !!a, visible: !!a && vis(a), href: !!a && a.href.startsWith('https://wa.me/447445450908') }; })(),
+        footer: [...document.querySelectorAll('footer a')].map((a) => a.getAttribute('href')),
+        btnTrim: (() => { const b = document.querySelector('.hd__quote'); return b ? getComputedStyle(b).textBoxTrim || getComputedStyle(b).getPropertyValue('text-box-trim') : 'none'; })(),
+        lfPad: (() => { const b = document.querySelector('.qf__slot .lf-b'); if (!b) return null; const c = getComputedStyle(b); return [c.paddingTop, c.paddingBottom]; })(),
         credit: document.querySelectorAll('[data-footer-credit] a').length,
         formSlot: !!document.querySelector('[data-lead-form]#quote, #quote [data-lead-form]'),
         contactId: !!document.getElementById('contact'),
@@ -133,14 +139,21 @@ for (const [vp, size] of [['desktop', { width: 1440, height: 900 }], ['mobile', 
     if (r.noAlt.length) fail(route, vp, `img without alt: ${r.noAlt.join(', ')}`);
     if (r.lowContrast.length) fail(route, vp, `low contrast: ${r.lowContrast.join(' | ')}`);
     if (r.brandLogo) fail(route, vp, 'a brand logo image is on the page');
-    if (!r.wa) fail(route, vp, 'floating WhatsApp button missing or hidden');
+    // WhatsApp float: phones only (operator, 5 Nov 2026). In the DOM everywhere, visible on mobile, hidden on desktop.
+    if (!r.wa.present || !r.wa.href) fail(route, vp, 'floating WhatsApp button missing or wrong number');
+    else if (vp === 'mobile' && !r.wa.visible) fail(route, vp, 'floating WhatsApp button hidden on mobile');
+    else if (vp === 'desktop' && r.wa.visible) fail(route, vp, 'floating WhatsApp button visible on desktop');
+    const missingFooter = footerMust.filter((h) => !r.footer.includes(h));
+    if (missingFooter.length) fail(route, vp, `footer missing links: ${missingFooter.join(', ')}`);
+    if (!/trim-both/.test(r.btnTrim || '')) fail(route, vp, `button label not cap-trimmed (text-box-trim: ${r.btnTrim})`);
+    if (r.lfPad && r.lfPad[0] !== r.lfPad[1]) fail(route, vp, `Formlane submit padding uneven ${r.lfPad.join(' / ')}`);
     if (r.credit !== 1) fail(route, vp, `footer credit links: ${r.credit}`);
     if (!r.manufacturer) fail(route, vp, 'approved manufacturer sentence missing');
     if (!is404 && route !== '/thank-you/' && route !== '/sitemap/' && !r.cta) fail(route, vp, 'CTA line missing');
     if (!noForm.has(route) && !r.formSlot) fail(route, vp, 'quote form slot (#quote) missing');
     if (!noForm.has(route) && !r.contactId) fail(route, vp, 'id="contact" missing');
     if (!noMapRoutes.has(route) && r.map !== 1) fail(route, vp, `${r.map} map embeds (want exactly 1)`);
-    if (hubs.some((h) => route === `/${h}/`) && !r.text.replace(/\s+/g, ' ').includes(CUSTOMERS)) fail(route, vp, 'residential-and-commercial line missing');
+    if ((hubs.some((h) => route === `/${h}/`) || articles.includes(route)) && !r.text.replace(/\s+/g, ' ').includes(CUSTOMERS)) fail(route, vp, 'residential-and-commercial line missing');
     if (!/noindex/.test(r.robots || '') && !process.env.PUBLIC_INDEXABLE) fail(route, vp, `robots meta "${r.robots}" on the preview`);
     if (is404 && r.jsonld.length) fail(route, vp, '404 carries JSON-LD');
     if (!is404) {

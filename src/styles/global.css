@@ -14,9 +14,11 @@
   --card: #fdfefe;
   --tint: #e2eef5;
   --tint-2: #cfe2ec;
-  --teal: #253c5e;      /* logo navy: links and badges on light (10.4:1 on --page) */
-  --teal-deep: #1c2f4b; /* deeper logo navy: dark panels, footer, servicing slab */
-  --teal-ink: #121f33;  /* deepest navy ground behind the hero gradient */
+  /* The navies are the logo's hue (216) lifted brighter and less grey (operator, 5 Nov 2026): was #253c5e /
+     #1c2f4b / #121f33, now more saturated and a touch lighter. */
+  --teal: #1f416f;      /* navy: links and badges on light (9.6:1 on --page) */
+  --teal-deep: #17355e; /* deeper navy: dark panels, footer, servicing slab */
+  --teal-ink: #0e213f;  /* deepest navy ground behind the hero gradient */
   --ink: #0d1d27;
   /* Accent: a bright orange on every button fill, carrying DARK text (law:
      no white on accent): #1a1208 on #ff7a1a is 7.1:1, and on the darkened
@@ -29,13 +31,13 @@
   --on-accent: #1a1208;
   /* Secondary accent: the logo's "spas" light blue, paired with the orange.
      Fills (chips, step badges, panel details) carry the deepest navy, never
-     white: #121f33 on #4faadf is 6.4:1 (the logo navy itself only reaches
-     4.3:1 there). As text on the light page it is too pale, so link hovers
+     white: #0e213f on #4faadf is 6.2:1 (the mid navy itself only reaches
+     4.0:1 there). As text on the light page it is too pale, so link hovers
      use the same-hue deep shade (5.3:1); on the navy grounds the true light
-     blue carries hovers and icons (5.2:1 on --teal-deep). */
+     blue carries hovers and icons (4.8:1 on --teal-deep). */
   --sky: #4faadf;
   --sky-deep: #1c6ca3;
-  --on-sky: #121f33;
+  --on-sky: #0e213f;
   --on-dark: #f2f7fa;
   --muted-dark: rgb(242 247 250 / 0.76);
   --faint-dark: rgb(242 247 250 / 0.5);
@@ -43,7 +45,7 @@
   --muted-light: rgb(13 29 39 / 0.68);
   --faint-light: rgb(13 29 39 / 0.45);
   --line-dark: rgb(255 255 255 / 0.14);
-  --line-light: rgb(28 47 75 / 0.12);
+  --line-light: rgb(23 53 94 / 0.12);
 
   --font-sans: 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
 
@@ -71,8 +73,8 @@
   --text-display: clamp(2.125rem, 1.35rem + 3.3vw, 4rem); /* 34px -> 64px */
 
   --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
-  --shadow-card: 0 10px 30px rgb(37 60 94 / 0.08);
-  --shadow-float: 0 18px 50px rgb(37 60 94 / 0.16);
+  --shadow-card: 0 10px 30px rgb(31 65 111 / 0.08);
+  --shadow-float: 0 18px 50px rgb(31 65 111 / 0.16);
 }
 
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -137,6 +139,12 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 4px); }
   overflow: hidden;
   --btn-sheen: rgb(255 255 255 / 0.38);
 }
+/* Optical centring (operator, 5 Nov 2026: the label sat high). Figtree's ascent is taller than its descent, so a
+   plain line box puts the caps above the middle. text-box trims the label to cap height and baseline, and the
+   flex centring then puts it in the exact middle. The phone sticky bar and the Formlane submit button (.lf-b,
+   whose own padding was 12px top against 24px bottom) take the same treatment. */
+.btn, [data-sticky-cta] a, .qf__slot .lf-f .lf-b { text-box: trim-both cap alphabetic; }
+.qf__slot .lf-f .lf-b { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 14px 1em; line-height: 1.2; }
 .btn:active { transform: translateY(1px); }
 /* Dark text on the accent, kept dark on the darkened hover fill. No glow, no shadow bloom. */
 .btn-primary { background: var(--accent); color: var(--on-accent); --btn-sheen: rgb(255 255 255 / 0.32); }
@@ -144,8 +152,8 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 4px); }
 .btn, .btn:hover, .btn:focus-visible { box-shadow: none; }
 .btn-ghost { background: transparent; color: var(--on-dark); border-color: rgb(255 255 255 / 0.55); }
 .btn-ghost:hover { background: rgb(255 255 255 / 0.1); border-color: rgb(255 255 255 / 0.85); }
-.btn-ghost-ink { background: transparent; color: var(--teal-deep); border-color: rgb(37 60 94 / 0.35); --btn-sheen: rgb(37 60 94 / 0.1); }
-.btn-ghost-ink:hover { background: rgb(37 60 94 / 0.06); border-color: rgb(37 60 94 / 0.7); }
+.btn-ghost-ink { background: transparent; color: var(--teal-deep); border-color: rgb(31 65 111 / 0.35); --btn-sheen: rgb(31 65 111 / 0.1); }
+.btn-ghost-ink:hover { background: rgb(31 65 111 / 0.06); border-color: rgb(31 65 111 / 0.7); }
 .btn-teal { background: var(--teal-deep); color: var(--on-dark); }
 .btn-teal:hover { background: var(--teal-ink); }
 

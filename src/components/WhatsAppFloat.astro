@@ -1,8 +1,9 @@
 ---
 /**
  * FLOATING WHATSAPP BUTTON (plan): click-to-chat in the bottom-right corner
- * of every page, desktop and mobile. On phones it rides above the sticky
- * Quick Quote / Call bar so the two never overlap.
+ * of every page, on phones only. Hidden completely from 768px up (operator,
+ * 5 Nov 2026: people can't use WhatsApp on desktop). On phones it rides above
+ * the sticky Quick Quote / Call bar so the two never overlap.
  */
 import { business } from '../data/site';
 ---
@@ -21,6 +22,8 @@ import { business } from '../data/site';
     transition: background-color 0.2s var(--ease), transform 0.2s var(--ease);
   }
   .wa:hover, .wa:focus-visible { background: #0f5a33; transform: translateY(-2px); }
+  /* Desktop and tablet: not rendered at all. */
+  @media (min-width: 768px) { .wa { display: none; } }
   /* Phones: an icon-only circle above the sticky bar. */
   @media (max-width: 767px) {
     .wa { right: 12px; bottom: calc(84px + env(safe-area-inset-bottom)); width: 56px; height: 56px; padding: 0; justify-content: center; }

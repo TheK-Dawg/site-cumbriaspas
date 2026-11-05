@@ -1,0 +1,127 @@
+---
+/**
+ * RESOURCES (/resources/, never "blog" and never "guides"; operator, 5 Nov
+ * 2026: every v4 build carries it). Indexes the town article series, one
+ * "<hub> in <Town>" article per hub per town (plan: 9 hubs x 100 towns, in
+ * src/data/article-queue.json publish order). Published articles show as
+ * cards (title links), then every hub's series with its published towns.
+ * Unpublished towns are not links. Seed-driven: hubs from site.ts (the seed's
+ * services order), towns from towns.json (built from plan/seed.json).
+ */
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import TrustStrip from '../../components/TrustStrip.astro';
+import AreasCovered from '../../components/AreasCovered.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import towns from '../../data/towns.json';
+import { business, hubs, hubHref, hubBySlug, customersLine } from '../../data/site';
+import { publishedArticles, articleHref } from '../../lib/articles';
+import { picks, pick } from '../../lib/media';
+
+const articles = await publishedArticles();
+const imgs = picks('home', 2);
+const url = `${business.url}/resources/`;
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Resources', href: '/resources/' }];
+const schema = [
+  {
+    '@type': 'CollectionPage', '@id': `${url}#resources`, name: 'Cumbria Spas resources', url,
+    hasPart: articles.map((a) => ({ '@type': 'Article', headline: a.data.title, url: new URL(articleHref(a.data), business.url).href })),
+  },
+];
+const card = (a: (typeof articles)[number]) => a.data.images[0] ?? pick(a.data.hub, 0);
+---
+
+<Base title="Hot Tub Resources by Town | Cumbria Spas" description="Resources from Cumbria Spas on wood-fired and electric hot tubs, hot tub repair and servicing, saunas, pools and swim spas, town by town across Cumbria and beyond." page="resources" crumbs={crumbs} schema={schema}>
+  <Hero
+    h1="Want the detail before you buy? Hot tub resources from Cumbria Spas"
+    lead={`Heat-up times, electrics, servicing and what to ask, service by service and town by town. ${customersLine}`}
+    crumbs={crumbs}
+    slides={imgs.slice(0, 2).map((im) => ({ src: im.src, alt: im.alt }))}
+    trust={['Nine services', `${towns.length} towns`, 'Real technical detail', 'Contact for prices']}
+  />
+
+  <TrustStrip />
+
+  <section class="rs on-light" data-section="resources-latest">
+    <div class="container">
+      <div class="sh">
+        <h2 class="sh__h2 rs__h2">The latest resources</h2>
+        <p class="sh__lead">Each resource covers one service in one town: how it works, what it involves and the questions buyers ask.</p>
+      </div>
+      {articles.length > 0 ? (
+        <ul class="rs__cards">
+          {articles.slice().reverse().map((a) => (
+            <li class="rs__card">
+              <figure class="rs__img"><img src={card(a).src} alt={card(a).alt} width="800" height="500" loading="lazy" decoding="async" /></figure>
+              <div class="rs__body">
+                <p class="rs__hub">{hubBySlug[a.data.hub].name}</p>
+                <h3 class="rs__t"><a href={articleHref(a.data)}>{a.data.title}</a></h3>
+                <p class="rs__d">{a.data.description}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="rs__empty">The first resources are being written. In the meantime, the service pages explain how each job runs.</p>
+      )}
+    </div>
+  </section>
+
+  <section class="rh on-light" data-section="resources-by-service">
+    <div class="rh__slab slab">
+      <div class="container">
+        <div class="sh">
+          <h2 class="sh__h2 rs__h2">Resources by service</h2>
+          <p class="sh__lead">Every service has a series of town resources. New towns are added in order, nearest first, starting from the showroom.</p>
+        </div>
+        <div class="rh__grid">
+          {hubs.map((h) => {
+            const list = articles.filter((a) => a.data.hub === h.slug);
+            return (
+              <div class="rh__hub">
+                <h3 class="rh__h3"><a href={hubHref(h.slug)}>{h.name}</a></h3>
+                {list.length > 0 ? (
+                  <ul class="rh__list">{list.map((a) => <li><a href={articleHref(a.data)}>{a.data.title}</a></li>)}</ul>
+                ) : (
+                  <p class="rh__soon">Town resources for this service are being written.</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <AreasCovered />
+
+  <QuoteForm heading="Ask Cumbria Spas a question" lead="Read something you want to ask about? Tell us what you need and where, and Cumbria Spas will come back to you." />
+</Base>
+
+<style>
+  .rs { background: var(--page); padding: var(--pad-med) 0; }
+  .rs__h2 { color: var(--teal-deep); }
+  .rs__cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .rs__card { background: var(--card); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card); display: flex; flex-direction: column; position: relative; }
+  .rs__img { margin: 0; aspect-ratio: 16 / 10; background: var(--tint-2); position: relative; overflow: hidden; }
+  .rs__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .rs__body { padding: 22px 24px 26px; display: grid; gap: 8px; }
+  .rs__hub { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sky-deep); }
+  .rs__t { font-size: 1.25rem; line-height: 1.25; color: var(--teal-deep); }
+  .rs__t a::after { content: ''; position: absolute; inset: 0; }
+  .rs__card:hover .rs__t a { color: var(--sky-deep); }
+  .rs__d { color: var(--muted-light); font-size: 0.9375rem; }
+  .rs__empty { color: var(--muted-light); }
+  .rh { background: var(--page); padding: 0 0 var(--inset); }
+  .rh__slab { background: var(--tint); padding: var(--pad-med) 0; }
+  .rh__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+  .rh__hub { background: var(--card); border-radius: var(--radius-lg); padding: 22px 24px; box-shadow: 0 4px 16px rgb(23 53 94 / 0.06); }
+  .rh__h3 { font-size: 1.0625rem; margin-bottom: 10px; }
+  .rh__h3 a { color: var(--teal-deep); }
+  .rh__h3 a:hover, .rh__list a:hover { color: var(--sky-deep); }
+  .rh__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 0.9375rem; }
+  .rh__list a { color: var(--teal); font-weight: 600; }
+  .rh__soon { color: var(--muted-light); font-size: 0.9375rem; }
+  @media (max-width: 1000px) { .rs__cards, .rh__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .rs__cards, .rh__grid { grid-template-columns: 1fr; } }
+</style>
