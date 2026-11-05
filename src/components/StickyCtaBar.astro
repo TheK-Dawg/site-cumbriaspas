@@ -1,8 +1,9 @@
 ---
 /**
- * STICKY CTA BAR (the 247 build's StickyCtaBar behaviour). Slides in once the
- * visitor scrolls the hero out of view, slides away again while the hero or
- * the quote form is on screen. Two segments in different colours with a gap:
+ * STICKY CTA BAR. Plan (this site): "On mobile, keep the phone number and
+ * the quote request visible at all times", so on phones the bar shows from
+ * the first screen and only slides away while the quote form itself is on
+ * screen (law: it hides only on the real quote form, by form identity). Two segments in different colours with a gap:
  * Quick Quote Online (accent, dark text) and his real number (deep brand
  * blue, the number only), equal width. LAW: MOBILE ONLY. It never renders at
  * 768px and up (display: none, and the script never arms it there); tablets
@@ -12,7 +13,7 @@ import { business } from '../data/site';
 ---
 <div class="sb" data-sticky-cta aria-hidden="true" inert>
   <a class="sb__quote" href="#quote" data-cta="sticky-quote">Quick Quote Online</a>
-  <a class="sb__call" href={business.phoneHref} data-cta="sticky-call" aria-label={`Call ${business.name} on ${business.phone}`}>{business.phone}</a>
+  <a class="sb__call" href={business.phoneHref} data-cta="sticky-call" aria-label={`Call now: ${business.name} on ${business.phone}`}>Call {business.phone}</a>
 </div>
 
 <style>
@@ -43,19 +44,18 @@ import { business } from '../data/site';
 
 <script>
   const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
-  const hero = document.querySelector<HTMLElement>('[data-hero-watch]') ?? document.querySelector<HTMLElement>('main > section:first-child');
-  const form = document.querySelector<HTMLElement>('form[data-quote-form]');
-  if (bar && hero) {
-    let heroVisible = true, formVisible = false;
+  const form = document.querySelector<HTMLElement>('[data-quote-card]');
+  if (bar) {
+    let formVisible = false;
     const phone = window.matchMedia('(max-width: 767px)');
     const sync = () => {
-      const show = phone.matches && !heroVisible && !formVisible;
+      const show = phone.matches && !formVisible;
       bar.toggleAttribute('data-show', show);
       bar.setAttribute('aria-hidden', String(!show));
       bar.inert = !show;
     };
-    new IntersectionObserver((en) => { heroVisible = en[0]?.isIntersecting ?? false; sync(); }, { threshold: 0.05 }).observe(hero);
     if (form) new IntersectionObserver((en) => { formVisible = en[0]?.isIntersecting ?? false; sync(); }, { threshold: 0.05 }).observe(form);
     phone.addEventListener('change', sync);
+    sync();
   }
 </script>

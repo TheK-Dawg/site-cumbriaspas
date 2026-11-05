@@ -3,15 +3,17 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Cumbria Spas: one-page homepage preview #2 on the v3 layout (247plumbersnorwich.uk build). Cloudflare Worker static assets.",
+  "description": "Cumbria Spas (cumbriaspas.co.uk): full site on the approved preview 2 look. Astro static build on a Cloudflare Worker.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "node scripts/check.mjs",
+    "check": "node scripts/qa.mjs",
     "deploy:dry": "wrangler deploy --dry-run",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "check:live": "node scripts/qa.mjs --url https://site-cumbriaspires-preview2.small-bird-3273.workers.dev",
+    "queue": "python3 -I scripts/gen-article-queue.py plan/seed.json src/data"
   },
   "dependencies": {
     "@fontsource-variable/figtree": "^5.2.5",

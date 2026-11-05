@@ -1,0 +1,111 @@
+---
+/**
+ * HUB (service) PAGE, one per hub in the seed's order. A LANDING page, never
+ * article-styled (law): hero (breadcrumbs above the H1, two CTAs, trust
+ * bullets) → trust strip in the reviews slot (no reviews exist) → intro and
+ * two or three alternating image/text rows → mid-page CTA band → process →
+ * FAQ accordions → related services → this hub's town articles (once
+ * published) → the shared gallery → areas map and towns → the quote form.
+ * Images: the plan's hub-image picks, hero first (src/data/media.json).
+ */
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import TrustStrip from '../../components/TrustStrip.astro';
+import Feature from '../../components/Feature.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Process from '../../components/Process.astro';
+import FaqList from '../../components/FaqList.astro';
+import RelatedHubs from '../../components/RelatedHubs.astro';
+import Gallery from '../../components/Gallery.astro';
+import AreasCovered from '../../components/AreasCovered.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import { hubs, business, hubHref } from '../../data/site';
+import { hubContent } from '../../data/hub-content';
+import { picks } from '../../lib/media';
+import { publishedArticles } from '../../lib/articles';
+
+export function getStaticPaths() {
+  return hubs.map((h) => ({ params: { hub: h.slug } }));
+}
+
+const { hub: slug } = Astro.params;
+const hub = hubs.find((h) => h.slug === slug)!;
+const c = hubContent[slug!];
+const imgs = picks(slug!, 4);
+const at = (i: number) => imgs[i % imgs.length];
+const articles = await publishedArticles(slug);
+const url = new URL(hubHref(slug!), Astro.site).href;
+
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Services', href: '/services/' }, { name: hub.name, href: hubHref(slug!) }];
+const schema = [
+  {
+    '@type': 'Service', '@id': `${url}#service`, name: hub.name, serviceType: c.serviceType, url,
+    description: c.description, provider: { '@id': `${business.url}/#business` },
+    areaServed: ['Cumbria', 'Lancashire', 'North Yorkshire'].map((name) => ({ '@type': 'AdministrativeArea', name })),
+  },
+  {
+    '@type': 'FAQPage', '@id': `${url}#faq`,
+    mainEntity: c.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+
+<Base title={c.title} description={c.description} page={`hub-${slug}`} crumbs={crumbs} schema={schema} ogImage={at(0).full ?? at(0).src}>
+  <Hero h1={c.h1} lead={c.lead} crumbs={crumbs} trust={c.trust} slides={imgs.slice(0, 3).map((im) => ({ src: im.src, alt: im.alt }))} />
+
+  <TrustStrip />
+
+  <Feature id="intro" heading={c.intro.heading} body={c.intro.body} image={at(1).src} full={at(1).full} imageAlt={at(1).alt} cta="Quick Quote Online" />
+
+  {c.rows.map((r, i) => (
+    <Feature
+      id={`detail-${i + 1}`}
+      heading={r.heading}
+      body={r.body}
+      points={r.points}
+      note={r.note}
+      image={at(i + 2).src}
+      full={at(i + 2).full}
+      imageAlt={at(i + 2).alt}
+      cta={r.cta}
+      flip={i % 2 === 0}
+      tone={i % 2 === 0 ? 'tint' : 'page'}
+    />
+  ))}
+
+  <CtaBand heading={c.cta.heading} line={c.cta.line} image={at(0).src} imageAlt={at(0).alt} />
+
+  <Process id="process" heading={c.process.heading} lead={c.process.lead} facts={c.process.facts} steps={c.process.steps} image={at(3).src} imageAlt={at(3).alt} cta="Quick Quote Online" />
+
+  {/* TODO(video): embed David's YouTube videos here once the operator supplies the channel (brief, 5 Nov 2026). Click-to-load facade, per the standard-pages law. */}
+
+  <FaqList heading={`${hub.name}: your questions answered`} lead="Anything else, ask: contact by the quote form, call now, or by WhatsApp." items={c.faqs} />
+
+  <RelatedHubs heading="Related services from Cumbria Spas" slugs={c.related} />
+
+  {articles.length > 0 && (
+    <section class="ra section-resources on-light" data-section="resources">
+      <div class="container">
+        <h2 class="ra__h2">{hub.name} resources by town</h2>
+        <ul class="ra__list">
+          {articles.map((a) => <li><a href={`/${a.data.hub}/${a.data.townSlug}/`}>{a.data.title}</a></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <Gallery />
+
+  <AreasCovered />
+
+  <QuoteForm heading={c.form.heading} lead={c.form.lead} />
+</Base>
+
+<style>
+  .ra { background: var(--page); padding: var(--pad-high) 0; }
+  .ra__h2 { font-size: var(--text-xl); color: var(--teal-deep); margin-bottom: 20px; }
+  .ra__list { list-style: none; margin: 0; padding: 0; columns: 3 240px; column-gap: 28px; }
+  .ra__list li { break-inside: avoid; padding: 6px 0; }
+  .ra__list a { color: var(--teal); font-weight: 600; }
+  .ra__list a:hover { color: var(--sky-deep); }
+</style>

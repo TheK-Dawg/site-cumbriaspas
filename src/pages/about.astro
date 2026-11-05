@@ -1,0 +1,101 @@
+---
+/**
+ * ABOUT. The seed's about sections (story, credentials, contact) from the
+ * plan's "The business (About page)". Not an article wall: hero, trust strip,
+ * three image/text rows, the facts, services, gallery, areas, form. David is
+ * the owner who does the installs, servicing and repairs; no staff team is
+ * described (site prohibition). Links to the legal pages (law: from About
+ * and Contact).
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import Feature from '../components/Feature.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import Gallery from '../components/Gallery.astro';
+import AreasCovered from '../components/AreasCovered.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { manufacturerLine, customersLine } from '../data/site';
+import { picks, pick } from '../lib/media';
+const imgs = picks('about', 3);
+const trade = pick('trade-and-holiday-park-hot-tubs', 0);
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'About', href: '/about/' }];
+---
+
+<Base title="About Cumbria Spas | Hot Tubs in Cumbria Since 2013" description="Cumbria Spas has sold, installed and serviced hot tubs since 2013, with a try-before-you-buy showroom at Kirkby In Furness and many holiday parks supplied and serviced." page="about" crumbs={crumbs} ogImage={imgs[0].full ?? imgs[0].src}>
+  <Hero
+    h1="Who is behind Cumbria Spas? A hot tub business established in 2013"
+    lead="Cumbria Spas is David Hughes's hot tub business, with a try-before-you-buy showroom at Kirkby In Furness, Cumbria, and hot tubs delivered to customers throughout the UK."
+    crumbs={crumbs}
+    slides={imgs.slice(0, 2).map((im) => ({ src: im.src, alt: im.alt }))}
+    trust={['Established in 2013', 'Try-before-you-buy showroom', 'Many holiday parks supplied', 'Residential and commercial']}
+  />
+
+  <TrustStrip />
+
+  <Feature
+    id="story"
+    heading="The owner does the installs, the servicing and the repairs"
+    body={[
+      'David started Cumbria Spas in 2013 and has delivered hot tubs to customers throughout the UK. He does the installs, the servicing and the repairs himself.',
+      'Much of the work comes by word of mouth, and there are regular customers going back years. ' + customersLine,
+    ]}
+    points={[
+      { h: 'Established in 2013', p: 'Selling, installing and servicing hot tubs since.' },
+      { h: 'Throughout the UK', p: 'Hot tubs delivered to customers across the country.' },
+    ]}
+    image={imgs[0].src}
+    full={imgs[0].full}
+    imageAlt={imgs[0].alt}
+    cta="Quick Quote Online"
+  />
+
+  <Feature
+    id="how-it-works"
+    tone="tint"
+    flip
+    heading="More information before you buy, not less"
+    body={[
+      'Customers prefer WhatsApp to email, so that is where most buying conversations happen. Buyers are sent videos and photos of the actual product, the buttons and the lights, so they know exactly what they are getting.',
+      'Visitors can also try a tub at the showroom before buying. Cumbria Spas shows a tub and a sauna at local shows too: at one, a holiday-let owner with 17 outlets bought five wood-fired tubs.',
+    ]}
+    image={(imgs[1] ?? imgs[0]).src}
+    full={(imgs[1] ?? imgs[0]).full}
+    imageAlt={(imgs[1] ?? imgs[0]).alt}
+    cta="Ask for Photos and Videos"
+  />
+
+  <Feature
+    id="partners"
+    heading="The manufacturers behind the range"
+    body={[
+      `${manufacturerLine} It makes the wood-fired hot tubs, the electric hot tubs and the saunas, and David deals with it directly.`,
+      'Cumbria Spas is also an Arctic Spas dealer, installing each Arctic Spa with one of Arctic\'s own engineers; a dealer for a UK manufacturer of mosaic-tiled spas, pools and swim spas; and a dealer for a Yorkshire swimming pool manufacturer.',
+      'It has supplied and serviced many holiday parks, and set out to offer them something different: <a href="/trade-and-holiday-park-hot-tubs/">trade prices on hot tubs and saunas</a>.',
+    ]}
+    image={trade.src}
+    full={trade.full}
+    imageAlt={trade.alt}
+    cta="Quick Quote Online"
+  />
+
+  <ServicesGrid heading="What Cumbria Spas sells, installs and services" lead="Nine services, from wood-fired hot tubs to commercial mosaic-tiled spas and holiday park supply." />
+
+  <section class="ab-legal on-light" data-section="legal-links">
+    <div class="container">
+      <p>How Cumbria Spas works with customers is set out in the <a href="/terms-and-conditions/">terms and conditions</a> and the <a href="/privacy-policy/">privacy policy</a>.</p>
+    </div>
+  </section>
+
+  <Gallery />
+
+  <AreasCovered />
+
+  <QuoteForm heading="Ask Cumbria Spas about your hot tub" lead="Buying, installing or servicing: tell us what you need and Cumbria Spas will come back to you." />
+</Base>
+
+<style>
+  .ab-legal { background: var(--page); padding: 0 0 var(--pad-high); color: var(--muted-light); }
+  .ab-legal a { color: var(--teal); font-weight: 700; }
+  .ab-legal a:hover { color: var(--sky-deep); }
+</style>

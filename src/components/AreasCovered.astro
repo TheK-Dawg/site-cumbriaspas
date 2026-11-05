@@ -1,0 +1,41 @@
+---
+/**
+ * AREAS COVERED (route). Identical on every page (content law): the real
+ * embedded map of the showroom (auto-loads, no click-to-load facade, D-148),
+ * the coverage line and every town in the plan as plain text. No area pages
+ * exist, so the towns are not links; the town articles link here later.
+ */
+import MapEmbed from './MapEmbed.astro';
+import towns from '../data/towns.json';
+import { business, serviceCoverage, customersLine } from '../data/site';
+---
+<section class="ar section-areas on-light" id="areas" data-section="areas">
+  <div class="ar__slab slab">
+    <div class="container ar__inner">
+      <div class="ar__copy" data-motion="reveal">
+        <h2 class="ar__h2">Hot tubs, spas and saunas across Cumbria, Lancashire and North Yorkshire</h2>
+        <p class="ar__p">The showroom is at {business.address}. Repairs and servicing cover {serviceCoverage}, and hot tubs, spas, saunas and pools are supplied further afield. {customersLine}</p>
+        <a href="#quote" class="btn btn-primary" data-cta="areas-quote">Quick Quote Online</a>
+      </div>
+      <MapEmbed query={business.mapQuery} label={`the Cumbria Spas showroom, ${business.town}`} zoom={9} class="ar__map" />
+    </div>
+    <div class="container">
+      <ul class="ar__towns" aria-label="Towns served">
+        {towns.map((t) => <li>{t.town}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ar { padding: 0 0 var(--inset); background: var(--page); }
+  .ar__slab { background: var(--tint); padding: var(--pad-med) 0; }
+  .ar__inner { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 32px 64px; align-items: center; margin-bottom: 36px; }
+  .ar__copy { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+  .ar__h2 { font-size: var(--text-2xl); max-width: 20ch; text-wrap: balance; color: var(--teal-deep); }
+  .ar__p { color: var(--muted-light); max-width: 52ch; }
+  .ar__inner :global(.ar__map) { aspect-ratio: 16 / 10; box-shadow: var(--shadow-float); }
+  .ar__towns { list-style: none; margin: 0; padding: 0; columns: 5 160px; column-gap: 24px; font-size: 0.9375rem; color: var(--teal-deep); }
+  .ar__towns li { break-inside: avoid; padding: 5px 0; border-bottom: 1px solid var(--line-light); }
+  @media (max-width: 900px) { .ar__inner { grid-template-columns: 1fr; } .ar__copy .btn { width: 100%; } .ar__towns { columns: 2 140px; } }
+</style>

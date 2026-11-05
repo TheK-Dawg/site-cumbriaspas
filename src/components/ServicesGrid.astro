@@ -1,41 +1,36 @@
 ---
 /**
  * SERVICES (route). The v3 pale-tint rounded cards, three across, photo
- * inside the card. His five services. LAW: the TITLE is the only link (to the
- * matching section on this page); the card box, photo and text are not
- * clickable, so there is no stretched-link overlay and no card-wide hover.
- * The sixth slot is a deep-blue card inviting a quick quote (try before you buy),
- * with its one button, so the grid closes evenly at three across.
+ * inside the card: the nine hubs in the seed's order. LAW: the TITLE is the
+ * only link (the exact service name, to its page); the card box, photo and
+ * text are not clickable.
  */
-import { services, business } from '../data/site';
-interface Props { heading: string; lead: string }
-const { heading, lead } = Astro.props;
+import { hubs, hubHref } from '../data/site';
+import { pick } from '../lib/media';
+interface Props { heading: string; lead: string; id?: string }
+const { heading, lead, id = 'services' } = Astro.props;
 ---
-<section class="sv section-services on-light" id="services" data-section="services">
+<section class="sv section-services on-light" id={id} data-section="services">
   <div class="container">
     <div class="sh" data-motion="reveal">
       <div><h2 class="sh__h2">{heading}</h2></div>
       <p class="sh__lead">{lead}</p>
     </div>
     <ul class="sv__grid">
-      {services.map((s, i) => (
-        <li class="sv__card" data-motion="reveal" style={`--reveal-delay: ${(i % 3) * 70}ms`}>
-          <div class="sv__media">
-            <img src={s.img} alt={s.alt} width="1200" height="900" loading="lazy" decoding="async" style={s.pos ? `object-position: ${s.pos}` : undefined} />
-          </div>
-          <div class="sv__body">
-            <h3 class="sv__title"><a href={s.anchor}>{s.name}</a></h3>
-            <p class="sv__text">{s.short}</p>
-          </div>
-        </li>
-      ))}
-      <li class="sv__card sv__card--cta on-dark" data-motion="reveal" style="--reveal-delay: 140ms">
-        <h3 class="sv__cta-h">Not sure which tub is right for you?</h3>
-        <p class="sv__cta-p">Tell us how you plan to use it and we will help you choose the right spa or hot tub for your garden or site.</p>
-        <div class="sv__cta-btns">
-          <a href="#quote" class="btn btn-primary" data-cta="services-quote">Quick Quote Online</a>
-        </div>
-      </li>
+      {hubs.map((h, i) => {
+        const im = pick(h.slug, 0);
+        return (
+          <li class="sv__card" data-motion="reveal" style={`--reveal-delay: ${(i % 3) * 70}ms`}>
+            <div class="sv__media">
+              <img src={im.src} alt={im.alt} width={im.w ?? 1200} height={im.h ?? 900} loading="lazy" decoding="async" />
+            </div>
+            <div class="sv__body">
+              <h3 class="sv__title"><a href={hubHref(h.slug)}>{h.name}</a></h3>
+              <p class="sv__text">{h.blurb}</p>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   </div>
 </section>
@@ -51,23 +46,13 @@ const { heading, lead } = Astro.props;
   .sv__title a { color: var(--teal-deep); text-decoration: none; transition: color 0.2s var(--ease); }
   .sv__title a:hover, .sv__title a:focus-visible { color: var(--sky-deep); }
   .sv__text { color: var(--muted-light); font-size: 0.9375rem; line-height: 1.55; }
-
-  .sv__card--cta { position: relative; }
-  .sv__card--cta { background: linear-gradient(150deg, var(--teal-deep) 0%, var(--teal) 100%); color: var(--on-dark); padding: 34px 30px; justify-content: flex-end; min-height: 100%; }
-  .sv__card--cta::before { content: ''; position: absolute; right: -70px; top: -70px; width: 240px; height: 240px; border-radius: 50%; background: rgb(79 170 223 / 0.22); }
-  .sv__cta-h { font-size: var(--text-xl); margin-bottom: 12px; max-width: 16ch; position: relative; }
-  .sv__cta-p { color: var(--muted-dark); font-size: 0.9375rem; margin-bottom: 24px; position: relative; }
-  .sv__cta-btns { position: relative; }
-
   @media (max-width: 980px) { .sv__grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
   @media (max-width: 600px) {
     .sv__grid { grid-template-columns: 1fr; gap: 12px; }
-    .sv__card:not(.sv__card--cta) { display: grid; grid-template-columns: 104px 1fr; align-items: center; padding: 10px; gap: 12px; }
+    .sv__card { display: grid; grid-template-columns: 104px 1fr; align-items: center; padding: 10px; gap: 12px; }
     .sv__media { aspect-ratio: 1 / 1; border-radius: var(--radius); }
     .sv__body { padding: 4px 4px 4px 0; }
     .sv__title { font-size: 1.0625rem; margin-bottom: 4px; }
     .sv__text { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.8125rem; }
-    .sv__card--cta { padding: 28px 22px; }
-    .sv__cta-btns .btn { width: 100%; }
   }
 </style>

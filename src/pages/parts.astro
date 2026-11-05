@@ -1,0 +1,57 @@
+---
+/**
+ * HOT TUB PARTS (standalone page, no town articles). PLACEHOLDER (operator, 3 Nov
+ * 2026; seed hubs[].contentNote): the sheet line at the top with a
+ * placeholder link until David supplies the real Google Sheet URL and the
+ * product list; the body is left blank; buying is by contact only, with the
+ * standard call to action. No shop, basket, checkout, card payment or prices
+ * on the page itself (the sheet is the one allowed price source).
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import AreasCovered from '../components/AreasCovered.astro';
+import Gallery from '../components/Gallery.astro';
+import { ctaLine } from '../data/site';
+import { picks } from '../lib/media';
+const imgs = picks('parts', 1);
+// TODO(David): the real Google Sheet URL replaces '#'.
+const SHEET_URL = '#';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Services', href: '/services/' }, { name: 'Hot Tub Parts', href: '/parts/' }];
+---
+
+<Base title="Hot Tub Parts | Cumbria Spas" description="Hot tub parts from Cumbria Spas: pumps, heaters and other parts, ordered by contact and shipped to you. See the updated Google Sheet of parts availability and pricing." page="parts" crumbs={crumbs}>
+  <Hero
+    h1="Need a part for your hot tub? Order it from Cumbria Spas"
+    lead="Parts are ordered by contacting Cumbria Spas and shipped to you. Every order is invoiced."
+    crumbs={crumbs}
+    slides={imgs.slice(0, 1).map((im) => ({ src: im.src, alt: im.alt }))}
+    trust={['Ordered by contact', 'Availability checked', 'Held and shipped to you', 'Invoiced']}
+  />
+
+  <TrustStrip />
+
+  <section class="sheet on-light" data-section="sheet-link">
+    <div class="container">
+      <div class="sheet__card">
+        <a class="sheet__link" href={SHEET_URL} data-placeholder="sheet-url">Click here to see the updated Google Sheet of parts availability and pricing</a>
+        <p class="sheet__p">To order, {ctaLine.charAt(0).toLowerCase() + ctaLine.slice(1)}</p>
+      </div>
+    </div>
+  </section>
+
+  <Gallery />
+
+  <AreasCovered />
+
+  <QuoteForm heading="Order parts" lead="Tell us what you need and your postcode, and Cumbria Spas will check availability and come back to you." />
+</Base>
+
+<style>
+  .sheet { background: var(--page); padding: var(--pad-high) 0 0; }
+  .sheet__card { background: var(--card); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: clamp(24px, 4vw, 40px); display: grid; gap: 14px; justify-items: start; }
+  .sheet__link { font-size: var(--text-xl); font-weight: 800; color: var(--teal); letter-spacing: -0.015em; line-height: 1.25; }
+  .sheet__link:hover { color: var(--sky-deep); }
+  .sheet__p { color: var(--muted-light); }
+</style>

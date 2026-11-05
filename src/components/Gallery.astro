@@ -1,12 +1,15 @@
 ---
 /**
- * GALLERY (prove). A plain grid of rounded thumbnails: four across on
- * desktop, two on phones. Every photo opens the one root Lightbox. Used for
- * his sauna photos; the first tile spans two rows as the lead image.
+ * GALLERY (prove). The ONE shared set (content law: the same full set on
+ * every page, up to 40, from the R2 pool), six across on desktop, three on
+ * tablets, two on phones. Every photo opens the root Lightbox at full size.
+ * Captions describe what is shown; dealer-range photos are never called his
+ * installs.
  */
-interface Item { src: string; alt: string }
-interface Props { id?: string; heading: string; note: string; items: Item[]; cta?: string; service?: string }
-const { id = 'gallery', heading, note, items, cta = 'Get a Quote', service } = Astro.props;
+import { gallery } from '../lib/media';
+interface Props { id?: string; heading?: string; note?: string }
+const { id = 'gallery', heading = 'Hot tubs, spas and saunas from the Cumbria Spas range', note = 'Wood-fired and electric hot tubs, mosaic-tiled spas, swim spas and saunas. Tap any photo to see it full size.' } = Astro.props;
+const items = gallery();
 ---
 <section class="gl section-gallery on-light" id={id} data-section={id}>
   <div class="container">
@@ -16,24 +19,25 @@ const { id = 'gallery', heading, note, items, cta = 'Get a Quote', service } = A
     </div>
     <ul class="gl__grid" data-gallery>
       {items.map((g, i) => (
-        <li class:list={[i === 0 && 'gl__lead']} data-motion="reveal" style={`--reveal-delay: ${(i % 4) * 60}ms`}>
+        <li class:list={[i === 0 && 'gl__lead']}>
           <button type="button" class="gl__item" data-lightbox aria-label={`Open larger: ${g.alt}`}>
-            <img src={g.src} alt={g.alt} width="900" height="900" loading="lazy" decoding="async" />
+            <img src={g.src} data-full={g.full ?? g.src} alt={g.alt} width={g.w ?? 900} height={g.h ?? 900} loading="lazy" decoding="async" />
           </button>
         </li>
       ))}
     </ul>
     <div class="gl__foot" data-motion="reveal">
-      <a href="#quote" class="btn btn-primary" data-cta={`${id}-quote`} data-service={service}>{cta}</a>
+      <a href="#quote" class="btn btn-primary" data-cta={`${id}-quote`}>Quick Quote Online</a>
     </div>
   </div>
 </section>
 
 <style>
   .gl { background: var(--page); padding: var(--pad-med) 0; }
-  .gl__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .gl__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  @media (max-width: 1100px) { .gl__grid { grid-template-columns: repeat(4, 1fr); } }
   .gl__lead { grid-row: span 2; grid-column: span 2; }
-  .gl__item { display: block; width: 100%; height: 100%; aspect-ratio: 1 / 1; padding: 0; border: 0; overflow: hidden; border-radius: var(--radius-lg); background: var(--tint); cursor: zoom-in; }
+  .gl__item { display: block; width: 100%; height: 100%; aspect-ratio: 1 / 1; padding: 0; border: 0; overflow: hidden; border-radius: var(--radius); background: var(--tint); cursor: zoom-in; }
   .gl__item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
   .gl__item:hover img { transform: scale(1.05); }
   .gl__foot { display: flex; justify-content: center; margin-top: 32px; }

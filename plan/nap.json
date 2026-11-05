@@ -1,0 +1,150 @@
+{
+  "businessName": "Cumbria Spas",
+  "phone": "0744 5450908",
+  "email": "david@cumbriaspas.co.uk",
+  "address": "Hight Bridge Lodge, Kirkby In Furness, Cumbria, LA17 7TT",
+  "addressDisplay": "Kirkby In Furness, Cumbria",
+  "baseTown": "Kirkby-in-Furness",
+  "baseTownNote": "The showroom address, identical on the live site (crawled 2 Nov 2026), in David's own email signature (12 Aug 2026) and on the FatRank enquiry. 'Kirkby-in-Furness' is the gazetteer's spelling of the same place.",
+  "niche": "hot_tubs",
+  "nicheNote": "No cached vertical in data/money-keywords.json matches hot tubs, spas or saunas, so every hub is an operator add priced by real DataForSEO volume (services-override.json).",
+  "mode": "client",
+  "siteUrl": "https://www.cumbriaspas.co.uk",
+  "buildNote": "A NEW SITE replacing the current A2A Internet site on cumbriaspas.co.uk, plus one year of SEO articles. David agreed on WhatsApp on 6 Oct 2026 ('We can go ahead') and signed up on 12 Oct 2026. The new site is a static site hosted on Cloudflare; the current site's platform and hosting do not matter and nothing in the build has to match them (operator, 4 Nov 2026). It is built on a temporary holding domain and moved onto cumbriaspas.co.uk once the domain transfer from A2A completes; emails move to Google Workspace; the SEO articles start publishing the day it goes live (operator's WhatsApp messages 6 and 12 Oct 2026; 21 Oct 2026 call). The 14 Aug 2026 call had offered to add articles to the existing site instead; that option was superseded by the new-site agreement.",
+  "coverageNote": "Service and repair: Cumbria, North Lancashire and North Yorkshire (the live site's own wording); David's email of 12 Aug 2026 says 'Service and repair is covered in Cumbria and Yorkshire'. Sales of hot tubs, saunas, swimming pools and swim spas: nationwide (same email). The town plan is a 50-mile radius of Kirkby-in-Furness plus the towns David named (operator, 3 Nov 2026).",
+  "legalName": "Cumbria Spas Ltd",
+  "legalNameNote": "The name on the FatRank enquiry (18 Jul 2026) and the name David asked the mosaic-spa manufacturer to rebrand its brochure to (WhatsApp 20 Oct 2026). Display name stays 'Cumbria Spas'. No company number is on file, so none may be published (standing prohibition 22).",
+  "emails": ["david@cumbriaspas.co.uk", "sales@cumbriaspas.co.uk"],
+  "emailsNote": "David's two mailboxes (WhatsApp 6 Oct 2026). david@ is the public contact on the live site; sales@ will be an alias of it in Google Workspace.",
+  "whatsapp": "447445450908",
+  "whatsappNote": "The live site already links https://wa.me/447445450908; David says customers prefer WhatsApp to email (14 Aug 2026 call). Same number as the phone. The new site carries a floating WhatsApp click-to-chat button in the corner, visible on mobile (operator, 4 Nov 2026), and every call to action reads 'Contact by the quote form, call now, or by WhatsApp.'",
+  "usps": [
+    {
+      "usp": "Try-before-you-buy hot tub showroom",
+      "source": "live-capture:cumbriaspas.co.uk home page, 2 Nov 2026 ('Why Not Try Before You Buy? Visit our Hot Tub Showroom ... trial your next hot tub purchase')",
+      "affirmed": true
+    },
+    {
+      "usp": "Wood-fired hot tubs heat up in about 2 to 4 hours, against 14 to 16 hours for an electric tub",
+      "source": "live-capture:cumbriaspas.co.uk Wood Fired Spas page, 2 Nov 2026 ('about 2 to 4 hours ... around 38°C'); 14 Aug 2026 call with David (an electric tub 'between 14 and 16 hours'; a 2-metre family wood-fired tub about two hours in hard winter)",
+      "affirmed": true
+    },
+    {
+      "usp": "Arctic Spas dealer: sells, supplies, installs and maintains Arctic Spas, installing alongside Arctic's own engineer",
+      "source": "live-capture:cumbriaspas.co.uk Arctic Spas page, 2 Nov 2026 ('Arctic Spas dealers able to sell install, supply and maintain'); 14 Aug 2026 call with David (Arctic send the tub 'with one of their engineers, so me and him do the install')",
+      "affirmed": true
+    },
+    {
+      "usp": "Repair and servicing for residential and commercial hot tubs, including plant rooms",
+      "source": "live-capture:cumbriaspas.co.uk Hot Tub Maintenance & Servicing page, 2 Nov 2026; 21 Oct 2026 call with David (services and repairs of plant rooms; installs and does the plant room in-house); operator, 3 Nov 2026",
+      "affirmed": true
+    },
+    {
+      "usp": "Commercial and mosaic-tiled spas with plant rooms, automated chemical dosing and glass filtration, installed by Cumbria Spas itself",
+      "source": "21 Oct 2026 call with David (automated dosing needs a plant room and a commercial spa; glass filtration; 'we can do all that ourselves'); supplier brochure, Cheshire Spas & Pools construction and specification presentation (sent 20 Oct 2026)",
+      "affirmed": true
+    },
+    {
+      "usp": "Bespoke mosaic-tiled spas designed to fit the space, with the manufacturer's CAD drawings",
+      "source": "21 Oct 2026 call with David ('we do offer bespoke as well on the mosaic ones ... they can do all the CAD drawings'); supplier brochure pages 6 and 9",
+      "affirmed": true
+    },
+    {
+      "usp": "Trade prices for holiday parks and lodge sites: a British limited company, VAT registered, ordering at least three units (hot tubs and saunas can be mixed)",
+      "source": "14 Aug 2026 call with David; David's WhatsApp of 13 Aug 2026 ('minimum of 3 products and they must be a British company and vat registered'); live-capture home page, 2 Nov 2026 ('holiday parks and small sites ... trade prices')",
+      "affirmed": true
+    },
+    {
+      "usp": "Dealer for a Yorkshire swimming pool manufacturer that does not sell direct to the public",
+      "source": "14 Aug 2026 call with David ('I work with a manufacturer over in Yorkshire ... he doesn't really sell direct to the public ... So I'm one of his dealers')",
+      "affirmed": true
+    },
+    {
+      "usp": "Videos and photos of the actual tub sent on WhatsApp before you buy",
+      "source": "14 Aug 2026 call with David (he sends buyers 'loads of videos and pictures of the product' on WhatsApp; a buyer chose him because he 'got more information out of me')",
+      "affirmed": true
+    },
+    {
+      "usp": "Established in 2013",
+      "source": "live-capture:cumbriaspas.co.uk home page, 2 Nov 2026 ('Established in 2013'); 14 Aug 2026 call with David ('I started this in 2013')",
+      "affirmed": true
+    },
+    {
+      "usp": "Arctic Spas has no dealer in Yorkshire, so Yorkshire buyers are served from Cumbria",
+      "source": "14 Aug 2026 call with David ('they actually don't have a dealer in Yorkshire'). Replaces the 2 Nov intake's 'Only Arctic Spas dealer in Yorkshire', which no source says: he is the Cumbria dealer (the live site trades as 'Arctic Spas Cumbria'), not a Yorkshire one, and 'only' is a superlative",
+      "affirmed": false
+    }
+  ],
+  "namedTownsFromCalls": ["Barrow in Furness", "Kendal", "Keswick", "Bedale", "Ballycastle"],
+  "namedTownsNote": "Every town David named himself as a place he works or sells, from every readable source (operator's instruction, 3 Nov 2026). Barrow in Furness and Kendal: the 14 Aug 2026 call, while the map of Cumbria was on screen (David: Barrow is 'about 10 minutes from where I live'). Keswick: a swimming-pool customer, 14 Aug call. Bedale (North Yorkshire, 64 miles): a service customer he was driving to, 14 Aug call. Ballycastle (Northern Ireland): a holiday park where he serviced and repaired hot tubs at the end of June, his WhatsApp of 12 Aug 2026. All five are pinned below; Bedale and Ballycastle are outside the 50-mile radius and are in the plan only because townOrder.pinBeyondRadius is set. NOT included, deliberately: Belfast (where his father was born, not a work place), York (where the pool manufacturer is), the Isle of Man (a swim-spa enquiry, 21 Oct call, and not a town in the gazetteer), Lithuania and France (supplier and an overseas trade enquiry).",
+  "townOrder": {
+    "scheme": "proximity",
+    "radiusMiles": 50,
+    "minPopulation": 1000,
+    "pinned": ["Kirkby-in-Furness", "Barrow in Furness", "Kendal", "Keswick", "Bedale", "Ballycastle"],
+    "pinBeyondRadius": true,
+    "_note": "Operator, 3 Nov 2026: a real 50-mile radius of the base, every town David named included, Lancashire and Yorkshire expected rather than excluded. The pins are the base and David's named towns, nearest first; everything after them is proximity order. pinBeyondRadius lets the two named towns outside the circle (Bedale, Ballycastle) into the plan (D-2026-11-03-14); take them out of `pinned` to drop them."
+  },
+  "gbp": {
+    "confirmedNone": true
+  },
+  "gbpNote": "OUTSTANDING (operator, 3 Nov 2026): David has no Google Business Profile or Google Maps listing. The operator has told him to create one and he has not done it yet. Consistent with the 14 Aug 2026 call, where a live search for Cumbria hot tubs showed his website in the organic results but no Maps listing, and with the 2 Nov research (no listing anywhere). When it exists, add gbp.mapsUrl and gbp.cid here and re-run.",
+  "reviews": {
+    "status": "none-yet",
+    "note": "No reviews exist yet on any platform (operator, 3 Nov 2026; no Google listing to hold them). The operator will get David to collect some later. Until then the Reviews page is an empty placeholder: no widget, no testimonials, no star ratings, and no review claim on any page."
+  },
+  "pages": [
+    {
+      "slug": "chemicals",
+      "title": "Chemicals",
+      "placeholder": true,
+      "topLink": {
+        "text": "Click here to see the updated Google Sheet of chemicals availability and pricing",
+        "href": "#"
+      },
+      "sections": ["sheet-link", "placeholder-body", "contact-to-order"],
+      "contentNote": "PLACEHOLDER PAGE (operator, 3 Nov 2026). New content, not a redo of anything on the current site. The top of the page is the sheet line above, with a placeholder link until David supplies the real Google Sheet URL and product list. Leave the body blank. Buying is by contact only, with the site's standard call to action: 'Contact by the quote form, call now, or by WhatsApp.' No shop, basket, checkout or card payment, and no prices on the page itself. A standalone page with no town articles."
+    },
+    {
+      "slug": "parts",
+      "title": "Parts",
+      "placeholder": true,
+      "topLink": {
+        "text": "Click here to see the updated Google Sheet of parts availability and pricing",
+        "href": "#"
+      },
+      "sections": ["sheet-link", "placeholder-body", "contact-to-order"],
+      "contentNote": "PLACEHOLDER PAGE (operator, 3 Nov 2026). Same treatment as Chemicals: the sheet line at the top with a placeholder link until David supplies the sheet, a blank body, and buying by contact only, with the standard call to action: 'Contact by the quote form, call now, or by WhatsApp.' A standalone page with no town articles."
+    },
+    {
+      "slug": "reviews",
+      "title": "Reviews",
+      "placeholder": true,
+      "sections": ["placeholder-body", "contact-cta"],
+      "contentNote": "EMPTY PLACEHOLDER (operator, 3 Nov 2026). Cumbria Spas has no reviews yet. Build the page, but publish no reviews, ratings, testimonials, star graphics or reviews widget: a short holding line and the standard call to action ('Contact by the quote form, call now, or by WhatsApp.') only. Fill it when David has collected real reviews."
+    }
+  ],
+  "hubContentNotes": {
+    "hot-tub-repair-and-servicing": "THE REPAIR AND SERVICING HUB (operator, 3 Nov 2026). Articles are 'Hot Tub Repair and Servicing in [Town]', for people searching 'hot tub repair <town>' and 'hot tub servicing <town>'. Cover, from SITE-PLAN.md Section 1 ('Product and service detail'): residential AND commercial hot tubs; the service itself step by step (the live site's nine-step service: line flush with jets on full power for 45 minutes, drain, vacuum the footwell and every jet line, clean the shell, lid and steps, inspect and clean the filters, refill and balance the chemicals); automated pH balancing and chemical dosing (what David described: domestic tubs need manual chemical balancing, automated dosing comes with a commercial spa and plant room, and Arctic Spas' Spa Boy is the domestic route to automated saltwater water care); plant-room maintenance, servicing and repair for commercial spas; leaking and neglected tubs; and a short mention of installation, linking to the installation hub (most of the business is installs; this hub is the repair and servicing angle). Coverage wording: Cumbria, North Lancashire and North Yorkshire. No service price is published: contact for a quote. On this page and in every article, say in passing that Cumbria Spas serves residential and commercial customers of all types, from hotels to spas to leisure centres. Every call to action reads 'Contact by the quote form, call now, or by WhatsApp.'",
+    "wood-fired-hot-tubs": "Lead the page with wood-fired tubs as David sells them: most buyers choose the model with hydrotherapy jets and LED lights, which plug into a standard 13-amp socket for the jets and lights only (the stove does the heating). The completely off-grid starter model exists but is a small share of sales, so it is a section, not the headline (David's WhatsApp, 6 Oct 2026). The range is made by Kubilų pasaulis, so name it: 'Cumbria Spas works in partnership with Kubilų pasaulis, the largest manufacturer in Lithuania of premium, luxury and custom hot tubs' (approved by the operator on 4 Nov 2026 for every page, articles included. That it is the largest manufacturer in Lithuania is the manufacturer's own claim and already on the live site; 'premium, luxury and custom hot tubs' is the operator's wording. Attribute it to Kubilų pasaulis and never make it a claim about Cumbria Spas). Never call it just 'a Lithuanian manufacturer'. Keep the live site's advantages: renewable wood heat with less reliance on electricity, off-grid use, the traditional bathing experience with the natural aroma of burning wood, and lower running costs with your own wood. Heat-up, temperature control by the stove vent, and the digital thermometer are in SITE-PLAN.md Section 1. The hero image must be a wood-fired tub. On this page and in every article, say in passing that Cumbria Spas serves residential and commercial customers of all types, from hotels to spas to leisure centres. Every call to action reads 'Contact by the quote form, call now, or by WhatsApp.' No prices anywhere: 'contact for prices' or 'contact for a quote'.",
+    "electric-hot-tubs": "The electric version of the Kubilų pasaulis range: the same tub shapes as the wood-fired range, from the same manufacturer (use the partnership wording on the wood-fired hub; never 'a Lithuanian manufacturer'). The trade-off to explain is convenience against heat-up time (an electric tub takes 14 to 16 hours from cold, per David), and electric tubs are governed to about 40°C. Cross-link to the wood-fired hub and the Arctic Spas hub. The hero image must be an electric tub. On this page and in every article, say in passing that Cumbria Spas serves residential and commercial customers of all types, from hotels to spas to leisure centres. Every call to action reads 'Contact by the quote form, call now, or by WhatsApp.' No prices anywhere: 'contact for prices' or 'contact for a quote'.",
+    "hot-tub-installation": "Installs are most of the business. Give the technical detail a buyer needs: a wood-fired tub arrives by 4x4 and trailer and is lifted into place with a HIAB crane; an Arctic Spa is installed with one of Arctic's own engineers; commercial and mosaic-tiled spas are installed in-house, plant room included. Trade orders to holiday parks are supplied without installation. On this page and in every article, say in passing that Cumbria Spas serves residential and commercial customers of all types, from hotels to spas to leisure centres. Every call to action reads 'Contact by the quote form, call now, or by WhatsApp.' No prices anywhere: 'contact for prices' or 'contact for a quote'.",
+    "saunas": "Saunas from Kubilų pasaulis, the same manufacturer as the wood-fired range (use the partnership wording on the wood-fired hub; never 'a Lithuanian manufacturer'): the live site's large-sauna specification (spruce exterior, alder benches, a Cozy 12 or TW 12 heater, tempered tinted 8 mm glass, Harvia chimney, LED lighting, accessory set) and a 220 x 220 cm model. The live site's own sauna photos also show a Harvia electric heater with a wall controller: do not write about an electric option until David confirms one is offered. Saunas count towards the three-unit trade minimum for holiday parks. On this page and in every article, say in passing that Cumbria Spas serves residential and commercial customers of all types, from hotels to spas to leisure centres. Every call to action reads 'Contact by the quote form, call now, or by WhatsApp.' No prices anywhere: 'contact for prices' or 'contact for a quote'.",
+    "arctic-spas-dealer": "Cumbria Spas is an Arctic Spas dealer (the live site trades as 'Arctic Spas Cumbria'): it sells, supplies, installs and maintains Arctic Spas, and each one is installed with one of Arctic's own engineers. Spa Boy automated saltwater care is Arctic's domestic answer to automated water care. Arctic also make a saltwater swim spa: cross-link the Swimming Pools & Swim Spas hub. Never write 'the only dealer'. On this page and in every article, say in passing that Cumbria Spas serves residential and commercial customers of all types, from hotels to spas to leisure centres. Every call to action reads 'Contact by the quote form, call now, or by WhatsApp.' No prices anywhere: 'contact for prices' or 'contact for a quote'.",
+    "commercial-and-mosaic-tiled-spas": "Residential, commercial and B2B: hotels, spa-day venues, leisure centres, holiday parks and homeowners who want a mosaic-tiled spa instead of acrylic. Most models run from a plant room; some domestic models build the plant into the spa (one has an exposed side showing the heater and pumps). Hydro spas, about 4 m x 3-3.5 m up to about 5.5 m x 4.5 m, hold 15 to 20 people. Automated dosing, glass filtration, bespoke CAD-designed spas, and the build and test detail (GRP shell, 24-hour water test, 70-point check) are in SITE-PLAN.md Section 1. The manufacturer has been family-run since 1965: say so, attributed to the manufacturer and never to Cumbria Spas (established 2013). Lead times are 6 to 10 weeks on most orders (David, WhatsApp 20 Oct 2026). Swim spas have their own hub, Swimming Pools & Swim Spas: cross-link it. Never name the manufacturer, including in the copyright notice on its drawings and photos, which names Cumbria Spas (operator, 4 Nov 2026): its brochure, drawings and photos are used as Cumbria Spas' own, with full authority. Every call to action reads 'Contact by the quote form, call now, or by WhatsApp.' No prices anywhere: 'contact for prices' or 'contact for a quote'.",
+    "swimming-pools-and-swim-spas": "ONE HUB FOR SWIMMING POOLS AND SWIM SPAS (operator, 4 Nov 2026). Pools: Cumbria Spas is a dealer for a Yorkshire swimming pool manufacturer that does not sell direct to the public, David works on the installation, and pools can be supplied nationally; mosaic-tiled and bespoke pools are in the photo library. Swim spas: GRP mosaic-tiled swim spas from the mosaic range (a 6 m model and a 7 m x 3 m model among them, built and water-tested like the mosaic spas; never name that manufacturer) and Arctic Spas' saltwater swim spa. A swim spa is a long decision for most buyers, so inform rather than rush. Cross-link the Commercial & Mosaic-Tiled Spas and Arctic Spas hubs. On this page and in every article, say in passing that Cumbria Spas serves residential and commercial customers of all types, from hotels to spas to leisure centres. Every call to action reads 'Contact by the quote form, call now, or by WhatsApp.' No prices anywhere: 'contact for prices' or 'contact for a quote'.",
+    "trade-and-holiday-park-hot-tubs": "B2B only, for holiday parks, lodge and glamping sites and other letting businesses, not individual buyers. David has supplied and serviced many holiday parks: say so. The trade terms are for the Kubilų pasaulis range (hot tubs and saunas). Qualifying: a British company registered at Companies House, VAT registered, ordering at least three units (hot tubs and saunas can be mixed). Priced in euros at trade rates (contact for prices); delivered to the buyer's site, unloading arranged by the buyer, and a parts-only warranty because Cumbria Spas does not install trade orders (14 Aug 2026 call). Servicing afterwards: link the Hot Tub Repair & Servicing hub. Other hot tub types for holiday parks are sub-topics of these articles. The VAT mechanism is in SITE-PLAN.md and needs checking by David or an accountant before it is published as advice. Say in passing that Cumbria Spas serves residential and commercial customers of all types, from hotels to spas to leisure centres. Every call to action reads 'Contact by the quote form, call now, or by WhatsApp.'"
+  },
+  "negativeTopics": [
+    "The Chill Gardens product image that the preview pages and the current home page carry: not used anywhere on the new site (operator's choice, 4 Nov 2026). Chill Gardens is a fantastic supplier; its products are not part of the range this site sells, so the site does not feature them",
+    "The mosaic-spa manufacturer's name or contact details (Cheshire Wellness, Cheshire Spas & Pools), anywhere, including the copyright notice on its drawings and photos, which names Cumbria Spas instead (operator, 4 Nov 2026). Its brochure, drawings and photos are used as Cumbria Spas' own with full authority, and the customer deals with Cumbria Spas only",
+    "Any supplier's phone number, email, address or website, including the trade parts supplier and the swimming pool manufacturer",
+    "Online checkout, a basket, card payment or buying online. Chemicals and parts are bought by contacting the business",
+    "A Google Business Profile, Google Maps listing or Google reviews. The business has none yet",
+    "A team of staff, engineers or experts, or staffing levels past or present: no source names any staff. Write as Cumbria Spas, an established business, with David as its owner",
+    "Any price or price figure on a page or in an article, including the service price on the current site. Every price is 'contact for prices' or 'contact for a quote' (operator, 4 Nov 2026). The Chemicals and Parts pages' link to David's own Google Sheet of availability and pricing stays (operator, 3 Nov 2026)",
+    "The business's own costs, margins and commissions, what the owner pays or spends, and how suppliers or subcontractors fulfil work behind the scenes (operator, 4 Nov 2026). The customer-facing facts in the usable claims and hub notes stay, such as Arctic Spas installs with Arctic's own engineer and the trade terms",
+    "Anything suggesting the business has scaled down or gone quiet, such as former staff or past advertising. Content informs with real technical detail and presents an established, professional, busy business (operator, 4 Nov 2026)",
+    "Screenshots of any kind used as images: phone screens, emails, invoices, payment pages, logins or websites. Several sit in the WhatsApp image pool and none is ever published"
+  ]
+}

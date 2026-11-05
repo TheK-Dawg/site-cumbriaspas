@@ -1,0 +1,137 @@
+---
+/**
+ * TOWN ARTICLE, "<hub> in <Town>" (the SEO engine's output; none are
+ * published yet: generation runs after handoff). The article treatment (law):
+ * breadcrumbs above the H1 (Home → hub → article), the top takeaways box, a
+ * two-column body with a sticky contents list and CTA rail, an image above
+ * every H2 (inserted below from the article's own images, then its hub's
+ * picks from the R2 pool), reader questions in their own
+ * section at the bottom, and a link to the hub. Article schema with the
+ * business as author.
+ */
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import QuoteForm from '../../components/QuoteForm.astro';
+import FaqList from '../../components/FaqList.astro';
+import { publishedArticles } from '../../lib/articles';
+import { business, hubBySlug, hubHref, ctaLine } from '../../data/site';
+import { pick, picks } from '../../lib/media';
+
+export async function getStaticPaths() {
+  const all = await publishedArticles();
+  return all.map((entry) => ({ params: { hub: entry.data.hub, town: entry.data.townSlug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+const hub = hubBySlug[d.hub];
+const { headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+const hero = d.images[0] ?? pick(d.hub, 0);
+// Law: an image above every H2, rotating through the article's own picks and then the hub's.
+const pool = [...d.images, ...picks(d.hub, 4)];
+let n = 1;
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const body = (entry.rendered?.html ?? '').replace(/<h2\b/g, () => {
+  const im = pool[n++ % pool.length];
+  return `<figure><img src="${esc(im.src)}" alt="${esc(im.alt)}" loading="lazy" decoding="async" width="1600" height="900"></figure><h2`;
+});
+const url = new URL(`/${d.hub}/${d.townSlug}/`, Astro.site).href;
+const crumbs = [{ name: 'Home', href: '/' }, { name: hub.name, href: hubHref(d.hub) }, { name: d.title, href: `/${d.hub}/${d.townSlug}/` }];
+const schema = [
+  {
+    '@type': 'Article', '@id': `${url}#article`, headline: d.title, description: d.description, mainEntityOfPage: url,
+    datePublished: d.publishDate.toISOString(), dateModified: (d.updatedDate ?? d.publishDate).toISOString(),
+    image: hero.full ?? hero.src, author: { '@id': `${business.url}/#business` }, publisher: { '@id': `${business.url}/#business` },
+    about: { '@type': 'Service', name: hub.name, url: new URL(hubHref(d.hub), Astro.site).href },
+  },
+  ...(d.faqs.length ? [{ '@type': 'FAQPage', '@id': `${url}#faq`, mainEntity: d.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : []),
+];
+---
+
+<Base title={`${d.title} | ${business.name}`} description={d.description} page="article" crumbs={crumbs} schema={schema} ogImage={hero.full ?? hero.src}>
+  <section class="ah on-dark" data-section="article-hero">
+    <div class="ah__slab slab" data-hero-watch>
+      <img class="ah__bg" src={hero.src} alt="" width="1600" height="900" fetchpriority="high" />
+      <div class="container ah__inner">
+        <nav class="ah__crumbs" aria-label="Breadcrumb">
+          <ol>{crumbs.map((c, i) => <li>{i < crumbs.length - 1 ? <a href={c.href}>{c.name}</a> : <span aria-current="page">{c.name}</span>}</li>)}</ol>
+        </nav>
+        <h1 class="ah__h1">{d.title}</h1>
+        <p class="ah__lead">{d.description}</p>
+        <div class="btn-row">
+          <a href="#quote" class="btn btn-primary" data-cta="article-hero-quote">Quick Quote Online</a>
+          <a href={business.phoneHref} class="btn btn-ghost" data-cta="article-hero-call">Call {business.phone}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ab on-light" data-section="article-body">
+    <div class="container ab__grid">
+      <article class="ab__main">
+        <div class="ab__takeaways">
+          <h2 class="ab__tk-h" id="top-takeaways">Top takeaways</h2>
+          <ul class="tick-list">{d.takeaways.map((t) => <li>{t}</li>)}</ul>
+        </div>
+        <div class="prose ab__prose" set:html={body} />
+        <p class="ab__hub">More on <a href={hubHref(d.hub)}>{hub.name.toLowerCase()} from Cumbria Spas</a>.</p>
+      </article>
+      <aside class="ab__side">
+        <div class="ab__sticky">
+          {toc.length > 0 && (
+            <nav class="ab__toc" aria-label="Contents">
+              <p class="ab__toc-h">Contents</p>
+              <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+            </nav>
+          )}
+          <div class="ab__cta on-dark">
+            <p class="ab__cta-h">{hub.name} in {d.town}</p>
+            <p class="ab__cta-p">{ctaLine}</p>
+            <a href="#quote" class="btn btn-primary" data-cta="article-rail-quote">Quick Quote Online</a>
+            <a href={business.phoneHref} class="btn btn-ghost" data-cta="article-rail-call">Call {business.phone}</a>
+            <a href={business.whatsapp} class="btn btn-ghost" target="_blank" rel="noopener" data-cta="article-rail-whatsapp">WhatsApp</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {d.faqs.length > 0 && <FaqList heading={`${hub.name} in ${d.town}: questions`} items={d.faqs} />}
+
+  <QuoteForm heading={`Ask about ${hub.name.toLowerCase()} in ${d.town}`} lead={`Tell us what you need in ${d.town} and Cumbria Spas will come back to you.`} />
+</Base>
+
+<style>
+  .ah { padding: 0 0 var(--inset); background: var(--page); }
+  .ah__slab { position: relative; overflow: hidden; background: var(--teal-ink); color: var(--on-dark); padding: calc(var(--header-h) + 48px) 0 56px; border-top-left-radius: 0; border-top-right-radius: 0; }
+  .ah__bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.28; }
+  .ah__inner { position: relative; }
+  .ah__crumbs ol { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.875rem; font-weight: 600; color: var(--muted-dark); }
+  .ah__crumbs li + li::before { content: '/'; margin-right: 10px; color: var(--faint-dark); }
+  .ah__crumbs a:hover { color: var(--sky); }
+  .ah__h1 { font-size: clamp(1.875rem, 1.3rem + 2.3vw, 3.25rem); max-width: 22ch; text-wrap: balance; margin-bottom: 14px; }
+  .ah__lead { color: var(--muted-dark); max-width: 60ch; margin-bottom: 26px; font-size: var(--text-lg); }
+  @media (min-width: 761px) { .ah__slab { margin-inline: var(--inset); border-radius: 0 0 var(--radius-xl) var(--radius-xl); } }
+  .ab { background: var(--page); padding: var(--pad-high) 0; }
+  .ab__grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 48px; align-items: start; }
+  .ab__takeaways { background: var(--tint); border-radius: var(--radius-lg); padding: 24px 28px; margin-bottom: 36px; }
+  .ab__tk-h { font-size: var(--text-lg); color: var(--teal-deep); margin-bottom: 12px; }
+  .ab__prose { max-width: none; }
+  .ab__prose :global(figure) { margin: 2.2em 0 0; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 16 / 9; }
+  .ab__prose :global(figure img) { width: 100%; height: 100%; object-fit: cover; }
+  .ab__prose :global(h2) { color: var(--teal-deep); scroll-margin-top: calc(var(--header-h) + 16px); }
+  .ab__hub { margin-top: 28px; font-weight: 600; }
+  .ab__hub a { color: var(--teal); }
+  .ab__sticky { position: sticky; top: calc(var(--header-h) + 16px); display: flex; flex-direction: column; gap: 16px; }
+  .ab__toc { background: var(--card); border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow-card); }
+  .ab__toc-h { font-weight: 800; color: var(--teal-deep); margin-bottom: 10px; }
+  .ab__toc ol { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; font-size: 0.9375rem; }
+  .ab__toc a { color: var(--teal); }
+  .ab__toc a:hover { color: var(--sky-deep); }
+  .ab__cta { background: var(--teal-deep); color: var(--on-dark); border-radius: var(--radius-lg); padding: 22px; display: grid; gap: 10px; }
+  .ab__cta-h { font-weight: 800; font-size: 1.125rem; }
+  .ab__cta-p { color: var(--muted-dark); font-size: 0.9375rem; margin-bottom: 4px; }
+  .ab__cta .btn { width: 100%; }
+  @media (max-width: 1000px) { .ab__grid { grid-template-columns: 1fr; } .ab__sticky { position: static; } }
+</style>

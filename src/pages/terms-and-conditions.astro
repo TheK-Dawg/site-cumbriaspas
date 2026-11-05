@@ -1,0 +1,58 @@
+---
+/**
+ * TERMS AND CONDITIONS. Clauses 1 to 8 are the current site's own text, word
+ * for word (plan/terms-and-conditions.md; operator, 4 Nov 2026: do not
+ * rewrite). The maroon "DO YOU NEED THIS?" line above the live page is the old
+ * designer's note and is left out. Clauses 9 to 12 are standard template
+ * language added to cover what the live text is silent on (operator's
+ * instruction): sales as well as repairs, no online prices or payment,
+ * quotations, and cookies. Generic, with no new claims about the business.
+ *
+ * TODO(operator decision, plan "Legal pages"): clause 2 describes repair and
+ * maintenance only, and clause 3 says "Pricing for services is detailed on our
+ * website" while the new site publishes no prices. The text stays word for
+ * word until the operator and David decide.
+ */
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { business } from '../data/site';
+const toc = [
+  ['acceptance', '1. Acceptance of Terms'], ['services', '2. Services Offered'], ['pricing', '3. Pricing and Payment'],
+  ['scheduling', '4. Scheduling and Appointments'], ['liability', '5. Liability'], ['law', '6. Governing Law'],
+  ['changes', '7. Changes to Terms'], ['contact', '8. Contact Us'], ['sales', '9. Sales of Products'],
+  ['quotations', '10. Quotations and Prices'], ['ordering', '11. Ordering and Payment'], ['website', '12. Use of This Website and Cookies'],
+].map(([id, title]) => ({ id, title }));
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Terms and Conditions', href: '/terms-and-conditions/' }];
+---
+
+<Base title="Terms and Conditions | Cumbria Spas" description="The terms and conditions for using the Cumbria Spas website and services: hot tub repair and maintenance, sales of hot tubs, saunas, spas, swim spas and pools, and quotations." page="terms" utility={true} crumbs={crumbs}>
+  <LegalPage h1="Terms and Conditions" lead="Cumbria Spas Terms and Conditions" crumbs={crumbs} toc={toc} rail>
+    <h2 id="acceptance">1. Acceptance of Terms</h2>
+    <p>By using the Cumbria Spas website and services, you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use our website or services.</p>
+    <h2 id="services">2. Services Offered</h2>
+    <p>Cumbria Spas provides hot tub repair and maintenance services. The specific services offered may vary and are detailed on our website. We strive to provide high-quality service, but we cannot guarantee specific outcomes.</p>
+    <h2 id="pricing">3. Pricing and Payment</h2>
+    <p>Pricing for services is detailed on our website. Payment is due upon completion of the service, unless otherwise agreed upon in writing.</p>
+    <h2 id="scheduling">4. Scheduling and Appointments</h2>
+    <p>Appointments are required for all services. Please contact us to schedule an appointment.</p>
+    <h2 id="liability">5. Liability</h2>
+    <p>Cumbria Spas is not liable for any damages, direct or indirect, arising from the use of our services, unless such damages are a direct result of our negligence.</p>
+    <h2 id="law">6. Governing Law</h2>
+    <p>These Terms and Conditions are governed by and construed in accordance with the laws of England and Wales.</p>
+    <h2 id="changes">7. Changes to Terms</h2>
+    <p>Cumbria Spas reserves the right to modify these Terms and Conditions at any time. Updated terms will be posted on our website.</p>
+    <h2 id="contact">8. Contact Us</h2>
+    <p>For any questions or concerns regarding these Terms and Conditions, please contact us at {business.email}.</p>
+
+    <div class="lp__added">
+      <h2 id="sales">9. Sales of Products</h2>
+      <p>As well as repair and maintenance, Cumbria Spas sells and supplies hot tubs, saunas, spas, swim spas and swimming pools, and related chemicals and parts. Product descriptions and specifications on this website are given in good faith as a general description; the specification that applies to your order is the one confirmed to you in writing.</p>
+      <h2 id="quotations">10. Quotations and Prices</h2>
+      <p>Prices are not published on this website. Prices are given on request, by quotation. A quotation is valid for the period stated on it, and the price, delivery, installation (where included) and any other terms that apply to your order are those set out in the quotation or order confirmation.</p>
+      <h2 id="ordering">11. Ordering and Payment</h2>
+      <p>No products or services can be bought or paid for online through this website. Orders are placed by contacting Cumbria Spas, and payment is made against an invoice, on the terms stated on that invoice or agreed in writing. Your statutory rights as a consumer are not affected by these terms.</p>
+      <h2 id="website">12. Use of This Website and Cookies</h2>
+      <p>The content of this website is provided for general information. We aim to keep it accurate and up to date, but we do not guarantee that it is complete or free of errors, and we may change it at any time. Information about how we handle personal information and cookies is in our <a href="/privacy-policy/">Privacy Policy</a>.</p>
+    </div>
+  </LegalPage>
+</Base>

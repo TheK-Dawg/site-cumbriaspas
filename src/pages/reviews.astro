@@ -1,0 +1,26 @@
+---
+/**
+ * REVIEWS. EMPTY PLACEHOLDER (operator, 3 Nov 2026; seed.reviews "none-yet";
+ * factory law, 17 Oct): Cumbria Spas has no reviews yet, so the page says so
+ * plainly. A short holding line and the standard call to action only: no
+ * widget, testimonials, stars, ratings or review markup. Fill it when David
+ * has collected real reviews.
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { picks } from '../lib/media';
+const imgs = picks('reviews', 1);
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Reviews', href: '/reviews/' }];
+---
+
+<Base title="Reviews | Cumbria Spas" description="Reviews of Cumbria Spas will appear here once customers have left them. In the meantime, contact by the quote form, call now, or by WhatsApp." page="reviews" crumbs={crumbs}>
+  <Hero
+    h1="Reviews of Cumbria Spas"
+    lead="There are no reviews to show here yet. When customers leave reviews, they will appear on this page."
+    crumbs={crumbs}
+    slides={imgs.slice(0, 1).map((im) => ({ src: im.src, alt: im.alt }))}
+  />
+
+  <QuoteForm heading="Ask Cumbria Spas a question" lead="Tell us what you are looking for, and Cumbria Spas will come back to you." />
+</Base>

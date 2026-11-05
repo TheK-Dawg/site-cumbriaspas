@@ -1,18 +1,33 @@
 ---
 /**
- * 404. Routes back into the one-page site. Utility page: no sticky bar.
+ * 404 (noindex, status 404 via the Worker's not_found_handling). Law: the
+ * site's own header and footer, a hero saying plainly the page was not found,
+ * and only Home and Call actions; no form, reviews or sticky bar. The plan
+ * puts the WhatsApp button on every page, so it stays. No entity schema.
  */
 import Base from '../layouts/Base.astro';
-import LegalPage from '../components/LegalPage.astro';
-import { services } from '../data/site';
+import { business } from '../data/site';
 ---
 
-<Base title="Page Not Found | Cumbria Spas" description="That page is not here. Wood fired spas, Arctic Spas hot tubs, saunas and hot tub servicing are all on the Cumbria Spas front page." page="404" utility={true}>
-  <LegalPage h1="That page is not here" lead="The address may have been typed wrongly or the page may have moved. Everything is on the front page." kind="error">
-    <h2>What we do</h2>
-    <ul>
-      {services.map((s) => <li><a href={`/${s.anchor === '#quote' ? '#services' : s.anchor}`}>{s.name}</a></li>)}
-    </ul>
-    <p>Or go to <a href="/">the front page</a>, or <a href="/#contact">contact us</a>.</p>
-  </LegalPage>
+<Base title="Page Not Found | Cumbria Spas" description="That page is not on the Cumbria Spas website. Go to the home page or call 0744 5450908." page="404" utility={true} noindex={true} noSchema={true}>
+  <section class="nf on-dark" data-section="404">
+    <div class="nf__slab slab" data-hero-watch>
+      <div class="container nf__inner">
+        <h1 class="nf__h1">Sorry, that page is not here</h1>
+        <p class="nf__lead">The address may have been typed wrongly, or the page may have moved.</p>
+        <div class="btn-row">
+          <a href="/" class="btn btn-primary" data-cta="404-home">Go to the Home Page</a>
+          <a href={business.phoneHref} class="btn btn-ghost" data-cta="404-call">Call {business.phone}</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </Base>
+
+<style>
+  .nf { padding: 0 0 var(--inset); background: var(--page); }
+  .nf__slab { background: linear-gradient(160deg, var(--teal-ink) 0%, var(--teal-deep) 60%, var(--teal) 100%); color: var(--on-dark); padding: calc(var(--header-h) + 96px) 0 110px; border-top-left-radius: 0; border-top-right-radius: 0; }
+  .nf__h1 { font-size: var(--text-display); max-width: 16ch; margin-bottom: 18px; text-wrap: balance; }
+  .nf__lead { color: var(--muted-dark); font-size: var(--text-lg); margin-bottom: 30px; max-width: 48ch; }
+  @media (min-width: 761px) { .nf__slab { margin-inline: var(--inset); border-radius: 0 0 var(--radius-xl) var(--radius-xl); } }
+</style>

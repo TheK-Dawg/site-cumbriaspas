@@ -1,0 +1,59 @@
+---
+/**
+ * SERVICES HUB. Links to every service page using text links (law): the
+ * nine hub cards (title links only) and a plain text list with the two
+ * standalone pages. Never called a directory.
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import Gallery from '../components/Gallery.astro';
+import AreasCovered from '../components/AreasCovered.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { hubs, hubHref, customersLine } from '../data/site';
+import { picks } from '../lib/media';
+const imgs = picks('home', 3);
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Services', href: '/services/' }];
+const schema = [{ '@type': 'ItemList', '@id': 'https://cumbriaspas.co.uk/services/#list', itemListElement: hubs.map((h, i) => ({ '@type': 'ListItem', position: i + 1, name: h.name, url: `https://cumbriaspas.co.uk${hubHref(h.slug)}` })) }];
+---
+
+<Base title="Hot Tub, Spa and Sauna Services in Cumbria | Cumbria Spas" description="Every Cumbria Spas service: wood-fired and electric hot tubs, repair and servicing, installation, pools and swim spas, saunas, Arctic Spas, commercial spas and trade supply." page="services" crumbs={crumbs} schema={schema}>
+  <Hero
+    h1="Looking for the right hot tub service? Everything Cumbria Spas does"
+    lead={`Hot tubs, spas, saunas and pools, sold, installed and serviced. ${customersLine}`}
+    crumbs={crumbs}
+    slides={imgs.slice(0, 2).map((im) => ({ src: im.src, alt: im.alt }))}
+    trust={['Nine services', 'Try before you buy', 'Arctic Spas dealer', 'Established in 2013']}
+  />
+
+  <TrustStrip />
+
+  <ServicesGrid id="all-services" heading="Hot tubs, spas, saunas and pools" lead="Choose a service for the details, the questions buyers ask and a quick quote." />
+
+  <section class="sl on-light" data-section="service-list">
+    <div class="container">
+      <h2 class="sl__h2">The full list of services</h2>
+      <ul class="sl__list">
+        {hubs.map((h) => <li><a href={hubHref(h.slug)}>{h.name}</a></li>)}
+        <li><a href="/chemicals/">Hot tub chemicals</a></li>
+        <li><a href="/parts/">Hot tub parts</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <Gallery />
+
+  <AreasCovered />
+
+  <QuoteForm heading="Ask about any Cumbria Spas service" lead="Tell us what you need and where, and Cumbria Spas will come back to you." />
+</Base>
+
+<style>
+  .sl { background: var(--page); padding: 0 0 var(--pad-med); }
+  .sl__h2 { font-size: var(--text-xl); color: var(--teal-deep); margin-bottom: 18px; }
+  .sl__list { list-style: none; margin: 0; padding: 0; columns: 3 240px; column-gap: 28px; }
+  .sl__list li { break-inside: avoid; padding: 7px 0; border-bottom: 1px solid var(--line-light); }
+  .sl__list a { color: var(--teal); font-weight: 700; }
+  .sl__list a:hover { color: var(--sky-deep); }
+</style>

@@ -1,0 +1,46 @@
+---
+/**
+ * FAQ (answer). Native <details> accordions: each one opens and STAYS open
+ * until the visitor closes it (law: accordions must stay open). The page adds
+ * the FAQPage node to its schema graph from the same list.
+ */
+interface Faq { q: string; a: string }
+interface Props { heading: string; lead?: string; items: Faq[] }
+const { heading, lead, items } = Astro.props;
+---
+<section class="fq section-faq on-light" id="faq" data-section="faq">
+  <div class="container fq__inner">
+    <div class="fq__head" data-motion="reveal">
+      <h2 class="fq__h2">{heading}</h2>
+      {lead && <p class="fq__lead">{lead}</p>}
+      <a href="#quote" class="btn btn-primary" data-cta="faq-quote">Quick Quote Online</a>
+    </div>
+    <div class="fq__list">
+      {items.map((f, i) => (
+        <details class="fq__item" data-motion="reveal" style={`--reveal-delay: ${(i % 4) * 50}ms`} open={i === 0}>
+          <summary class="fq__q">
+            <span>{f.q}</span>
+            <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
+          <p class="fq__a">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .fq { background: var(--page); padding: var(--pad-med) 0; }
+  .fq__inner { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 32px 72px; align-items: start; }
+  .fq__head { position: sticky; top: calc(var(--header-h) + 20px); display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .fq__h2 { font-size: var(--text-2xl); max-width: 16ch; text-wrap: balance; color: var(--teal-deep); }
+  .fq__lead { color: var(--muted-light); max-width: 42ch; }
+  .fq__list { display: flex; flex-direction: column; gap: 12px; }
+  .fq__item { background: var(--card); border-radius: var(--radius-lg); box-shadow: 0 4px 16px rgb(28 47 75 / 0.06); }
+  .fq__q { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 20px 24px; font-weight: 700; font-size: 1.0625rem; color: var(--teal-deep); }
+  .fq__q::-webkit-details-marker { display: none; }
+  .fq__q svg { flex-shrink: 0; color: var(--sky-deep); transition: transform 0.25s var(--ease); }
+  .fq__item[open] .fq__q svg { transform: rotate(180deg); }
+  .fq__a { padding: 0 24px 22px; color: var(--muted-light); max-width: 64ch; }
+  @media (max-width: 900px) { .fq__inner { grid-template-columns: 1fr; } .fq__head { position: static; } .fq__head .btn { width: 100%; } }
+</style>

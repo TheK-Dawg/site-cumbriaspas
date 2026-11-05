@@ -1,53 +1,63 @@
 ---
 /**
- * FOOTER (route, rest). The v3 deep-blue slab with a light quote panel
- * top-right. Brand (LAW: his logo image, never a text wordmark) + tagline +
- * NAP, his five services (anchors on this page), the address, and a meta row.
- * Real phone, email and address from his site.
+ * FOOTER (route, rest). The v3 deep-blue slab. Brand (LAW: his logo image,
+ * never a text wordmark) + the approved manufacturer line + NAP; every hub;
+ * every other built page; a "More" group (gallery, sitemap, legal). Law: the
+ * footer links every built page, the year is automatic, and there is NO call
+ * to action in the footer. The email is shown as text only: the mailbox is
+ * not live yet. Bottom bar: copyright + the one-link footer credit.
  */
-import { business, services } from '../data/site';
+import FooterCredit from './FooterCredit.astro';
+import { business, hubs, hubHref, pages, manufacturerLine } from '../data/site';
 const year = new Date().getFullYear();
-const onHome = Astro.url.pathname === '/';
-const link = (href: string) => (onHome ? href : `/${href}`);
 ---
 <footer class="ft">
   <div class="ft__slab slab on-dark">
     <div class="ft__inner container">
       <div class="ft__grid">
         <div class="ft__brand">
-          <a href={onHome ? '#main' : '/'} class="ft__logo" aria-label={`${business.name}, home`}>
+          <a href="/" class="ft__logo" aria-label={`${business.name}, home`}>
             <img src="/images/square.jpg" alt={business.name} width="96" height="96" loading="lazy" decoding="async" />
           </a>
-          <p class="ft__tag">{business.tagline}. Established in {business.founded}, with after sales service second to none.</p>
-          <p class="ft__nap">
-            <a href={business.phoneHref}>{business.phone}</a><br />
-            <a href={`mailto:${business.email}`}>{business.email}</a>
-          </p>
+          <p class="ft__tag">Hot tubs, spas, saunas, pools and hot tub servicing, established in {business.founded}. {manufacturerLine}</p>
+          <ul class="ft__nap">
+            <li><span class="ft__k">Address</span><span>{business.address}</span></li>
+            <li><span class="ft__k">Phone</span><a href={business.phoneHref}>{business.phone}</a></li>
+            <li><span class="ft__k">WhatsApp</span><a href={business.whatsapp} target="_blank" rel="noopener">{business.phone} on WhatsApp</a></li>
+            <li><span class="ft__k">Email</span><span>{business.email}</span></li>
+          </ul>
         </div>
         <div class="ft__col">
           <p class="ft__h">Services</p>
           <ul>
-            {services.map((s) => <li><a href={link(s.anchor === '#quote' ? '#services' : s.anchor)}>{s.name}</a></li>)}
+            {hubs.map((h) => <li><a href={hubHref(h.slug)}>{h.name}</a></li>)}
           </ul>
         </div>
         <div class="ft__col">
-          <p class="ft__h">Address</p>
+          <p class="ft__h">Cumbria Spas</p>
           <ul>
-            <li><span>{business.street}</span></li>
-            <li><span>{business.town}</span></li>
-            <li><span>{business.region}, {business.postcode}</span></li>
-            <li><a href={business.whatsapp} target="_blank" rel="noopener">WhatsApp us</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href={pages.services.href}>All services</a></li>
+            <li><a href={pages.chemicals.href}>Hot tub chemicals</a></li>
+            <li><a href={pages.parts.href}>Hot tub parts</a></li>
+            <li><a href={pages.about.href}>About Cumbria Spas</a></li>
+            <li><a href={pages.reviews.href}>Reviews</a></li>
+            <li><a href={pages.contact.href}>Contact</a></li>
           </ul>
         </div>
-        <div class="ft__panel">
-          <p class="ft__panel-h">Try before you buy</p>
-          <p class="ft__panel-p">Not sure which spa suits you? Send a quick quote and we will help you choose.</p>
-          <a href={link('#quote')} class="btn btn-primary" data-cta="footer-quote">Quick Quote Online</a>
+        <div class="ft__col">
+          <p class="ft__h">More</p>
+          <ul>
+            <li><a href={pages.gallery.href}>Gallery</a></li>
+            <li><a href={pages.sitemap.href}>Sitemap</a></li>
+            <li><a href={pages.terms.href}>Terms and Conditions</a></li>
+            <li><a href={pages.privacy.href}>Privacy Policy</a></li>
+          </ul>
         </div>
       </div>
       <div class="ft__meta">
-        <p>&copy; {year} {business.name}. {business.address}.</p>
-        <p class="ft__legal"><a href={link('#services')}>Services</a><a href={link('#contact')}>Contact</a></p>
+        <p>&copy; {year} {business.name}</p>
+        <FooterCredit />
       </div>
     </div>
   </div>
@@ -56,24 +66,21 @@ const link = (href: string) => (onHome ? href : `/${href}`);
 <style>
   .ft { padding: 0 0 var(--inset); background: var(--page); }
   .ft__slab { background: var(--teal-deep); color: var(--on-dark); padding: clamp(40px, 5vw, 64px) 0 28px; overflow: hidden; }
-  .ft__grid { display: grid; grid-template-columns: 1.4fr 1fr 0.9fr 1.3fr; gap: 36px 40px; align-items: start; }
+  .ft__grid { display: grid; grid-template-columns: 1.5fr 1.1fr 0.9fr 0.8fr; gap: 36px 40px; align-items: start; }
   /* His logo is a white-ground JPG: it sits on its own white rounded tile on the deep blue. */
   .ft__logo { display: inline-block; background: #fff; border-radius: var(--radius); padding: 6px; margin-bottom: 18px; }
   .ft__logo img { width: 84px; height: 84px; object-fit: contain; }
-  .ft__tag { color: var(--muted-dark); max-width: 36ch; font-size: 0.9375rem; margin-bottom: 16px; }
-  .ft__nap { font-size: 0.9375rem; font-weight: 600; line-height: 1.8; }
+  .ft__tag { color: var(--muted-dark); max-width: 44ch; font-size: 0.9375rem; margin-bottom: 18px; }
+  .ft__nap { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 0.9375rem; }
+  .ft__nap li { display: grid; grid-template-columns: 84px 1fr; gap: 12px; }
+  .ft__k { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sky); padding-top: 3px; }
+  .ft__nap a { font-weight: 600; }
   .ft__nap a:hover { color: var(--sky); }
   .ft__h { font-weight: 700; margin-bottom: 14px; font-size: 1rem; }
   .ft__col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; font-size: 0.9375rem; }
-  .ft__col a, .ft__col span { color: var(--muted-dark); }
+  .ft__col a { color: var(--muted-dark); }
   .ft__col a:hover { color: var(--sky); }
-  .ft__panel { background: var(--tint); color: var(--on-light); border-radius: var(--radius-lg); padding: 26px; margin-top: -8px; }
-  .ft__panel-h { font-size: 1.25rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.015em; color: var(--teal-deep); }
-  .ft__panel-p { color: var(--muted-light); font-size: 0.9375rem; margin-bottom: 18px; }
-  .ft__panel .btn { width: 100%; }
   .ft__meta { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 44px; padding-top: 22px; border-top: 1px solid var(--line-dark); font-size: 0.875rem; color: var(--muted-dark); }
-  .ft__legal { display: flex; gap: 22px; }
-  .ft__legal a:hover { color: var(--sky); }
-  @media (max-width: 1000px) { .ft__grid { grid-template-columns: 1fr 1fr; } .ft__brand, .ft__panel { grid-column: 1 / -1; } .ft__panel { margin-top: 0; } }
-  @media (max-width: 520px) { .ft__grid { grid-template-columns: 1fr; } }
+  @media (max-width: 1080px) { .ft__grid { grid-template-columns: 1fr 1fr; } .ft__brand { grid-column: 1 / -1; } }
+  @media (max-width: 520px) { .ft__grid { grid-template-columns: 1fr; } .ft__nap li { grid-template-columns: 1fr; gap: 2px; } }
 </style>

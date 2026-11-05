@@ -1,0 +1,43 @@
+---
+/**
+ * RELATED SERVICES (route). Cards for sibling hubs. LAW: ONE link per card,
+ * on the title text only, the exact service name; the photo is not a link.
+ */
+import { hubBySlug, hubHref } from '../data/site';
+import { pick } from '../lib/media';
+interface Props { heading: string; slugs: string[] }
+const { heading, slugs } = Astro.props;
+const items = slugs.map((s) => hubBySlug[s]).filter(Boolean);
+---
+<section class="rh section-related on-light" data-section="related">
+  <div class="container">
+    <h2 class="rh__h2" data-motion="reveal">{heading}</h2>
+    <ul class="rh__grid">
+      {items.map((h, i) => {
+        const im = pick(h.slug, 0);
+        return (
+          <li class="rh__card" data-motion="reveal" style={`--reveal-delay: ${(i % 4) * 60}ms`}>
+            <div class="rh__media"><img src={im.src} alt={im.alt} width={im.w ?? 1200} height={im.h ?? 900} loading="lazy" decoding="async" /></div>
+            <h3 class="rh__title"><a href={hubHref(h.slug)}>{h.name}</a></h3>
+            <p class="rh__text">{h.blurb}</p>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .rh { background: var(--page); padding: var(--pad-med) 0; }
+  .rh__h2 { font-size: var(--text-2xl); max-width: 24ch; color: var(--teal-deep); margin-bottom: 32px; text-wrap: balance; }
+  .rh__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+  .rh__card { background: var(--tint); border-radius: var(--radius-lg); padding: 10px 10px 20px; display: flex; flex-direction: column; }
+  .rh__media { border-radius: calc(var(--radius-lg) - 6px); overflow: hidden; aspect-ratio: 4 / 3; background: var(--tint-2); margin-bottom: 16px; }
+  .rh__media img { width: 100%; height: 100%; object-fit: cover; }
+  .rh__title { font-size: 1.125rem; font-weight: 800; padding: 0 10px; margin-bottom: 8px; }
+  .rh__title a { color: var(--teal-deep); }
+  .rh__title a:hover, .rh__title a:focus-visible { color: var(--sky-deep); }
+  .rh__text { padding: 0 10px; font-size: 0.875rem; color: var(--muted-light); line-height: 1.5; }
+  @media (max-width: 1000px) { .rh__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .rh__grid { grid-template-columns: 1fr; } }
+</style>

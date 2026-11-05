@@ -1,0 +1,20 @@
+---
+/** HTML SITEMAP: every canonical page, grouped by type, regenerated on every build. */
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { allRoutes } from '../lib/routes';
+const routes = await allRoutes();
+const groups = [...new Set(routes.map((r) => r.group))];
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Sitemap', href: '/sitemap/' }];
+---
+
+<Base title="Sitemap | Cumbria Spas" description="Every page on the Cumbria Spas website: hot tubs, spas, saunas, pools, servicing, chemicals, parts, about, contact and the legal pages." page="sitemap" utility={true} crumbs={crumbs}>
+  <LegalPage h1="Sitemap" lead="Every page on the Cumbria Spas website." crumbs={crumbs} kind="sitemap">
+    {groups.map((g) => (
+      <>
+        <h2>{g}</h2>
+        <ul>{routes.filter((r) => r.group === g).map((r) => <li><a href={r.href}>{r.name}</a></li>)}</ul>
+      </>
+    ))}
+  </LegalPage>
+</Base>

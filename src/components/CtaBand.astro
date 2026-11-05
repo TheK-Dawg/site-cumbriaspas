@@ -1,24 +1,26 @@
 ---
 /**
  * CTA BAND (convert). The v3 full-bleed photo slab with a centred white card
- * floating over it. Used once, for Try Before You Buy: Quick Quote Online
- * (primary) and a call button (secondary), equal width. No visit phrasing.
+ * floating over it, once per page mid-way down (never directly above the
+ * form). The three contact routes of the site's call to action, equal width:
+ * Quick Quote Online (primary), call now, WhatsApp.
  */
-import { business } from '../data/site';
+import { business, ctaLine } from '../data/site';
 interface Props { heading: string; line: string; image: string; imageAlt: string; imagePos?: string }
 const { heading, line, image, imageAlt, imagePos = 'center' } = Astro.props;
 ---
-<section class="cb section-cta" id="try-before-you-buy" data-section="cta">
+<section class="cb section-cta" data-section="cta">
   <div class="cb__slab slab" data-motion="scrub">
     <img class="cb__bg" src={image} alt={imageAlt} width="896" height="1003" loading="lazy" decoding="async" style={`object-position: ${imagePos}`} />
     <div class="cb__scrim" aria-hidden="true"></div>
     <div class="container cb__inner">
       <div class="cb__card on-light" data-motion="reveal">
         <h2 class="cb__h2">{heading}</h2>
-        <p class="cb__line">{line}</p>
+        <p class="cb__line">{line} {ctaLine}</p>
         <div class="btn-row cb__btns">
           <a href="#quote" class="btn btn-primary" data-cta="band-quote">Quick Quote Online</a>
           <a href={business.phoneHref} class="btn btn-ghost-ink" data-cta="band-call">Call {business.phone}</a>
+          <a href={business.whatsapp} class="btn btn-ghost-ink" data-cta="band-whatsapp" target="_blank" rel="noopener">WhatsApp</a>
         </div>
       </div>
     </div>

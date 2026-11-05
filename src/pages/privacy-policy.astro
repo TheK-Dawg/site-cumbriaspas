@@ -1,0 +1,58 @@
+---
+/**
+ * PRIVACY POLICY. Sections 1 to 7 are the current site's own text, word for
+ * word (plan/privacy-policy.md; operator, 4 Nov 2026: do not rewrite).
+ * Sections 8 to 12 are standard template language added to cover gaps the
+ * live text is silent on (operator's instruction): enquiries about sales as
+ * well as repairs, the service providers behind the website and its enquiry
+ * form, cookies, retention and complaints. Generic, no new business claims.
+ *
+ * TODO(operator decision, plan "Legal pages"): clause 7 gives
+ * info@cumbriaspas.co.uk, not one of David's mailboxes (david@, sales@); add
+ * info@ as an alias when Google Workspace is set up, or change it to david@.
+ * Clause 3 describes repair services only. The text stays word for word until
+ * the operator and David decide. Cookies: this site sets no analytics or
+ * marketing cookies; if one is added, section 10 needs a line on it.
+ */
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+const toc = [
+  ['introduction', '1. Introduction'], ['collect', '2. Information We Collect'], ['use', '3. How We Use Your Information'],
+  ['sharing', '4. Information Sharing'], ['security', '5. Security'], ['rights', '6. Your Rights'], ['contact', '7. Contact Us'],
+  ['enquiries', '8. Enquiries About Products'], ['providers', '9. Service Providers'], ['cookies', '10. Cookies'],
+  ['retention', '11. How Long We Keep Information'], ['complaints', '12. Complaints'],
+].map(([id, title]) => ({ id, title }));
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Privacy Policy', href: '/privacy-policy/' }];
+---
+
+<Base title="Privacy Policy | Cumbria Spas" description="How Cumbria Spas collects, uses and protects your personal information when you contact us, ask for a quote or use this website, and how cookies are used." page="privacy" utility={true} crumbs={crumbs}>
+  <LegalPage h1="Privacy Policy" lead="Cumbria Spas Privacy Policy" crumbs={crumbs} toc={toc} rail>
+    <h2 id="introduction">1. Introduction</h2>
+    <p>This Privacy Policy describes how Cumbria Spas collects, uses, and protects your personal information. We are committed to protecting your privacy.</p>
+    <h2 id="collect">2. Information We Collect</h2>
+    <p>We may collect personal information such as your name, email address, phone number, and details about your hot tub when you contact us, schedule an appointment, or use our website.</p>
+    <h2 id="use">3. How We Use Your Information</h2>
+    <p>We use your information to provide you with the hot tub repair services you request, to communicate with you about your service, and to improve our services.</p>
+    <h2 id="sharing">4. Information Sharing</h2>
+    <p>We do not share your personal information with third parties, except as required by law or with your consent.</p>
+    <h2 id="security">5. Security</h2>
+    <p>We implement reasonable security measures to protect your personal information from unauthorized access, use, or disclosure.</p>
+    <h2 id="rights">6. Your Rights</h2>
+    <p>You have the right to access, correct, and delete your personal information. Please contact us if you wish to exercise these rights.</p>
+    <h2 id="contact">7. Contact Us</h2>
+    <p>For any questions or concerns regarding this Privacy Policy, please contact us at info@cumbriaspas.co.uk.</p>
+
+    <div class="lp__added">
+      <h2 id="enquiries">8. Enquiries About Products</h2>
+      <p>The information described in section 2 is also collected when you ask about buying a hot tub, sauna, spa, swim spa, pool, chemicals or parts. We use it to answer your enquiry, prepare a quotation and, if you place an order, to supply, deliver, install or service what you have ordered. Our lawful basis is taking steps at your request before entering into a contract, and performing that contract.</p>
+      <h2 id="providers">9. Service Providers</h2>
+      <p>Some service providers process information on our behalf so that this website and our enquiry form work, such as website hosting and the provider that receives and forwards enquiry form submissions to us. They act only on our instructions and are required to keep your information secure. If you contact us by WhatsApp, your messages are also handled under WhatsApp's own terms and privacy policy.</p>
+      <h2 id="cookies">10. Cookies</h2>
+      <p>Cookies are small files stored on your device. This website does not use advertising or analytics cookies. The embedded map and the enquiry form are provided by third parties, which may set cookies or use similar storage that are needed for them to work. You can block or delete cookies in your browser settings; parts of the website, such as the map, may not work fully if you do.</p>
+      <h2 id="retention">11. How Long We Keep Information</h2>
+      <p>We keep personal information only for as long as we need it for the purposes above, including to meet legal, accounting or reporting requirements, and then delete it securely.</p>
+      <h2 id="complaints">12. Complaints</h2>
+      <p>If you are unhappy with how we have handled your personal information, please contact us first using the details in section 7. You also have the right to complain to the Information Commissioner's Office (ICO), the UK regulator for data protection, at ico.org.uk.</p>
+    </div>
+  </LegalPage>
+</Base>

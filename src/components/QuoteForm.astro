@@ -1,21 +1,24 @@
 ---
 /**
- * CONTACT + QUOTE FORM (convert). The v3 closing slab: heading, his address,
- * phone and email as plain details with a map under them on the left; the
- * white form card on the right. LAW: no contact-method buttons (Call /
- * WhatsApp) anywhere in this section; it is just the form. Those live in the
- * header, the mobile sticky bar and the footer. Placeholder-only fields. The form element
- * carries id="quote" so every Get a Quote button lands on the fields.
+ * CONTACT + QUOTE FORM (convert). The v3 closing slab: heading, the page's
+ * own lead (law: the form copy talks about THAT page's service), the site's
+ * call-to-action line and his NAP on the left; the white form card on the
+ * right. No map here: the areas section above carries the page's one map.
  *
- * Preview build: no form routing. FORM_ENDPOINT is left empty, so a valid
- * submit goes straight to the thank-you page. Set it to the live endpoint
- * when the site goes live.
+ * The form is Formlane (operator's form system), form
+ * `cumbriaspas-quick-quote-online-form` ("Cumbria Spas — Quick Quote Online"),
+ * Live, direct embed from api.formlane.uk, allowed on cumbriaspas.co.uk, www
+ * and the preview2 workers.dev host. Fields (Formlane standard): name, email,
+ * phone (below email), postcode, message. Leads go to the operator's
+ * admin address only for now (brief, 5 Nov 2026). The embed token is public
+ * and cannot read leads. The card keeps id="quote" so every Quick Quote
+ * Online link lands on the fields; the section keeps id="contact".
  */
-import MapEmbed from './MapEmbed.astro';
-import { business, services } from '../data/site';
+import { business, ctaLine } from '../data/site';
 interface Props { heading: string; lead: string }
 const { heading, lead } = Astro.props;
-const FORM_ENDPOINT = '';
+const FORM_ID = 'f_OTUvZjx2lNRyaokpaP6p';
+const FORM_TOKEN = 'ERbIOFuK2Wzd0rMsINNflg';
 ---
 <section class="qf section-contact" id="contact" data-section="contact">
   <div class="qf__slab slab on-dark">
@@ -23,122 +26,66 @@ const FORM_ENDPOINT = '';
       <div class="qf__copy" data-motion="reveal">
         <h2 class="qf__h2">{heading}</h2>
         <p class="qf__p">{lead}</p>
+        <p class="qf__cta">{ctaLine}</p>
         <ul class="qf__contact">
           <li>
-            <span class="qf__k">Address</span>
+            <span class="qf__k">Showroom</span>
             <span class="qf__v">{business.street}<br />{business.town}, {business.region}<br />{business.postcode}</span>
           </li>
           <li>
-            <span class="qf__k">Phone</span>
+            <span class="qf__k">Call now</span>
             <a class="qf__v" href={business.phoneHref}>{business.phone}</a>
           </li>
           <li>
+            <span class="qf__k">WhatsApp</span>
+            <a class="qf__v" href={business.whatsapp} target="_blank" rel="noopener">Message {business.phone}</a>
+          </li>
+          <li>
             <span class="qf__k">Email</span>
-            <a class="qf__v" href={`mailto:${business.email}`}>{business.email}</a>
+            <span class="qf__v">{business.email}</span>
           </li>
         </ul>
-        <MapEmbed query={business.mapQuery} label={`Cumbria Spas, ${business.town}`} zoom={13} class="qf__map" />
       </div>
 
-      <form class="qf__form lead-form on-light" id="quote" method="post" action="/thank-you/" data-quote-form data-endpoint={FORM_ENDPOINT} data-form-id="quick-quote" novalidate>
-        <h3 class="qf__form-h">Get a Quote</h3>
-        <p class="qf__form-p">Tell us what you are looking for and we will come back to you.</p>
-        <div class="qf__field"><input type="text" name="name" autocomplete="name" placeholder="Full name" aria-label="Full name" required /></div>
-        <div class="qf__field"><input type="tel" name="phone" autocomplete="tel" placeholder="Phone number" aria-label="Phone number" required /></div>
-        <div class="qf__field"><input type="email" name="email" autocomplete="email" placeholder="Email address" aria-label="Email address" required /></div>
-        <div class="qf__field"><input type="text" name="postcode" autocomplete="postal-code" placeholder="Postcode" aria-label="Postcode" required /></div>
-        <div class="qf__field"><textarea name="message" rows="4" placeholder="Garden, holiday home or site, and anything else we should know" aria-label="Your message" required></textarea></div>
-        <input type="text" name="company" class="qf__hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
-        <button type="submit" class="btn btn-primary qf__submit" data-cta="form-submit">Send My Enquiry</button>
-        <p class="qf__secure">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.6"/></svg>
-          Your details are only used to reply to your enquiry, never shared.
-        </p>
-        <p class="qf__note qf__note--err" role="alert" hidden data-error>Please fill in the fields left blank so we can get back to you.</p>
-      </form>
+      <div class="qf__card on-light" id="quote" data-quote-card>
+        <h3 class="qf__form-h">Quick Quote Online</h3>
+        <p class="qf__form-p">Send the form and Cumbria Spas will come back to you.</p>
+        <div class="qf__slot" data-lead-form={FORM_ID} data-lf-token={FORM_TOKEN}>
+          <noscript><p class="qf__note">The quote form needs JavaScript. Call {business.phone} or message on WhatsApp instead.</p></noscript>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+<script is:inline src="https://api.formlane.uk/edge/form.js" defer></script>
 
 <style>
-  /* Slab-to-slab spacing matches the rest of the page: the --inset gap only. */
   .qf { padding: 0 0 var(--inset); background: var(--page); }
   .qf__slab { background: linear-gradient(115deg, var(--teal-ink) 0%, var(--teal-deep) 50%, var(--teal) 100%); color: var(--on-dark); padding: var(--pad-med) 0; position: relative; overflow: hidden; }
   .qf__slab::before { content: ''; position: absolute; left: -80px; top: -80px; width: 320px; height: 320px; border-radius: 50%; background: rgb(255 255 255 / 0.07); pointer-events: none; }
-  .qf__inner { display: grid; grid-template-columns: 1fr 460px; gap: 48px 72px; align-items: start; position: relative; }
+  .qf__inner { display: grid; grid-template-columns: 1fr 480px; gap: 48px 72px; align-items: start; position: relative; }
   .qf__h2 { font-size: var(--text-2xl); max-width: 20ch; margin-bottom: 16px; text-wrap: balance; }
-  .qf__p { color: var(--muted-dark); line-height: 1.6; max-width: 52ch; margin-bottom: 26px; }
-  .qf__contact { list-style: none; margin: 0 0 26px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, auto)); gap: 18px 32px; justify-content: start; }
+  .qf__p { color: var(--muted-dark); line-height: 1.6; max-width: 52ch; margin-bottom: 14px; }
+  .qf__cta { font-weight: 700; margin-bottom: 28px; }
+  .qf__contact { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, auto)); gap: 22px 40px; justify-content: start; }
   .qf__contact li { display: flex; flex-direction: column; gap: 6px; }
   .qf__k { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sky); }
   .qf__v { font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
   a.qf__v:hover { color: var(--sky); }
-  .qf__copy :global(.qf__map) { aspect-ratio: 16 / 8; max-width: 640px; box-shadow: 0 24px 50px rgb(10 18 31 / 0.35); }
 
-  .qf__form {
+  .qf__card {
     background: var(--card); color: var(--on-light); border-radius: var(--radius-lg);
-    padding: clamp(22px, 3vw, 32px); display: grid; gap: 12px;
+    padding: clamp(22px, 3vw, 32px); display: grid; gap: 10px;
     box-shadow: 0 30px 80px rgb(15 26 43 / 0.35);
     scroll-margin-top: calc(var(--header-h) + 8px);
   }
   .qf__form-h { font-size: 1.375rem; font-weight: 800; letter-spacing: -0.015em; color: var(--teal-deep); }
-  .qf__form-p { font-size: 0.9375rem; color: var(--muted-light); margin-bottom: 4px; }
-  .qf__field { display: grid; }
-  .qf__field input, .qf__field select, .qf__field textarea {
-    width: 100%; font: inherit; font-size: 1rem; color: var(--on-light);
-    background-color: #f1f6f9; border: 1px solid rgb(28 47 75 / 0.18); border-radius: var(--radius); padding: 12px 16px;
-  }
-  .qf__field ::placeholder { color: var(--muted-light); opacity: 1; }
-  .qf__field select:invalid { color: var(--muted-light); }
-  .qf__field select option { color: var(--on-light); }
-  .qf__field select {
-    appearance: none; -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%231c2f4b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 16px center; background-size: 14px; padding-right: 40px;
-  }
-  .qf__field :is(input, select, textarea):focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 1px; border-color: var(--accent-deep); }
-  .qf__field :is(input, select, textarea)[aria-invalid='true'] { border-color: #b3261e; }
-  .qf__hp { position: absolute !important; left: -9999px !important; width: 0; height: 0; opacity: 0; pointer-events: none; }
-  .qf__submit { width: 100%; margin-top: 4px; }
-  .qf__secure { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: var(--muted-light); }
-  .qf__note { font-size: 0.875rem; line-height: 1.45; }
-  .qf__note--err { color: #b3261e; }
-
-  @media (max-width: 1080px) { .qf__inner { grid-template-columns: 1fr; } .qf__form { max-width: 560px; } }
+  .qf__form-p { font-size: 0.9375rem; color: var(--muted-light); }
+  .qf__slot { min-height: 360px; }
+  .qf__note { font-size: 0.9375rem; color: var(--muted-light); }
+  @media (max-width: 1080px) { .qf__inner { grid-template-columns: 1fr; } .qf__card { max-width: 560px; } }
   @media (max-width: 640px) {
     .qf__contact { grid-template-columns: 1fr; }
-    .qf__form { padding: 18px; scroll-margin-top: calc(var(--header-h) + 4px); }
-    .qf__copy :global(.qf__map) { aspect-ratio: 4 / 3; }
+    .qf__card { padding: 18px; scroll-margin-top: calc(var(--header-h) + 4px); }
   }
-  .qf__form input, .qf__form textarea { scroll-margin-top: calc(var(--header-h) + 12px); }
 </style>
-
-<script>
-  const form = document.querySelector<HTMLFormElement>('form[data-quote-form]');
-  if (form) {
-    const error = form.querySelector<HTMLElement>('[data-error]')!;
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      if (String(data.get('company') || '')) return; // honeypot
-      const fields = ['name', 'phone', 'email', 'postcode', 'service', 'message'] as const;
-      const get = (k: string) => String(data.get(k) || '').trim();
-      let missing = false;
-      for (const k of fields) {
-        const el = form.elements.namedItem(k) as HTMLElement | null;
-        const empty = !get(k);
-        el?.setAttribute('aria-invalid', empty ? 'true' : 'false');
-        if (empty) missing = true;
-      }
-      if (missing) { error.hidden = false; return; }
-      error.hidden = true;
-      const endpoint = form.dataset.endpoint || '';
-      if (endpoint) {
-        try {
-          await fetch(endpoint, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(Object.fromEntries(fields.map((k) => [k, get(k)]))) });
-        } catch { /* the thank-you page still confirms */ }
-      }
-      window.location.assign('/thank-you/');
-    });
-  }
-</script>

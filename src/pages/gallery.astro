@@ -1,0 +1,26 @@
+---
+/**
+ * GALLERY (standard page): header, the image library (the same shared set of
+ * up to 40 square R2 images as every page), a heading and paragraph, and the
+ * side button. Dealer-range photos are captioned as the range, never as his
+ * installs.
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Gallery from '../components/Gallery.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { picks } from '../lib/media';
+const imgs = picks('home', 2);
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Gallery', href: '/gallery/' }];
+---
+
+<Base title="Hot Tub, Spa and Sauna Gallery | Cumbria Spas" description="Photos of wood-fired and electric hot tubs, mosaic-tiled spas, swim spas and saunas from the Cumbria Spas range." page="gallery" crumbs={crumbs}>
+  <Hero
+    h1="Want to see the hot tubs before you ask? The Cumbria Spas gallery"
+    lead="Wood-fired and electric hot tubs, mosaic-tiled spas, swim spas and saunas from the range. Ask for more photos and videos on WhatsApp."
+    crumbs={crumbs}
+    slides={imgs.slice(0, 2).map((im) => ({ src: im.src, alt: im.alt }))}
+  />
+  <Gallery heading="Photos from the Cumbria Spas range" />
+  <QuoteForm heading="Seen one you like?" lead="Tell us which tub, spa or sauna caught your eye, and Cumbria Spas will come back to you with prices." />
+</Base>

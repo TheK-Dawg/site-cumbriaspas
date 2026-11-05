@@ -1,0 +1,49 @@
+---
+/**
+ * CONTACT. Plan: the NAP, the quote form, WhatsApp, a map of the showroom.
+ * No opening hours exist in any source, so none are shown (left off until
+ * David gives them). The form sits directly under the hero and trust strip;
+ * the areas section carries the page's one map embed. The email is shown as
+ * text: the mailbox is not live yet. Links to the legal pages (law).
+ */
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import TrustStrip from '../components/TrustStrip.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import AreasCovered from '../components/AreasCovered.astro';
+import Gallery from '../components/Gallery.astro';
+import { business } from '../data/site';
+import { picks } from '../lib/media';
+const imgs = picks('contact', 2);
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Contact', href: '/contact/' }];
+---
+
+<Base title="Contact Cumbria Spas | Hot Tubs, Kirkby In Furness" description="Contact Cumbria Spas, Hight Bridge Lodge, Kirkby In Furness, Cumbria, LA17 7TT. Call or WhatsApp 0744 5450908, or send the quick quote form." page="contact" crumbs={crumbs}>
+  <Hero
+    h1="Want to ask about a hot tub, spa or sauna? Contact Cumbria Spas"
+    lead={`The showroom is at ${business.address}. Call or WhatsApp ${business.phone}, or send the quick quote form below.`}
+    crumbs={crumbs}
+    slides={imgs.slice(0, 1).map((im) => ({ src: im.src, alt: im.alt }))}
+    trust={['Showroom at Kirkby In Furness', 'Call or WhatsApp 0744 5450908', 'Try before you buy', 'Residential and commercial']}
+  />
+
+  <TrustStrip />
+
+  <QuoteForm heading="Send a quick quote" lead="Buying a hot tub, booking a service or asking about trade prices: tell us what you need and Cumbria Spas will come back to you." />
+
+  <AreasCovered />
+
+  <section class="ct-legal on-light" data-section="legal-links">
+    <div class="container">
+      <p>Read the <a href="/terms-and-conditions/">terms and conditions</a> and the <a href="/privacy-policy/">privacy policy</a>.</p>
+    </div>
+  </section>
+
+  <Gallery />
+</Base>
+
+<style>
+  .ct-legal { background: var(--page); padding: var(--pad-high) 0 0; color: var(--muted-light); }
+  .ct-legal a { color: var(--teal); font-weight: 700; }
+  .ct-legal a:hover { color: var(--sky-deep); }
+</style>

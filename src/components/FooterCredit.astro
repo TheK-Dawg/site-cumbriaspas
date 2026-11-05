@@ -1,0 +1,31 @@
+---
+// The footer credit in every new build's bottom bar (operator, 20 Oct 2026; factory DSN-A-064, DSN-N-030),
+// ported from the v4 starter: "[keyword phrase] by [mark]", and on desktop hover, or keyboard focus on the keyword
+// link, "Local Map Booster" slides out beside the mark. ONE outbound link, on the keyword phrase only. The mark and
+// the name are plain text: no <a>, no tabindex, no role. Touch screens never reveal it. CSS only.
+import { credit } from '../data/site';
+import mark from '../assets/brand/local-map-booster-mark.svg?raw';
+---
+<p class="footer-credit" data-footer-credit>
+  <a href={credit.href} class="footer-credit__link" rel="nofollow noopener" target="_blank">{credit.phrase}</a>
+  <span class="footer-credit__by"> by </span><span class="footer-credit__brand" data-credit-brand><span class="footer-credit__mark" set:html={mark} /><span class="footer-credit__name">Local Map Booster</span></span>
+</p>
+
+<style is:global>
+  .footer-credit { margin: 0; white-space: nowrap; }
+  .footer-credit__link { color: inherit; }
+  .footer-credit__link:hover { color: var(--sky); }
+  .footer-credit__brand { white-space: nowrap; }
+  .footer-credit__mark { display: inline-block; width: 1.2em; height: 1.2em; vertical-align: -0.2em; }
+  .footer-credit__mark svg { display: block; width: 100%; height: 100%; }
+  .footer-credit__name {
+    display: inline-block; overflow: hidden; vertical-align: top;
+    max-width: 0; opacity: 0; margin-left: 0;
+    transition: max-width 250ms ease, opacity 250ms ease, margin-left 250ms ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .footer-credit__brand:hover .footer-credit__name,
+    .footer-credit__link:focus-visible ~ .footer-credit__brand .footer-credit__name { max-width: 11em; opacity: 1; margin-left: 0.35em; }
+  }
+  @media (prefers-reduced-motion: reduce) { .footer-credit__name { transition: none; } }
+</style>

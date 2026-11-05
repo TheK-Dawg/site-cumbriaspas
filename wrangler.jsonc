@@ -1,4 +1,4 @@
-// Standard LMB static-assets Worker. Cumbria Spas preview #2: workers.dev only, no custom domain.
+// Standard LMB static-assets Worker. Cumbria Spas: the preview2 worker the operator uses (workers.dev only until the domain moves from A2A).
 {
   "name": "site-cumbriaspires-preview2",
   "account_id": "95d517ae0ca508fcbf5918233c713182",

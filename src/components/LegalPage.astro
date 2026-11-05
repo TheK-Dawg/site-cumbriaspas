@@ -1,29 +1,76 @@
 ---
 /**
- * LEGAL / UTILITY PAGE SHELL. A short teal slab head (single H1) over a prose
- * column. Used by terms, privacy and the thank-you page.
+ * LEGAL / UTILITY PAGE SHELL. A short slab head (breadcrumbs above the single
+ * H1) over the text. Legal pages render like an article (law): a contents
+ * list and a CTA rail on the right, no gallery, work showcase or map. The
+ * thank-you and 404 pages use it without the rail.
  */
-interface Props { h1: string; lead?: string; kind?: string }
-const { h1, lead, kind = 'legal' } = Astro.props;
+import { business, ctaLine } from '../data/site';
+interface Crumb { name: string; href?: string }
+interface Section { id: string; title: string }
+interface Props { h1: string; lead?: string; kind?: string; crumbs?: Crumb[]; toc?: Section[]; rail?: boolean }
+const { h1, lead, kind = 'legal', crumbs = [], toc = [], rail = false } = Astro.props;
 ---
 <section class={`lp section-${kind} on-light`} data-section={kind}>
   <div class="lp__head slab on-dark" data-hero-watch>
     <div class="container">
+      {crumbs.length > 0 && (
+        <nav class="lp__crumbs" aria-label="Breadcrumb">
+          <ol>{crumbs.map((c, i) => <li>{i < crumbs.length - 1 ? <a href={c.href}>{c.name}</a> : <span aria-current="page">{c.name}</span>}</li>)}</ol>
+        </nav>
+      )}
       <h1 class="lp__h1">{h1}</h1>
       {lead && <p class="lp__lead">{lead}</p>}
     </div>
   </div>
-  <div class="container lp__body prose">
-    <slot />
+  <div class:list={['container', 'lp__grid', rail && 'lp__grid--rail']}>
+    <div class="lp__body prose">
+      <slot />
+    </div>
+    {rail && (
+      <aside class="lp__side">
+        <div class="lp__sticky">
+          {toc.length > 0 && (
+            <nav class="lp__toc" aria-label="Contents">
+              <p class="lp__toc-h">Contents</p>
+              <ol>{toc.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ol>
+            </nav>
+          )}
+          <div class="lp__cta on-dark">
+            <p class="lp__cta-h">Questions about a hot tub?</p>
+            <p class="lp__cta-p">{ctaLine}</p>
+            <a href="/contact/#quote" class="btn btn-primary" data-cta="legal-rail-quote">Quick Quote Online</a>
+            <a href={business.phoneHref} class="btn btn-ghost" data-cta="legal-rail-call">Call {business.phone}</a>
+            <a href={business.whatsapp} class="btn btn-ghost" target="_blank" rel="noopener" data-cta="legal-rail-whatsapp">WhatsApp</a>
+          </div>
+        </div>
+      </aside>
+    )}
   </div>
 </section>
 
 <style>
   .lp { background: var(--page); padding: 0 0 var(--pad-med); }
   .lp__head { background: linear-gradient(160deg, var(--teal-ink) 0%, var(--teal-deep) 60%, var(--teal) 100%); color: var(--on-dark); padding: calc(var(--header-h) + 56px) 0 56px; border-top-left-radius: 0; border-top-right-radius: 0; }
-  .lp__h1 { font-size: var(--text-2xl); max-width: 18ch; text-wrap: balance; }
-  .lp__lead { color: var(--muted-dark); max-width: 56ch; margin-top: 14px; font-size: var(--text-lg); }
-  .lp__body { padding-top: 48px; }
-  .lp__body :global(h2) { color: var(--teal-deep); }
+  .lp__crumbs ol { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 0.875rem; font-weight: 600; color: var(--muted-dark); }
+  .lp__crumbs li + li::before { content: '/'; margin-right: 10px; color: var(--faint-dark); }
+  .lp__crumbs a:hover { color: var(--sky); }
+  .lp__h1 { font-size: var(--text-2xl); max-width: 22ch; text-wrap: balance; }
+  .lp__lead { color: var(--muted-dark); max-width: 60ch; margin-top: 14px; font-size: var(--text-lg); }
+  .lp__grid { padding-top: 48px; }
+  .lp__grid--rail { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 56px; align-items: start; }
+  .lp__body :global(h2) { color: var(--teal-deep); scroll-margin-top: calc(var(--header-h) + 16px); }
+  .lp__body :global(.lp__added) { border-top: 1px solid var(--line-light); margin-top: 2.4em; padding-top: 0.4em; }
+  .lp__sticky { position: sticky; top: calc(var(--header-h) + 16px); display: flex; flex-direction: column; gap: 16px; }
+  .lp__toc { background: var(--card); border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow-card); }
+  .lp__toc-h { font-weight: 800; color: var(--teal-deep); margin-bottom: 10px; }
+  .lp__toc ol { margin: 0; padding-left: 1.2em; display: grid; gap: 7px; font-size: 0.9375rem; }
+  .lp__toc a { color: var(--teal); }
+  .lp__toc a:hover { color: var(--sky-deep); }
+  .lp__cta { background: var(--teal-deep); color: var(--on-dark); border-radius: var(--radius-lg); padding: 22px; display: grid; gap: 10px; }
+  .lp__cta-h { font-weight: 800; font-size: 1.125rem; }
+  .lp__cta-p { color: var(--muted-dark); font-size: 0.9375rem; margin-bottom: 4px; }
+  .lp__cta .btn { width: 100%; }
   @media (min-width: 761px) { .lp__head { margin-inline: var(--inset); border-radius: 0 0 var(--radius-xl) var(--radius-xl); } }
+  @media (max-width: 1000px) { .lp__grid--rail { grid-template-columns: 1fr; } .lp__sticky { position: static; } }
 </style>

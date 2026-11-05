@@ -1,54 +1,82 @@
 ---
 /**
- * Root layout. Head (noindex test build, canonical, OG, LocalBusiness +
- * WebSite + WebPage graph plus any page-level schema), header, footer, the one
- * root-mounted Lightbox, the mobile sticky bar, the motion wiring and the
+ * Root layout. Head (canonical on the client's domain, OG, ONE JSON-LD graph
+ * around the one LocalBusiness node at <origin>/#business per the ENTITY-SAMEAS
+ * law, plus page nodes), header, footer, the one root-mounted Lightbox, the
+ * mobile sticky bar, the floating WhatsApp button, the motion wiring and the
  * Quick Quote anchor law.
+ *
+ * Indexing: this build runs on the preview2 workers.dev host until the domain
+ * moves, so every page is noindex unless PUBLIC_INDEXABLE=1 at build time (set
+ * it at go-live on cumbriaspas.co.uk; thank-you and 404 stay noindex always).
  */
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Lightbox from '../components/Lightbox.astro';
 import StickyCtaBar from '../components/StickyCtaBar.astro';
-import { business, services, seo } from '../data/site';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { business, hubs, hubHref, seo, entity, serviceCoverage } from '../data/site';
+import towns from '../data/towns.json';
 
+interface Crumb { name: string; href?: string }
 interface Props {
   title?: string;
   description?: string;
   page?: string;
   utility?: boolean; // thank-you / 404: no sticky bar
+  noindex?: boolean;
+  noSchema?: boolean; // the 404 carries no entity graph
   schema?: Record<string, unknown>[]; // extra @graph nodes
+  crumbs?: Crumb[];
   ogImage?: string;
 }
-const { title = seo.title, description = seo.description, page = 'page', utility = false, schema = [], ogImage = '/images/new-20top-20image.jpg' } = Astro.props;
+const { title = seo.title, description = seo.description, page = 'page', utility = false, noindex = false, noSchema = false, schema = [], crumbs = [], ogImage = '/images/new-20top-20image.jpg' } = Astro.props;
+const indexable = import.meta.env.PUBLIC_INDEXABLE === '1' && !noindex;
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
-const ogImageUrl = new URL(ogImage, Astro.site).href;
+const ogImageUrl = /^https?:/.test(ogImage) ? ogImage : new URL(ogImage, Astro.site).href;
+const origin = business.url;
 
-// Real NAP from his site. No aggregateRating: his site carries no reviews.
-const graph: Record<string, unknown>[] = [
-  {
-    '@type': 'LocalBusiness',
-    '@id': `${business.url}/#business`,
-    name: business.name,
-    description: seo.description,
-    url: business.url,
-    email: business.email,
-    telephone: business.phone,
-    image: ogImageUrl,
-    foundingDate: String(business.founded),
-    address: { '@type': 'PostalAddress', streetAddress: business.street, addressLocality: business.town, addressRegion: business.region, postalCode: business.postcode, addressCountry: 'GB' },
-    knowsAbout: services.map((s) => s.name),
-    hasOfferCatalog: {
-      '@type': 'OfferCatalog',
-      name: 'Hot tubs, spas, saunas and servicing',
-      itemListElement: services.map((s) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: s.name } })),
-    },
+// The one business node. sameAs: none verified yet (no GBP, Facebook page or
+// company number on file): ships empty, listed as operator questions.
+const sameAs = [
+  ...(entity.gbpPlaceId ? [`https://www.google.com/maps/place/?q=place_id:${entity.gbpPlaceId}`] : []),
+  ...entity.sameAs,
+  ...(entity.companyNumber ? [`https://find-and-update.company-information.service.gov.uk/company/${entity.companyNumber}`] : []),
+];
+const businessNode: Record<string, unknown> = {
+  '@type': entity.type,
+  '@id': `${origin}/#business`,
+  name: business.name,
+  legalName: business.legalName,
+  description: seo.description,
+  url: `${origin}/`,
+  telephone: '+44 7445 450908',
+  image: new URL('/images/square.jpg', Astro.site).href,
+  logo: new URL('/images/square.jpg', Astro.site).href,
+  foundingDate: String(business.founded),
+  address: { '@type': 'PostalAddress', streetAddress: business.street, addressLocality: business.town, addressRegion: business.region, postalCode: business.postcode, addressCountry: 'GB' },
+  areaServed: [serviceCoverage, ...towns.map((t) => t.town)].map((name) => ({ '@type': 'Place', name })),
+  knowsAbout: hubs.map((h) => h.name),
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Hot tubs, spas, saunas, pools and hot tub servicing',
+    itemListElement: hubs.map((h) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: h.name, url: `${origin}${hubHref(h.slug)}` } })),
   },
-  { '@type': 'WebSite', '@id': `${business.url}/#website`, url: business.url, name: business.name, publisher: { '@id': `${business.url}/#business` } },
-  { '@type': 'WebPage', '@id': pageUrl, url: pageUrl, name: title, description, isPartOf: { '@id': `${business.url}/#website` }, about: { '@id': `${business.url}/#business` } },
+  ...(sameAs.length ? { sameAs } : {}),
+};
+const graph: Record<string, unknown>[] = [
+  businessNode,
+  { '@type': 'WebSite', '@id': `${origin}/#website`, url: `${origin}/`, name: business.name, publisher: { '@id': `${origin}/#business` }, inLanguage: 'en-GB' },
+  { '@type': 'WebPage', '@id': pageUrl, url: pageUrl, name: title, description, isPartOf: { '@id': `${origin}/#website` }, about: { '@id': `${origin}/#business` }, inLanguage: 'en-GB' },
+  ...(crumbs.length ? [{
+    '@type': 'BreadcrumbList', '@id': `${pageUrl}#breadcrumb`,
+    itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: new URL(c.href ?? Astro.url.pathname, Astro.site).href })),
+  }] : []),
   ...schema,
 ];
-const jsonld = { '@context': 'https://schema.org', '@graph': graph };
+// `<` is escaped so no value can close the script element early.
+const jsonld = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
 ---
 
 <!doctype html>
@@ -58,10 +86,14 @@ const jsonld = { '@context': 'https://schema.org', '@graph': graph };
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {/* Client preview on workers.dev: never indexed. */}
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content={indexable ? 'index, follow' : 'noindex, nofollow'} />
     <link rel="canonical" href={pageUrl} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#1c2f4b" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={business.name} />
@@ -71,7 +103,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': graph };
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:locale" content="en_GB" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+    {!noSchema && <script type="application/ld+json" set:html={jsonld} />}
   </head>
   <body data-page={page}>
     <a href="#main" class="skip-link">Skip to content</a>
@@ -81,8 +113,8 @@ const jsonld = { '@context': 'https://schema.org', '@graph': graph };
     </main>
     <Footer />
     {!utility && <StickyCtaBar />}
+    <WhatsAppFloat />
     <Lightbox />
-
     <script>
       // MOTION. Two patterns site-wide, both declarative:
       //   data-motion="reveal"  one-shot fade/rise when the element enters view
@@ -153,16 +185,16 @@ const jsonld = { '@context': 'https://schema.org', '@graph': graph };
         if (!a) return;
         const form = document.getElementById('quote');
         if (!form) {
-          // Utility pages carry no form: the fallback is the homepage form.
+          // Pages without a form (legal, utility): the contact page's form.
           e.preventDefault();
-          location.href = '/#quote';
+          location.href = '/contact/#quote';
           return;
         }
         const samePage = a.getAttribute('href') === '#quote' || a.pathname === location.pathname;
         if (!samePage) return;
         e.preventDefault();
         const mobile = window.innerWidth < 1024;
-        const firstField = form.querySelector('input:not([type=hidden]), textarea, select');
+        const firstField = form.querySelector('input:not([type=hidden]), textarea, select') as HTMLElement | null;
         const target = mobile ? (firstField ?? form) : (form.closest('section') ?? form);
         target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
         if (mobile && firstField) {
@@ -174,10 +206,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': graph };
           }, reduce ? 0 : 450);
         }
         history.replaceState(null, '', '#quote');
-        const svc = a.dataset.service;
-        const select = form.querySelector<HTMLSelectElement>('[data-service-select]');
-        if (svc && select) select.value = svc;
-        setTimeout(() => form.querySelector<HTMLInputElement>('input[name="name"]')?.focus({ preventScroll: true }), 650);
+        setTimeout(() => form.querySelector<HTMLInputElement>('input:not([type=hidden])')?.focus({ preventScroll: true }), 650);
       });
     </script>
   </body>

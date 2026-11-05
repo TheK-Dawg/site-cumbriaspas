@@ -3,7 +3,7 @@
  * LIGHTBOX. Mounted once in the root layout. Any [data-lightbox] element that
  * wraps an <img> opens it. Prev/next by arrow keys, on-screen chevrons, or a
  * swipe on touch. Controls are light on the dark backdrop, always visible.
- * A Get a Quote button sits centred under the image. No numbering.
+ * A Quick Quote Online button sits centred under the image. No numbering.
  */
 ---
 <dialog class="lb" data-lb aria-label="Photo viewer">
@@ -19,7 +19,7 @@
   <figure class="lb__figure" data-lb-figure>
     <img class="lb__img" alt="" width="1200" height="1200" />
   </figure>
-  <a href="#quote" class="btn btn-primary lb__cta" data-lb-close data-cta="lightbox-quote">Get a Quote</a>
+  <a href="#quote" class="btn btn-primary lb__cta" data-lb-close data-cta="lightbox-quote">Quick Quote Online</a>
 </dialog>
 
 <style>
@@ -64,7 +64,7 @@
       if (!items.length) return;
       index = (i + items.length) % items.length;
       const src = items[index];
-      img.src = src.currentSrc || src.src;
+      img.src = src.dataset.full || src.currentSrc || src.src;
       img.alt = src.alt;
     };
     const open = (trigger: HTMLElement) => {

@@ -1,16 +1,21 @@
 /**
- * Single source of truth for the Cumbria Spas one-page preview: business
- * facts, the five services (his nav, his names), the sauna gallery and the
- * on-page navigation. Every fact and photo comes from cumbriaspas.co.uk.
+ * Single source of truth for the Cumbria Spas site: business facts (the
+ * plan's NAP, exactly as written), the standard call to action, the nine hubs
+ * in the seed's order (which is also the nav order), the standalone pages and
+ * the navigation. Plan: plan/SITE-PLAN.md (approved, fingerprint
+ * f604099b93602bfa); seed: plan/seed.json.
  *
- * NO reviews: his current site carries none, so no review band and no rating
- * strip. A trust strip of verifiable facts takes that slot instead.
+ * NO reviews (seed.reviews.status "none-yet"): no review band, rating strip,
+ * widget or review markup anywhere. A strip of verifiable facts takes that slot.
+ * NO Google Business Profile yet: no Google listing link or reviews widget.
  */
 export const business = {
   name: 'Cumbria Spas',
+  legalName: 'Cumbria Spas Ltd',
   url: 'https://cumbriaspas.co.uk',
+  // Shown as text only: the mailbox is not live yet (the operator sets it up).
   email: 'david@cumbriaspas.co.uk',
-  phone: '07445 450908',
+  phone: '0744 5450908',
   phoneHref: 'tel:+447445450908',
   whatsapp: 'https://wa.me/447445450908',
   founded: 2013,
@@ -20,48 +25,96 @@ export const business = {
   postcode: 'LA17 7TT',
   address: 'Hight Bridge Lodge, Kirkby In Furness, Cumbria, LA17 7TT',
   mapQuery: 'Hight Bridge Lodge, Kirkby In Furness, LA17 7TT',
-  tagline: 'Wood fired spas, Arctic Spas hot tubs, saunas and hot tub servicing',
 };
 
-export interface Service {
+/** The site-wide call to action, word for word (plan). */
+export const ctaLine = 'Contact by the quote form, call now, or by WhatsApp.';
+
+/** The approved manufacturer sentence, word for word (operator, 4 Nov 2026). */
+export const manufacturerLine =
+  'Cumbria Spas works in partnership with Kubilų pasaulis, the largest manufacturer in Lithuania of premium, luxury and custom hot tubs.';
+
+/** Said in passing on every hub page (plan). */
+export const customersLine =
+  'Cumbria Spas serves residential and commercial customers of all types, from hotels to spas to leisure centres.';
+
+/** Repair and servicing coverage wording (plan). */
+export const serviceCoverage = 'Cumbria, North Lancashire and North Yorkshire';
+
+export interface Hub {
+  slug: string;
   name: string;
-  anchor: string;
+  /** Shorter label for the nav dropdown and footer where the full name is long. */
   short: string;
-  img: string;
-  alt: string;
-  pos?: string; // object-position for the card crop
+  /** One-line card description for the services grid. */
+  blurb: string;
 }
 
-export const services: Service[] = [
-  { name: 'Wood Fired Spas', anchor: '#wood-fired', short: 'Off grid wood fired spas in various sizes and specifications. No electricity needed, so they suit gardens, holiday homes, lodge parks and glamping sites.', img: '/images/wood-tub.jpg', alt: 'Wood fired hot tub with stainless stove and chimney on a gravel base', pos: 'center 60%' },
-  { name: 'Small Spas', anchor: '#quote', short: 'Compact spas with timber cladding and jetted seating for two, for smaller gardens, patios and holiday lets where space is tight.', img: '/images/small-IMG-20260611-WA0004.jpg', alt: 'Looking into a small two-seat spa with jets and a grey shell' },
-  { name: 'Arctic Spas', anchor: '#arctic-spas', short: 'Cumbria Spas also sells the amazing Arctic Spa range of hot tubs, with Spa Boy® water care that helps test and adjust the water for you.', img: '/images/arctic-artic-20spa-1-.jpg', alt: 'Arctic Spas hot tub with cedar cabinet on a stone bed by a lake' },
-  { name: 'Saunas', anchor: '#saunas', short: 'Outdoor cube saunas with glass fronts, Harvia heaters and wood burning stoves, built for gardens, decks and holiday parks.', img: '/images/saunas-sauna1.jpg', alt: 'Cube outdoor sauna with a glass front and stove chimney', pos: 'center 40%' },
-  { name: 'Hot Tub Maintenance & Servicing', anchor: '#servicing', short: 'A full nine-step hot tub service: line flush, drain, clean, filters, refill and chemical balance. Up to three hours on site.', img: '/images/small-IMG-20260611-WA0003.jpg', alt: 'Timber clad spa cabinet in the Cumbria Spas workshop' },
+/** The nine hubs, in the seed's services[] order: the four hot tub hubs first. */
+export const hubs: Hub[] = [
+  { slug: 'wood-fired-hot-tubs', name: 'Wood-Fired Hot Tubs', short: 'Wood-Fired Hot Tubs', blurb: 'Kubilų pasaulis wood-fired tubs with hydrotherapy jets and LED lights, heated by a stainless steel stove in about 2 to 4 hours.' },
+  { slug: 'hot-tub-repair-and-servicing', name: 'Hot Tub Repair & Servicing', short: 'Repair & Servicing', blurb: 'Repairs, leaks, full services and plant-room maintenance for residential and commercial hot tubs across Cumbria, North Lancashire and North Yorkshire.' },
+  { slug: 'electric-hot-tubs', name: 'Electric Hot Tubs', short: 'Electric Hot Tubs', blurb: 'The same tub shapes as the wood-fired range with electric heating, for owners who want the tub kept at temperature.' },
+  { slug: 'hot-tub-installation', name: 'Hot Tub Installation', short: 'Installation', blurb: 'Delivery by 4x4 and trailer, lifting into place by HIAB crane, and in-house installs for commercial and mosaic-tiled spas.' },
+  { slug: 'swimming-pools-and-swim-spas', name: 'Swimming Pools & Swim Spas', short: 'Pools & Swim Spas', blurb: 'Swimming pools from a Yorkshire pool manufacturer, GRP mosaic-tiled swim spas and the Arctic Spas saltwater swim spa.' },
+  { slug: 'saunas', name: 'Saunas', short: 'Saunas', blurb: 'Outdoor saunas from Kubilų pasaulis with spruce exteriors, alder benches, tinted glass fronts and LED lighting.' },
+  { slug: 'arctic-spas-dealer', name: 'Arctic Spas Dealer', short: 'Arctic Spas', blurb: 'Cumbria Spas is an Arctic Spas dealer: sold, supplied, installed with an Arctic engineer, and maintained.' },
+  { slug: 'commercial-and-mosaic-tiled-spas', name: 'Commercial & Mosaic-Tiled Spas', short: 'Commercial & Mosaic Spas', blurb: 'GRP mosaic-tiled spas and hydro spas with plant rooms, automated dosing and glass filtration, installed in-house.' },
+  { slug: 'trade-and-holiday-park-hot-tubs', name: 'Trade and Holiday Park Hot Tubs', short: 'Trade & Holiday Parks', blurb: 'Trade prices for holiday parks, lodge and glamping sites ordering three or more hot tubs and saunas.' },
 ];
 
-export const saunaGallery = [
-  { src: '/images/saunas-sauna1.jpg', alt: 'Cube sauna with full glass front and stove chimney' },
-  { src: '/images/saunas-IMG-20260529-WA0087.jpg', alt: 'Wood fired hot tub and cube sauna side by side on a timber deck' },
-  { src: '/images/saunas-IMG-20260606-WA0014.jpg', alt: 'Blue-grey cube sauna with glass door in the workshop' },
-  { src: '/images/saunas-IMG-20260529-WA0061.jpg', alt: 'Inside a sauna: two-tier slatted benches and a Harvia heater' },
-  { src: '/images/saunas-IMG-20260529-WA0056.jpg', alt: 'Open glass door into a sauna with lit benches' },
-  { src: '/images/saunas-IMG-20260606-WA0010.jpg', alt: 'Harvia electric sauna heater beside the bench' },
-  { src: '/images/saunas-IMG-20260528-WA0013.jpg', alt: 'Wood burning sauna stove door set in timber cladding' },
-  { src: '/images/saunas-IMG-20260529-WA0062.jpg', alt: 'Looking down into a sauna with benches and a cylinder heater' },
-  { src: '/images/saunas-IMG-20260529-WA0069.jpg', alt: 'Harvia heater control panel on the sauna wall' },
-];
+export const hubBySlug = Object.fromEntries(hubs.map((h) => [h.slug, h])) as Record<string, Hub>;
+export const hubHref = (slug: string) => `/${slug}/`;
 
+/** Standalone pages (no town articles). */
+export const pages = {
+  chemicals: { href: '/chemicals/', name: 'Chemicals' },
+  parts: { href: '/parts/', name: 'Parts' },
+  reviews: { href: '/reviews/', name: 'Reviews' },
+  about: { href: '/about/', name: 'About' },
+  contact: { href: '/contact/', name: 'Contact' },
+  gallery: { href: '/gallery/', name: 'Gallery' },
+  services: { href: '/services/', name: 'Services' },
+  sitemap: { href: '/sitemap/', name: 'Sitemap' },
+  terms: { href: '/terms-and-conditions/', name: 'Terms and Conditions' },
+  privacy: { href: '/privacy-policy/', name: 'Privacy Policy' },
+};
+
+/** Header nav. Services opens a dropdown of every hub plus Chemicals and Parts. */
 export const nav = [
-  // The LMB standard nav. One-page preview: each item points at the section
-  // that stands in for that page (Resources = the hot tub care guide for now).
-  { label: 'Services', href: '#services' },
-  { label: 'Resources', href: '#servicing' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services/', dropdown: true },
+  { label: 'Chemicals', href: '/chemicals/' },
+  { label: 'Parts', href: '/parts/' },
+  { label: 'About', href: '/about/' },
+  { label: 'Reviews', href: '/reviews/' },
+  { label: 'Contact', href: '/contact/' },
+];
+
+/** Verifiable facts for the strip under every hero (in place of reviews). */
+export const trustFacts = [
+  { k: `Since ${business.founded}`, v: 'Selling, installing and servicing hot tubs' },
+  { k: 'Try before you buy', v: 'Showroom at Kirkby In Furness' },
+  { k: 'Arctic Spas dealer', v: 'Installed with an Arctic engineer' },
+  { k: 'Residential and commercial', v: 'Homes, hotels, spas, holiday parks' },
 ];
 
 export const seo = {
-  title: 'Cumbria Spas | Wood Fired Spas, Arctic Spas Hot Tubs & Saunas',
-  description: 'Wood fired spas and hot tubs, the Arctic Spas range, saunas and hot tub servicing from Cumbria Spas, Kirkby In Furness, Cumbria. Try before you buy. Est. 2013.',
+  title: 'Hot Tubs, Wood-Fired Hot Tubs & Saunas in Cumbria | Cumbria Spas',
+  description: 'Wood-fired and electric hot tubs, Arctic Spas, saunas, swim spas and hot tub repair and servicing from Cumbria Spas, Kirkby In Furness. Try before you buy. Est. 2013.',
+};
+
+/** Footer credit (operator, 20 Oct 2026). No approved trade phrase: the generic one. */
+export const credit = { phrase: 'Local business websites', href: 'https://localmapbooster.com/' };
+
+/**
+ * LocalBusiness entity (operator, 22 Oct 2026, ENTITY-SAMEAS). No GBP place id,
+ * no verified Facebook page and no company number on file: sameAs ships empty
+ * and each is an operator question in BUILD-REPORT.md, never guessed.
+ */
+export const entity = {
+  type: 'HomeGoodsStore',
+  gbpPlaceId: null as string | null,
+  sameAs: [] as string[],
+  companyNumber: null as string | null,
 };

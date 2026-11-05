@@ -1,7 +1,9 @@
 ---
 /**
  * FEATURE ROW (explain). The v3 alternating image/copy row: a large rounded
- * photo with an optional inset (logo or second photo) on one side, H2, body, a tint card list of points and the CTA on the other. `flip`
+ * photo with an optional photo inset on one side, H2, body (may carry inline
+ * links), a tint card list of points and the CTA on the other. No logo insets
+ * (operator, 5 Nov 2026: no brand-logo pictures). `flip`
  * puts the photo on the right. `tone="tint"` sits the row on the ice-blue
  * slab so consecutive features read as separate bands.
  */
@@ -12,10 +14,11 @@ interface Props {
   body: string[];
   image: string;
   imageAlt: string;
+  full?: string;
   imagePos?: string;
   inset?: string;
   insetAlt?: string;
-  insetKind?: 'logo' | 'photo';
+  insetKind?: 'photo';
   points?: Point[];
   note?: string;
   cta?: string;
@@ -23,14 +26,14 @@ interface Props {
   flip?: boolean;
   tone?: 'page' | 'tint';
 }
-const { id, heading, body, image, imageAlt, imagePos = 'center', inset, insetAlt = '', insetKind = 'logo', points = [], note, cta = 'Get a Quote', service, flip = false, tone = 'page' } = Astro.props;
+const { id, heading, body, image, imageAlt, full, imagePos = 'center', inset, insetAlt = '', insetKind = 'photo', points = [], note, cta = 'Quick Quote Online', service, flip = false, tone = 'page' } = Astro.props;
 ---
 <section class:list={['ft-row', `section-${id}`, 'on-light', tone === 'tint' && 'ft-row--tint']} id={id} data-section={id}>
   <div class:list={['ft-row__slab', tone === 'tint' && 'slab']}>
     <div class:list={['container', 'ft-row__grid', flip && 'ft-row__grid--flip']}>
       <div class="ft-row__media" data-motion="reveal">
         <figure class="ft-row__photo">
-          <img src={image} alt={imageAlt} width="1000" height="1100" loading="lazy" decoding="async" style={`object-position: ${imagePos}`} />
+          <img src={image} data-full={full ?? image} alt={imageAlt} width="1000" height="1100" loading="lazy" decoding="async" style={`object-position: ${imagePos}`} />
         </figure>
         {inset && (
           <div class:list={['ft-row__inset', `ft-row__inset--${insetKind}`]}>
@@ -40,7 +43,7 @@ const { id, heading, body, image, imageAlt, imagePos = 'center', inset, insetAlt
       </div>
       <div class="ft-row__copy" data-motion="reveal" style="--reveal-delay: 80ms">
         <h2 class="ft-row__h2">{heading}</h2>
-        {body.map((p) => <p class="ft-row__p">{p}</p>)}
+        {body.map((p) => <p class="ft-row__p" set:html={p} />)}
         {points.length > 0 && (
           <ul class="ft-row__points">
             {points.map((pt) => (
@@ -76,6 +79,8 @@ const { id, heading, body, image, imageAlt, imagePos = 'center', inset, insetAlt
   .ft-row__inset--photo img { border-radius: var(--radius); mix-blend-mode: normal; }
   .ft-row__h2 { font-size: var(--text-2xl); max-width: 20ch; text-wrap: balance; margin-bottom: 18px; color: var(--teal-deep); }
   .ft-row__p { color: var(--muted-light); max-width: 56ch; margin-bottom: 14px; }
+  .ft-row__p :global(a) { color: var(--teal); font-weight: 700; }
+  .ft-row__p :global(a:hover) { color: var(--sky-deep); }
   .ft-row__points { list-style: none; margin: 22px 0 18px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .ft-row__points li { background: var(--card); border-radius: var(--radius); padding: 16px 18px; box-shadow: 0 4px 16px rgb(28 47 75 / 0.06); }
   .ft-row--tint .ft-row__points li { background: var(--card); }
