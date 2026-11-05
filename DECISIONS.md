@@ -8,7 +8,8 @@ operator ruling first). This repository started from the approved preview 2 one-
 build (247 Plumbers Norwich) and were replaced.
 
 ## Look
-- **Preview 2 kept as-is** (brief item 1; plan flag 9): its palette (navy `#1c2f4b` / `#253c5e`, sky `#4faadf`, orange
+- **Preview 2 kept as-is** (brief item 1; plan flag 9), except the navies, lifted brighter on 5 Nov (correction
+  round 1: `#1c2f4b` / `#253c5e` / `#121f33` became `#17355e` / `#1f416f` / `#0e213f`): its palette (navy, sky `#4faadf`, orange
   CTA `#ff7a1a` with dark text), Figtree, the floating pill header with the `square.jpg` stacked wordmark, the rounded
   slabs and pill buttons. Preview 1 is not used.
 - **No brand logos** (brief item 2): the "Brands we sell" strip and the Arctic Spas, Kubilų pasaulis and Spa Boy badge
@@ -22,10 +23,10 @@ build (247 Plumbers Norwich) and were replaced.
   `/contact/`, `/terms-and-conditions/`, `/privacy-policy/`. Standard pages added by law: `/services/` (text-linked
   list), `/gallery/`, `/sitemap/` (HTML), `/thank-you/` (noindex, Formlane's redirect target), the 404, `/sitemap.xml`,
   `/robots.txt`, `/llms.txt`.
-- **Not built:** `/areas/` and `/resources/`. The plan's inventory has neither; the areas map and the full town list sit
-  on every page instead (the identical areas component), and the hubs act as the article category archives at root
-  level, listing their town articles once any are published. No cookie, accessibility or complaints page: the plan names
-  only the two legal pages, and cookies are covered inside the privacy policy (brief).
+- **Added in correction round 1 (operator, 5 Nov 2026):** `/resources/` (the article index; articles moved to
+  `/resources/<hub>-<town-slug>/`), `/faq/` and `/areas/`. This reverses the earlier "not built" call on `/areas/` and
+  `/resources/`. No cookie, accessibility or complaints page: the plan names only the two legal pages, and cookies are
+  covered inside the privacy policy (brief).
 - Hub pages are landing pages: hero (breadcrumbs above the H1, Quick Quote Online + call, CTA line, trust bullets) →
   trust strip → intro + 2-4 alternating image/text rows → mid-page CTA band → process → FAQ accordions → related
   services → town articles (when published) → gallery → areas (map + towns) → quote form.
@@ -51,7 +52,8 @@ build (247 Plumbers Norwich) and were replaced.
   `admin@apexaimarketing.com`. The operator should confirm; it is a one-field change in the dashboard if wrong.
 - Section `id="contact"`, the form card `id="quote"`: every Quick Quote Online link lands on the fields; pages without
   a form send it to `/contact/#quote`.
-- Floating WhatsApp button on every page (404 included, because the plan says every page). Phones: the sticky Quick
+- Floating WhatsApp button on every page (404 included, because the plan says every page), on phones only: hidden
+  from 768px up (operator, 5 Nov 2026, correction round 1). Phones: the sticky Quick
   Quote / Call bar shows from the first screen (plan: "keep the phone number and the quote request visible at all
   times") and hides only while the form itself is on screen; the WhatsApp circle rides above it.
 

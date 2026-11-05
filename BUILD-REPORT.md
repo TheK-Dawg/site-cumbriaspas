@@ -157,3 +157,55 @@ Dealer-range and brochure photos are captioned as the range and never as David's
 - No mailbox or Google Workspace setup.
 - No AI imagery and no generated brand or product images.
 - No DNS or domain change.
+
+## CORRECTIONS: round 1 (operator's live review, 5 Nov 2026)
+Brief: `CUMBRIA-FIX1-BRIEF.md`. Commits `34a4e09` (the fixes), `8b425e9`, `d6c377b` and `655b2ab` (button centring
+tuned from live measurements), then this report. Worker `site-cumbriaspires-preview2`, version
+`a3f49cc1-c9ec-4db5-b94e-9ac5c8aa0581`. Rollback to the first full build: `npx wrangler rollback 4efa7c6c-3fe1-4a43-9e04-cd44b23ada1f`.
+No test leads were sent, no AI images were used, and no other pages were added.
+
+| # | Fix | What changed |
+|---|---|---|
+| 1 | **Resources** | New `/resources/` index (v4 pattern): the published articles as cards, then all nine hubs with their published towns. Unpublished towns are not linked. Hubs come from `site.ts` (the seed order) and towns from `towns.json` (built from the seed). **Article URLs moved to `/resources/<hub>-<town-slug>/`**, as the brief asked. The template is now `src/pages/resources/[slug].astro`, breadcrumbs go Home → Resources → article, the queue paths were regenerated, and `docs/ARTICLE-ENGINE.md` was updated. **Resources is in the header nav and the footer.** The footer now links all nine hubs plus Chemicals, Parts, Reviews, About, Contact, Resources, Privacy and Terms, and `qa.mjs` checks this on every page. |
+| 1 | **Three articles, ready to publish** | `/resources/wood-fired-hot-tubs-kirkby-in-furness/`, `/resources/hot-tub-repair-and-servicing-barrow-in-furness/`, `/resources/electric-hot-tubs-kendal/` (queue items 1, 11 and 21; the three pinned towns in publish order, each on a different hub). Each has 5 H2s, a real R2 photo above every H2 plus a hero (no AI images, no brochure or dealer-range photos), takeaways, FAQs and FAQPage schema, the residential-and-commercial line, and the CTA line word for word. Every fact comes from plan §Product and service detail. No prices (the repair article says "contact for a quote"), no service frequency, and no superlatives beyond the approved manufacturer sentence. |
+| 1 | **Sitemap** | `/sitemap/` and `/sitemap.xml` (26 URLs) list Resources, the 3 articles, FAQ and Areas. `llms.txt` lists the new pages too. |
+| 2 | **WhatsApp: phones only** | The floating button is `display:none` from 768px up and shows on phones. The article rail's WhatsApp button is also hidden on desktop. The text links (footer NAP, form panel, CTA band) and the CTA line itself stay. QA checks that the button is hidden on desktop and visible on mobile on every route. |
+| 3 | **Footer credit** | "Hot tub websites by [LMB mark]". The single nofollow link and the mark are unchanged. |
+| 4 | **Phone** | **Not changed.** There is a `TODO(phone)` in `src/data/site.ts` and an open item below. |
+| 5 | **Contact spacing** | The trust strip now has the page's usual section padding (`--pad-med`) above the next section and between that section and the form. |
+| 6 | **Contact split row** | One image/text row (the hub pages' `Feature` component, used once) sits between the trust strip and the form: the showroom, WhatsApp photos and videos, David does the work himself, four fact cards, and links to About and Services. |
+| 7 | **Brighter navy** | Same hue (216), more saturation and a little lighter. `--teal-deep` went from `#1c2f4b` to `#17355e`, `--teal` from `#253c5e` to `#1f416f`, and `--teal-ink` from `#121f33` to `#0e213f`. The navy shadow and line tints, `theme-color` and the manifest were updated to match. Contrast: on-dark text 11.4:1, muted text 7.3:1 and sky-blue hovers 4.8:1 on the new deep navy. The QA contrast walk passes on every route. The favicon keeps the logo's own navy. |
+| 8 | **Button text centring** | Two causes. (a) The **Formlane submit**: Formlane's `padding: var(--lf-p) 1.4em` turns into 12px top and 24px bottom, which pushed the text up. The site now sets the submit's padding (15px / 13px, measured). (b) **Site buttons**: Figtree's tall ascent left the caps about 1px above centre. A `--nudge` (0.075em) moves 1px of padding from the bottom to the top on `.btn`, the header pill and the phone sticky bar. CSS `text-box` trim was tried first and does nothing here, because the label is an anonymous flex item. Measured on the live site from 3× screenshots (space above the cap tops / space below the baseline): header pill was 17 / 19px and is now 17.7 / 18.0px; form submit is now 21.7 / 22.0px; phone menu button is 21 / 20px. Before and after crops are in `shots/fix1/` (gitignored). |
+
+### Standard pages compared with the v4 / BFL set
+BFL has services index, areas, FAQ, resources, about, contact, privacy, terms, 404 and thank-you. Cumbria already had
+the services index, gallery, sitemap, about, contact, legal pages, 404 and thank-you. **Added:**
+- **`/faq/`:** a short "About Cumbria Spas" group, then every hub's own FAQs. All of it is plan §1 material that was
+  already published on the hubs. The one £ answer stays on the Repair & Servicing page only.
+- **`/areas/`:** the plan's coverage wording, the shared areas map and town list, and the services grid. There are no
+  town pages (the plan has none), and Bedale and Ballycastle are not singled out while flags 4 and 5 are open.
+- **`/resources/`:** see item 1 above.
+
+Both FAQ and Areas are linked from the footer "More" column and from the sitemap. Nothing new was invented: no hours,
+warranties, team, or company facts that are not in the plan. The "company facts" the operator mentioned are on About
+already. Anything beyond that (company number, hours, insurance) is still an open question, not new copy.
+
+### Verification
+- `astro build`: 28 pages, plus sitemap.xml, robots.txt and llms.txt.
+- `node scripts/qa.mjs --url <preview>` (Playwright, 1440×900 and 390×844, all 28 routes including `/resources/`, the 3
+  articles, `/faq/` and `/areas/`): **0 failures.** The walk now also checks:
+  - WhatsApp hidden on desktop and visible on mobile;
+  - the footer's required link list;
+  - the header button's nudge;
+  - the Formlane submit's padding;
+  - that the form draws on every form page.
+- The old article path `/wood-fired-hot-tubs/kirkby-in-furness/` returns 404. Nothing linked to it, because no articles
+  were published before.
+
+### Open item added
+12. **Phone number: confirm with David.** The plan's NAP gives **0744 5450908**, copied from David's own messages.
+    That is only 10 digits after the 0, which is one short for a UK mobile. The operator reads it as **07444 545090**
+    (07444545090). The site still shows 0744 5450908, with `tel:+447445450908` and `wa.me/447445450908`, so the number
+    and the link digits match. If David confirms the 11-digit number, change `phone`, `phoneHref`
+    (`tel:+447444545090`) and `whatsapp` (`https://wa.me/447444545090`) in `src/data/site.ts` together. Then grep for
+    `5450908` and fix the rest: the contact page copy, the `qa.mjs` WhatsApp check and the Whapi chat id in open item 1.
