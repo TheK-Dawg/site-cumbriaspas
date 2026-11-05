@@ -1,0 +1,40 @@
+---
+/**
+ * COOKIE POLICY (standard page set, operator, 5 Nov 2026; plan "Legal pages":
+ * "a proper cookie policy if one is needed"). Standard template language that
+ * matches what the build actually loads: no analytics or advertising cookies,
+ * a Google Maps embed and the Formlane enquiry form (third parties). If an
+ * analytics or marketing tool is ever added, this page and Privacy Policy
+ * section 10 both need a line on it.
+ */
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { business, pages } from '../data/site';
+const toc = [
+  ['what', '1. What cookies are'], ['use', '2. How this website uses cookies'], ['third-party', '3. Third-party services'],
+  ['control', '4. Managing cookies'], ['changes', '5. Changes to this policy'], ['contact', '6. Contact us'],
+].map(([id, title]) => ({ id, title }));
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Cookie Policy', href: '/cookie-policy/' }];
+---
+
+<Base title="Cookie Policy | Cumbria Spas" description="How the Cumbria Spas website uses cookies: no advertising or analytics cookies, and the third-party map and enquiry form that may set their own." page="cookie-policy" utility={true} crumbs={crumbs}>
+  <LegalPage h1="Cookie Policy" lead="Cumbria Spas Cookie Policy" crumbs={crumbs} toc={toc} rail kind="cookie-policy">
+    <h2 id="what">1. What cookies are</h2>
+    <p>Cookies are small text files that a website stores on your device. Similar technologies, such as local storage, work in the same way. They can be strictly necessary for a website to work, or used for things like analytics and advertising.</p>
+    <h2 id="use">2. How this website uses cookies</h2>
+    <p>This website does not use advertising or analytics cookies, and it does not track you across other websites.</p>
+    <h2 id="third-party">3. Third-party services</h2>
+    <p>Some pages include services provided by third parties, which may set cookies or use similar storage that they need to work:</p>
+    <ul>
+      <li><strong>Google Maps</strong>, the embedded map showing where Cumbria Spas is and the areas covered.</li>
+      <li><strong>The enquiry form provider</strong>, which receives quote form submissions and forwards them to us, and protects the form from spam.</li>
+    </ul>
+    <p>These providers' own policies explain how they use cookies. If you contact us by WhatsApp, WhatsApp's own terms and privacy policy apply.</p>
+    <h2 id="control">4. Managing cookies</h2>
+    <p>You can block or delete cookies in your browser settings. If you do, parts of the website, such as the map or the quote form, may not work fully. You can still contact us by phone or WhatsApp on <a href={business.phoneHref}>{business.phone}</a>.</p>
+    <h2 id="changes">5. Changes to this policy</h2>
+    <p>If the way this website uses cookies changes, this page will be updated. More on how we handle personal information is in our <a href={pages.privacy.href}>Privacy Policy</a>.</p>
+    <h2 id="contact">6. Contact us</h2>
+    <p>For any questions about this Cookie Policy, please contact us at {business.email}.</p>
+  </LegalPage>
+</Base>

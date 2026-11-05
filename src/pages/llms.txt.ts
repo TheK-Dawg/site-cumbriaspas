@@ -22,6 +22,12 @@ ${hubs.map((h) => `- [${h.name}](${u(hubHref(h.slug))}): ${h.blurb}`).join('\n')
 - [Areas Covered](${u('/areas/')})
 - [Gallery](${u('/gallery/')})
 - [Sitemap](${u('/sitemap/')})
+- [Company Facts](${u('/company-facts/')})
+- [Complaints](${u('/complaints/')})
+- [Accessibility](${u('/accessibility/')})
+- [Privacy Policy](${u('/privacy-policy/')})
+- [Terms and Conditions](${u('/terms-and-conditions/')})
+- [Cookie Policy](${u('/cookie-policy/')})
 `;
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 };

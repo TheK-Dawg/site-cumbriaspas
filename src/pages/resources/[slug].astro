@@ -38,6 +38,9 @@ const body = (entry.rendered?.html ?? '').replace(/<h2\b/g, () => {
   return `<figure><img src="${esc(im.src)}" alt="${esc(im.alt)}" loading="lazy" decoding="async" width="1600" height="900"></figure><h2`;
 });
 const href = articleHref(d);
+// Interlinking (operator, 5 Nov 2026): across to 1 or 2 related articles, same hub first, then the nearest in publish order.
+const others = (await publishedArticles()).filter((e) => e.id !== entry.id);
+const related = [...others.filter((e) => e.data.hub === d.hub), ...others.filter((e) => e.data.hub !== d.hub)].slice(0, 2);
 const url = new URL(href, Astro.site).href;
 const crumbs = [{ name: 'Home', href: '/' }, { name: 'Resources', href: '/resources/' }, { name: d.title, href }];
 const schema = [
@@ -78,6 +81,13 @@ const schema = [
         </div>
         <div class="prose ab__prose" set:html={body} />
         <p class="ab__hub">More on <a href={hubHref(d.hub)}>{hub.name.toLowerCase()} from Cumbria Spas</a>, or browse <a href="/resources/">every Cumbria Spas resource</a>.</p>
+        {related.length > 0 && (
+          <div class="ab__related">
+            <p class="ab__related-h">Related resources</p>
+            <ul>{related.map((e) => <li><a href={articleHref(e.data)}>{e.data.title}</a></li>)}</ul>
+          </div>
+        )}
+        <p class="ab__next">Ready to talk it through? Send a <a href="#quote">Quick Quote Online</a>, see <a href="/contact/">Cumbria Spas contact details</a>, or read the <a href="/faq/">frequently asked questions</a>.</p>
       </article>
       <aside class="ab__side">
         <div class="ab__sticky">
@@ -124,7 +134,14 @@ const schema = [
   .ab__prose :global(figure img) { width: 100%; height: 100%; object-fit: cover; }
   .ab__prose :global(h2) { color: var(--teal-deep); scroll-margin-top: calc(var(--header-h) + 16px); }
   .ab__hub { margin-top: 28px; font-weight: 600; }
-  .ab__hub a { color: var(--teal); }
+  .ab__hub a, .ab__next a, .ab__related a { color: var(--teal); }
+  .ab__hub a:hover, .ab__next a:hover, .ab__related a:hover { color: var(--sky-deep); }
+  .ab__related { margin-top: 24px; background: var(--tint); border-radius: var(--radius-lg); padding: 20px 24px; }
+  .ab__related-h { font-weight: 800; color: var(--teal-deep); margin-bottom: 8px; }
+  .ab__related ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; font-weight: 600; }
+  .ab__next { margin-top: 20px; }
+  /* The rail stretches the row's full height so the CTA box stays in view while the article scrolls (operator, 5 Nov 2026). */
+  .ab__side { align-self: stretch; }
   .ab__sticky { position: sticky; top: calc(var(--header-h) + 16px); display: flex; flex-direction: column; gap: 16px; }
   .ab__toc { background: var(--card); border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow-card); }
   .ab__toc-h { font-weight: 800; color: var(--teal-deep); margin-bottom: 10px; }

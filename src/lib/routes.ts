@@ -13,6 +13,7 @@ export async function allRoutes(): Promise<RouteItem[]> {
     { href: '/chemicals/', name: 'Hot Tub Chemicals', group: 'Services' },
     { href: '/parts/', name: 'Hot Tub Parts', group: 'Services' },
     { href: '/about/', name: 'About', group: 'Main pages' },
+    { href: '/company-facts/', name: 'Company Facts', group: 'Main pages' },
     { href: '/reviews/', name: 'Reviews', group: 'Main pages' },
     { href: '/contact/', name: 'Contact', group: 'Main pages' },
     { href: '/faq/', name: 'FAQ', group: 'Main pages' },
@@ -23,5 +24,8 @@ export async function allRoutes(): Promise<RouteItem[]> {
     ...articles.map((a) => ({ href: articleHref(a.data), name: a.data.title, group: 'Resources' })),
     { href: '/terms-and-conditions/', name: 'Terms and Conditions', group: 'Legal' },
     { href: '/privacy-policy/', name: 'Privacy Policy', group: 'Legal' },
+    { href: '/cookie-policy/', name: 'Cookie Policy', group: 'Legal' },
+    { href: '/complaints/', name: 'Complaints Procedure', group: 'Legal' },
+    { href: '/accessibility/', name: 'Accessibility Statement', group: 'Legal' },
   ];
 }

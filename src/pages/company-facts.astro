@@ -1,0 +1,73 @@
+---
+/**
+ * COMPANY FACTS (standard page set, operator, 5 Nov 2026). Only facts already
+ * in the plan and site data: trading and legal name, established 2013, owner
+ * David Hughes, the Kirkby In Furness showroom, contact details, services,
+ * coverage and the manufacturers. Nothing else.
+ *
+ * TODO(operator): no company number, VAT number, trade registration or
+ * insurance details are on file (plan/nap.json, standing prohibition 22).
+ * Add a "Registrations" row here only when David supplies them.
+ */
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { business, hubs, hubHref, pages, manufacturerLine, customersLine, serviceCoverage } from '../data/site';
+const toc = [
+  ['business', 'Business details'], ['contact-details', 'Contact details'], ['services', 'Services'],
+  ['coverage', 'Areas covered'], ['partners', 'Manufacturers and dealerships'], ['policies', 'Policies'],
+].map(([id, title]) => ({ id, title }));
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'About', href: '/about/' }, { name: 'Company Facts', href: '/company-facts/' }];
+---
+
+<Base title="Company Facts | Cumbria Spas" description="Cumbria Spas at a glance: Cumbria Spas Ltd, established in 2013 by David Hughes, with a hot tub showroom at Kirkby In Furness, Cumbria. Services, areas and contact details." page="company-facts" utility={true} crumbs={crumbs}>
+  <LegalPage h1="Company facts: Cumbria Spas at a glance" lead={`${business.legalName}, established in ${business.founded}, with a try-before-you-buy showroom at Kirkby In Furness, Cumbria.`} crumbs={crumbs} toc={toc} rail kind="company-facts">
+    <h2 id="business">Business details</h2>
+    <dl class="cf">
+      <div><dt>Trading name</dt><dd>{business.name}</dd></div>
+      <div><dt>Legal name</dt><dd>{business.legalName}</dd></div>
+      <div><dt>Established</dt><dd>{business.founded}</dd></div>
+      <div><dt>Owner</dt><dd>David Hughes, who does the installs, the servicing and the repairs himself</dd></div>
+      <div><dt>Showroom</dt><dd>{business.address}. Visitors can try a hot tub before buying.</dd></div>
+      <div><dt>Customers</dt><dd>{customersLine}</dd></div>
+    </dl>
+
+    <h2 id="contact-details">Contact details</h2>
+    <dl class="cf">
+      <div><dt>Phone</dt><dd><a href={business.phoneHref}>{business.phone}</a></dd></div>
+      <div><dt>WhatsApp</dt><dd><a href={business.whatsapp} target="_blank" rel="noopener">{business.phone} on WhatsApp</a></dd></div>
+      <div><dt>Email</dt><dd>{business.email}</dd></div>
+      <div><dt>Quote form</dt><dd><a href="/contact/#quote">Quick Quote Online</a> on the contact page</dd></div>
+    </dl>
+
+    <h2 id="services">Services</h2>
+    <ul>
+      {hubs.map((h) => <li><a href={hubHref(h.slug)}>{h.name}</a></li>)}
+      <li><a href={pages.chemicals.href}>Hot tub chemicals</a></li>
+      <li><a href={pages.parts.href}>Hot tub parts</a></li>
+    </ul>
+
+    <h2 id="coverage">Areas covered</h2>
+    <p>Hot tub repair and servicing covers {serviceCoverage}. Hot tubs, saunas, swimming pools and swim spas are delivered to customers throughout the UK. The full town list is on the <a href={pages.areas.href}>areas covered page</a>.</p>
+
+    <h2 id="partners">Manufacturers and dealerships</h2>
+    <p>{manufacturerLine} Cumbria Spas is also an <a href="/arctic-spas-dealer/">Arctic Spas dealer</a>, installing each Arctic Spa with one of Arctic's own engineers; a dealer for a UK manufacturer of mosaic-tiled spas, pools and swim spas; and a dealer for a Yorkshire swimming pool manufacturer.</p>
+
+    <h2 id="policies">Policies</h2>
+    <ul>
+      <li><a href={pages.terms.href}>Terms and Conditions</a></li>
+      <li><a href={pages.privacy.href}>Privacy Policy</a></li>
+      <li><a href={pages.cookies.href}>Cookie Policy</a></li>
+      <li><a href={pages.complaints.href}>Complaints procedure</a></li>
+      <li><a href={pages.accessibility.href}>Accessibility statement</a></li>
+    </ul>
+    <p>More about how the business works is on the <a href={pages.about.href}>About Cumbria Spas page</a>.</p>
+  </LegalPage>
+</Base>
+
+<style>
+  .cf { margin: 0 0 1.4em; display: grid; gap: 0; border-top: 1px solid var(--line-light); }
+  .cf > div { display: grid; grid-template-columns: 160px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line-light); }
+  .cf dt { font-weight: 700; color: var(--teal-deep); }
+  .cf dd { margin: 0; }
+  @media (max-width: 560px) { .cf > div { grid-template-columns: 1fr; gap: 2px; } }
+</style>

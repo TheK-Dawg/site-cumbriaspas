@@ -61,6 +61,8 @@ const { h1, lead, kind = 'legal', crumbs = [], toc = [], rail = false } = Astro.
   .lp__grid--rail { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 56px; align-items: start; }
   .lp__body :global(h2) { color: var(--teal-deep); scroll-margin-top: calc(var(--header-h) + 16px); }
   .lp__body :global(.lp__added) { border-top: 1px solid var(--line-light); margin-top: 2.4em; padding-top: 0.4em; }
+  /* The rail stretches the row's full height so the sticky box has room to travel (align-items: start would shrink it). */
+  .lp__side { align-self: stretch; }
   .lp__sticky { position: sticky; top: calc(var(--header-h) + 16px); display: flex; flex-direction: column; gap: 16px; }
   .lp__toc { background: var(--card); border-radius: var(--radius-lg); padding: 20px 22px; box-shadow: var(--shadow-card); }
   .lp__toc-h { font-weight: 800; color: var(--teal-deep); margin-bottom: 10px; }

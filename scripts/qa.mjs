@@ -39,12 +39,14 @@ if (!remote) {
 
 const hubs = ['wood-fired-hot-tubs', 'hot-tub-repair-and-servicing', 'electric-hot-tubs', 'hot-tub-installation', 'swimming-pools-and-swim-spas', 'saunas', 'arctic-spas-dealer', 'commercial-and-mosaic-tiled-spas', 'trade-and-holiday-park-hot-tubs'];
 const articles = ['/resources/wood-fired-hot-tubs-kirkby-in-furness/', '/resources/hot-tub-repair-and-servicing-barrow-in-furness/', '/resources/electric-hot-tubs-kendal/'];
-const routes = ['/', ...hubs.map((h) => `/${h}/`), '/services/', '/chemicals/', '/parts/', '/reviews/', '/about/', '/contact/', '/gallery/', '/resources/', ...articles, '/faq/', '/areas/', '/sitemap/', '/terms-and-conditions/', '/privacy-policy/', '/thank-you/', '/this-page-does-not-exist/'];
+// The standard page set (operator, 5 Nov 2026) beyond the legal two.
+const stdPages = ['/company-facts/', '/complaints/', '/accessibility/', '/cookie-policy/'];
+const routes = ['/', ...hubs.map((h) => `/${h}/`), '/services/', '/chemicals/', '/parts/', '/reviews/', '/about/', '/contact/', '/gallery/', '/resources/', ...articles, '/faq/', '/areas/', '/sitemap/', '/terms-and-conditions/', '/privacy-policy/', ...stdPages, '/thank-you/', '/this-page-does-not-exist/'];
 // The footer must link these on every page (operator, 5 Nov 2026), plus every hub.
-const footerMust = [...hubs.map((h) => `/${h}/`), '/chemicals/', '/parts/', '/reviews/', '/about/', '/contact/', '/resources/', '/privacy-policy/', '/terms-and-conditions/'];
-const legal = new Set(['/terms-and-conditions/', '/privacy-policy/', '/sitemap/', '/thank-you/', '/this-page-does-not-exist/']);
+const footerMust = [...hubs.map((h) => `/${h}/`), '/chemicals/', '/parts/', '/reviews/', '/about/', '/contact/', '/resources/', '/privacy-policy/', '/terms-and-conditions/', '/gallery/', '/faq/', '/sitemap/', ...stdPages];
+const legal = new Set(['/terms-and-conditions/', '/privacy-policy/', ...stdPages, '/sitemap/', '/thank-you/', '/this-page-does-not-exist/']);
 const noForm = legal;
-const noMapRoutes = new Set(['/reviews/', '/gallery/', '/faq/', ...articles, '/terms-and-conditions/', '/privacy-policy/', '/sitemap/', '/this-page-does-not-exist/']);
+const noMapRoutes = new Set(['/reviews/', '/gallery/', '/faq/', ...articles, '/terms-and-conditions/', '/privacy-policy/', ...stdPages, '/sitemap/', '/this-page-does-not-exist/']);
 
 const CTA = 'Contact by the quote form, call now, or by WhatsApp.';
 const MANUFACTURER = 'Cumbria Spas works in partnership with Kubilų pasaulis, the largest manufacturer in Lithuania of premium, luxury and custom hot tubs.';
@@ -130,6 +132,8 @@ for (const [vp, size] of [['desktop', { width: 1440, height: 900 }], ['mobile', 
         jsonld: [...document.querySelectorAll('script[type="application/ld+json"]')].map((s) => s.textContent),
         sticky: (() => { const b = document.querySelector('[data-sticky-cta]'); return b ? b.hasAttribute('data-show') : null; })(),
         lowContrast: lowContrast.slice(0, 6),
+        // Style law: no underlined links (text-decoration or a bottom border drawn as an underline).
+        underlined: [...document.querySelectorAll('a')].filter((a) => vis(a) && !a.classList.contains('skip-link')).filter((a) => { const s = getComputedStyle(a); return s.textDecorationLine.includes('underline') || (parseFloat(s.borderBottomWidth) > 0 && s.borderBottomStyle !== 'none' && s.display.startsWith('inline') && !a.classList.contains('btn')); }).map((a) => a.textContent.trim().slice(0, 30)).slice(0, 4),
         brandLogo: [...document.querySelectorAll('img')].some((i) => /logo/i.test(i.src) && !/square\.jpg/.test(i.src)),
       };
     }, { CTA, MANUFACTURER });
@@ -139,6 +143,7 @@ for (const [vp, size] of [['desktop', { width: 1440, height: 900 }], ['mobile', 
     if (r.noAlt.length) fail(route, vp, `img without alt: ${r.noAlt.join(', ')}`);
     if (r.lowContrast.length) fail(route, vp, `low contrast: ${r.lowContrast.join(' | ')}`);
     if (r.brandLogo) fail(route, vp, 'a brand logo image is on the page');
+    if (r.underlined.length) fail(route, vp, `underlined links: ${r.underlined.join(' | ')}`);
     // WhatsApp float: phones only (operator, 5 Nov 2026). In the DOM everywhere, visible on mobile, hidden on desktop.
     if (!r.wa.present || !r.wa.href) fail(route, vp, 'floating WhatsApp button missing or wrong number');
     else if (vp === 'mobile' && !r.wa.visible) fail(route, vp, 'floating WhatsApp button hidden on mobile');
@@ -211,6 +216,26 @@ for (const [vp, size] of [['desktop', { width: 1440, height: 900 }], ['mobile', 
   if (!(await mp.locator('.hd__menu').isVisible())) fail('/', 'mobile', 'burger menu did not open');
   await mp.screenshot({ path: 'shots/qa/mobile_menu.png' });
   await m.close();
+}
+
+// Sticky rail (operator, 5 Nov 2026): on every article the CTA box stays in view while the article scrolls.
+{
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await ctx.newPage();
+  for (const route of [...articles, '/privacy-policy/']) {
+    await page.goto(base + route, { waitUntil: 'load' });
+    const sel = route.startsWith('/resources/') ? '.ab__cta' : '.lp__cta';
+    const prose = route.startsWith('/resources/') ? '.ab__main' : '.lp__body';
+    const h = await page.locator(prose).evaluate((e) => e.getBoundingClientRect().height);
+    for (const f of [0.4, 0.7]) {
+      await page.locator(prose).evaluate((e, f) => window.scrollTo(0, e.getBoundingClientRect().top + window.scrollY + e.offsetHeight * f - 300), f);
+      await page.waitForTimeout(250);
+      const b = await page.locator(sel).evaluate((e) => { const r = e.getBoundingClientRect(); return { top: r.top, bottom: r.bottom }; });
+      if (b.top < 0 || b.bottom > 900) fail(route, 'desktop', `rail CTA out of view at ${f * 100}% scroll (top ${Math.round(b.top)}, bottom ${Math.round(b.bottom)}, body ${Math.round(h)}px)`);
+    }
+  }
+  await page.screenshot({ path: 'shots/qa/desktop_sticky-rail.png' });
+  await ctx.close();
 }
 
 // Internal links resolve.

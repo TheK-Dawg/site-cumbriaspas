@@ -1,0 +1,37 @@
+---
+/**
+ * COMPLAINTS PROCEDURE (standard page set, operator, 5 Nov 2026). Standard,
+ * generic template language: how to complain, what to include, what happens
+ * next and where to go if it is not resolved. No response-time promise is
+ * given (none is in the plan); the wording says "as soon as we can".
+ */
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { business, pages } from '../data/site';
+const toc = [
+  ['how', '1. How to make a complaint'], ['include', '2. What to include'], ['next', '3. What happens next'],
+  ['not-resolved', '4. If your complaint is not resolved'], ['data', '5. Complaints about personal information'],
+].map(([id, title]) => ({ id, title }));
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Complaints', href: '/complaints/' }];
+---
+
+<Base title="Complaints Procedure | Cumbria Spas" description="How to raise a complaint with Cumbria Spas about a hot tub, sauna, pool, installation, repair or service, what to include and what happens next." page="complaints" utility={true} crumbs={crumbs}>
+  <LegalPage h1="Complaints procedure" lead="If something has gone wrong with a product or a job, tell us and we will put it right where we can." crumbs={crumbs} toc={toc} rail kind="complaints">
+    <h2 id="how">1. How to make a complaint</h2>
+    <p>Please contact Cumbria Spas directly, in whichever way suits you:</p>
+    <ul>
+      <li>Phone: <a href={business.phoneHref}>{business.phone}</a></li>
+      <li>WhatsApp: <a href={business.whatsapp} target="_blank" rel="noopener">{business.phone} on WhatsApp</a></li>
+      <li>Email: {business.email}</li>
+      <li>Post: {business.address}</li>
+    </ul>
+    <h2 id="include">2. What to include</h2>
+    <p>To help us look into it quickly, please include your name and contact details, the address where the product was delivered or the work was carried out, the product or service concerned, the date of the order or visit, what went wrong, and what you would like us to do to put it right. Photos or videos are very helpful, and you can send them by WhatsApp.</p>
+    <h2 id="next">3. What happens next</h2>
+    <p>We will acknowledge your complaint as soon as we can and look into it fully. Where we need to, we will arrange to see the hot tub, sauna, spa or pool in person. We will then explain what we found and what we propose to do. If we need more time to investigate, for example because a manufacturer needs to be involved, we will keep you updated.</p>
+    <h2 id="not-resolved">4. If your complaint is not resolved</h2>
+    <p>If you are not happy with our response, please tell us and we will look at it again. If we still cannot agree, you can get free, impartial help from the national consumer helpline. Your statutory rights as a consumer are not affected by this procedure.</p>
+    <h2 id="data">5. Complaints about personal information</h2>
+    <p>Complaints about how we handle personal information are covered in our <a href={pages.privacy.href}>Privacy Policy</a>, including your right to complain to the Information Commissioner's Office (ICO).</p>
+  </LegalPage>
+</Base>

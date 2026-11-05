@@ -86,6 +86,10 @@ export const pages = {
   sitemap: { href: '/sitemap/', name: 'Sitemap' },
   terms: { href: '/terms-and-conditions/', name: 'Terms and Conditions' },
   privacy: { href: '/privacy-policy/', name: 'Privacy Policy' },
+  cookies: { href: '/cookie-policy/', name: 'Cookie Policy' },
+  companyFacts: { href: '/company-facts/', name: 'Company Facts' },
+  complaints: { href: '/complaints/', name: 'Complaints' },
+  accessibility: { href: '/accessibility/', name: 'Accessibility' },
 };
 
 /** Header nav. Services opens a dropdown of every hub plus Chemicals and Parts. */

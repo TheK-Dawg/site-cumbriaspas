@@ -4,8 +4,13 @@
  * plan's "The business (About page)". Not an article wall: hero, trust strip,
  * three image/text rows, the facts, services, gallery, areas, form. David is
  * the owner who does the installs, servicing and repairs; no staff team is
- * described (site prohibition). Links to the legal pages (law: from About
- * and Contact).
+ * described (site prohibition). Links to the legal pages, company facts,
+ * complaints and accessibility (law: from About and Contact).
+ *
+ * TODO(operator, charity): the operator asked for a "Community / giving back"
+ * block here if David donates to a cause (an image in his WhatsApp media).
+ * Nothing in his chat or the pulled media shows one (5 Nov 2026), so no block
+ * is shown. Add it when the operator supplies the cause, image and link.
  */
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
@@ -83,7 +88,7 @@ const crumbs = [{ name: 'Home', href: '/' }, { name: 'About', href: '/about/' }]
 
   <section class="ab-legal on-light" data-section="legal-links">
     <div class="container">
-      <p>How Cumbria Spas works with customers is set out in the <a href="/terms-and-conditions/">terms and conditions</a> and the <a href="/privacy-policy/">privacy policy</a>.</p>
+      <p>The key details are on the <a href="/company-facts/">company facts page</a>. How Cumbria Spas works with customers is set out in the <a href="/terms-and-conditions/">terms and conditions</a>, the <a href="/privacy-policy/">privacy policy</a>, the <a href="/cookie-policy/">cookie policy</a> and the <a href="/complaints/">complaints procedure</a>. Read our <a href="/accessibility/">accessibility statement</a>, visit the <a href="/reviews/">reviews page</a>, or find answers in the <a href="/faq/">FAQ</a> and <a href="/resources/">resources</a>.</p>
     </div>
   </section>
 

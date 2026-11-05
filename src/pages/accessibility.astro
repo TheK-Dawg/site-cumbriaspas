@@ -1,0 +1,45 @@
+---
+/**
+ * ACCESSIBILITY STATEMENT (standard page set, operator, 5 Nov 2026). Standard
+ * template language. It describes only what the build actually does (skip
+ * link, keyboard focus outlines, contrast checked on every page by
+ * scripts/qa.mjs, alt text, reduced motion, one H1 and ordered headings) and
+ * names the third-party parts it does not control (map, enquiry form).
+ */
+import Base from '../layouts/Base.astro';
+import LegalPage from '../components/LegalPage.astro';
+import { business } from '../data/site';
+const toc = [
+  ['commitment', 'Commitment to accessibility'], ['measures', 'What we have done'], ['limitations', 'Known limitations'],
+  ['help', 'Ask for help or report a problem'], ['statement', 'About this statement'],
+].map(([id, title]) => ({ id, title }));
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Accessibility', href: '/accessibility/' }];
+---
+
+<Base title="Accessibility Statement | Cumbria Spas" description="How the Cumbria Spas website is built to be usable by as many people as possible, its known limitations, and how to ask for information in another way." page="accessibility" utility={true} crumbs={crumbs}>
+  <LegalPage h1="Accessibility statement" lead="Cumbria Spas wants everyone to be able to use this website and get in touch easily." crumbs={crumbs} toc={toc} rail kind="accessibility">
+    <h2 id="commitment">Commitment to accessibility</h2>
+    <p>We aim for this website to meet the Web Content Accessibility Guidelines (WCAG) 2.1 at level AA, and we keep working to improve it.</p>
+    <h2 id="measures">What we have done</h2>
+    <ul>
+      <li>Every page can be used with a keyboard, with a visible outline on the link or button in focus and a "Skip to content" link at the top of each page.</li>
+      <li>Text and background colours are checked against the WCAG contrast ratios on every page.</li>
+      <li>Images that carry information have text descriptions.</li>
+      <li>Each page has one main heading and a clear order of headings, so screen readers can move through it.</li>
+      <li>Animation is kept short and is switched off if your device is set to reduce motion.</li>
+      <li>Pages work when zoomed in and on small screens.</li>
+    </ul>
+    <h2 id="limitations">Known limitations</h2>
+    <p>The embedded map and the quote form are provided by third parties, and we cannot control every part of how they work. If either gives you trouble, please contact us another way using the details below and we will help.</p>
+    <h2 id="help">Ask for help or report a problem</h2>
+    <p>If you find any part of this website hard to use, or you need information in a different format, please tell us:</p>
+    <ul>
+      <li>Phone: <a href={business.phoneHref}>{business.phone}</a></li>
+      <li>WhatsApp: <a href={business.whatsapp} target="_blank" rel="noopener">{business.phone} on WhatsApp</a></li>
+      <li>Email: {business.email}</li>
+    </ul>
+    <p>Buyers are sent photos and videos of the actual product by WhatsApp, and visitors can see a hot tub in person at the showroom at Kirkby In Furness.</p>
+    <h2 id="statement">About this statement</h2>
+    <p>This statement was prepared on 5 November 2026 and will be reviewed when the website changes.</p>
+  </LegalPage>
+</Base>

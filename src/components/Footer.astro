@@ -3,10 +3,18 @@
  * FOOTER (route, rest). The v3 deep-blue slab. Brand (LAW: his logo image,
  * never a text wordmark) + the approved manufacturer line + NAP; every hub;
  * every other built page (Resources included: operator, 5 Nov 2026); a
- * "More" group (FAQ, areas, gallery, sitemap, legal). Law: the
+ * "Legal" group (sitemap and the legal and policy pages). The standard page
+ * set (operator, 5 Nov 2026): About, Contact, Reviews, Gallery, FAQ,
+ * Resources, Sitemap, Company Facts, Complaints, Accessibility, Privacy,
+ * Terms and Cookie Policy are all linked here. Law: the
  * footer links every built page, the year is automatic, and there is NO call
  * to action in the footer. The email is shown as text only: the mailbox is
  * not live yet. Bottom bar: copyright + the one-link footer credit.
+ *
+ * TODO(operator, charity): the operator wants a "Proud to support <charity>"
+ * line here, linked rel="nofollow" to the charity's page, like TrueLine's.
+ * David's chat and media show no charity yet (5 Nov 2026). No line is shown
+ * until the operator supplies the name and the URL.
  */
 import FooterCredit from './FooterCredit.astro';
 import { business, hubs, hubHref, pages, manufacturerLine } from '../data/site';
@@ -35,27 +43,31 @@ const year = new Date().getFullYear();
           </ul>
         </div>
         <div class="ft__col">
-          <p class="ft__h">Cumbria Spas</p>
+          <p class="ft__h">Company</p>
           <ul>
             <li><a href="/">Home</a></li>
             <li><a href={pages.services.href}>All services</a></li>
             <li><a href={pages.chemicals.href}>Hot tub chemicals</a></li>
             <li><a href={pages.parts.href}>Hot tub parts</a></li>
             <li><a href={pages.about.href}>About Cumbria Spas</a></li>
+            <li><a href={pages.companyFacts.href}>Company facts</a></li>
             <li><a href={pages.reviews.href}>Reviews</a></li>
+            <li><a href={pages.gallery.href}>Gallery</a></li>
             <li><a href={pages.resources.href}>Resources</a></li>
+            <li><a href={pages.faq.href}>FAQ</a></li>
+            <li><a href={pages.areas.href}>Areas covered</a></li>
             <li><a href={pages.contact.href}>Contact</a></li>
           </ul>
         </div>
         <div class="ft__col">
-          <p class="ft__h">More</p>
+          <p class="ft__h">Legal</p>
           <ul>
-            <li><a href={pages.faq.href}>FAQ</a></li>
-            <li><a href={pages.areas.href}>Areas covered</a></li>
-            <li><a href={pages.gallery.href}>Gallery</a></li>
             <li><a href={pages.sitemap.href}>Sitemap</a></li>
-            <li><a href={pages.terms.href}>Terms and Conditions</a></li>
             <li><a href={pages.privacy.href}>Privacy Policy</a></li>
+            <li><a href={pages.terms.href}>Terms and Conditions</a></li>
+            <li><a href={pages.cookies.href}>Cookie Policy</a></li>
+            <li><a href={pages.complaints.href}>Complaints</a></li>
+            <li><a href={pages.accessibility.href}>Accessibility</a></li>
           </ul>
         </div>
       </div>
