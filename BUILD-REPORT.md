@@ -231,3 +231,21 @@ Brief: `STD-PAGES-ROUND-BRIEF.md`. Commit `25ec6d9`. Worker `site-cumbriaspires-
 ### Open items added
 13. **Charity / giving back:** the cause, image and URL are needed before the footer line and the About block can go in.
 14. **Company registrations:** if David has a company number, VAT number or trade registrations he wants shown, add a row to `/company-facts/`. Until then nothing is published (standing prohibition 22).
+
+## BUTTON CENTRING (5 Nov 2026)
+
+Operator: "Quick Quote Online isn't vertically centred, and Cumbria's wasn't fixed earlier either." Commit `6e0d03c`, worker `site-cumbriaspires-preview2`, version `701bb09b-39bc-4d8b-9cbf-c74660485a2a`.
+
+**Cause.** The earlier fix (`8b425e9`) assumed Figtree's caps sit high and added a 0.075em nudge (about 1.1px moved from bottom to top padding). Pixel calibration at 200px shows the opposite: Figtree's line box is 0.95em ascent + 0.25em descent with 0.70em caps, so the caps are already centred in their own line box. The nudge therefore pushed every 15px label about 0.8px low (Formlane submit, 15px / 13px, also low). The one real offset is Chromium's whole-pixel snapping of the text, which leaves 15px labels about 0.25px high and the 14px header pill about 1.5px high.
+
+**Fix.** Nudge variable removed. `.btn`, the phone sticky bar and the Formlane submit (`#quote .lf-b`): padding 14.25px top / 13.75px bottom. Header pill (14px): 12.5px / 9.5px. `scripts/qa.mjs` now checks those values. No other styling changed.
+
+**Measurements** (top gap minus bottom gap around the cap box, px; positive = label low). Pixel test: label rendered at 16 sub-pixel positions, text on/off diff, average.
+
+| Button | Before (DPR 1 / 2 / 3) | After (DPR 1 / 2 / 3) |
+|---|---|---|
+| `.btn` 15px (every Quick Quote Online, call, WhatsApp, Ask About buttons; sticky bar) | +1.31 / +1.81 / +1.65 | -0.44 / +0.06 / -0.10 |
+| Header pill `.hd__quote` 14px | -0.69 / -0.69 / -0.69 | +0.19 / +0.19 / +0.19 |
+| Formlane submit `.lf-b` 17px | +1.56 / +1.56 / +1.56 | +0.06 / +0.06 / +0.06 |
+
+Live sweep of every visible button on all 32 routes at 1440 and 390 (layout model): before, worst +2.25 at both widths (494 of 523 buttons over 1px); after, worst +0.39 at 1440 and +0.19 at 390, none over 1px. In-page pixel checks on the live worker after deploy: header pill +0.25, call and trade buttons +0.25 to +0.5, Formlane submit +1.0 at 1440 and -1.0 at 390 (whole-pixel text snapping at that page position). `npm run build` passed; `node scripts/qa.mjs`: 32 routes x 2 viewports, 0 failures.
