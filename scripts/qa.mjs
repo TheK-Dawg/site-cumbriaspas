@@ -145,9 +145,9 @@ for (const [vp, size] of [['desktop', { width: 1440, height: 900 }], ['mobile', 
     else if (vp === 'desktop' && r.wa.visible) fail(route, vp, 'floating WhatsApp button visible on desktop');
     const missingFooter = footerMust.filter((h) => !r.footer.includes(h));
     if (missingFooter.length) fail(route, vp, `footer missing links: ${missingFooter.join(', ')}`);
-    // Button labels: the optical nudge on the header pill (top padding about 2px more than bottom); the form submit even.
+    // Button labels: the optical nudge on the header pill (top padding about 2px more than bottom); the form submit 15px / 13px.
     if (r.btnPad !== null && !(r.btnPad > 1 && r.btnPad < 3)) fail(route, vp, `header button padding not nudged (${r.btnPad}px)`);
-    if (r.lfPad) { const d = parseFloat(r.lfPad[0]) - parseFloat(r.lfPad[1]); if (Math.abs(d) > 0.5) fail(route, vp, `Formlane submit padding ${r.lfPad.join(' / ')}`); }
+    if (r.lfPad) { const d = parseFloat(r.lfPad[0]) - parseFloat(r.lfPad[1]); if (Math.abs(d - 2) > 0.5) fail(route, vp, `Formlane submit padding ${r.lfPad.join(' / ')}`); }
     if (r.credit !== 1) fail(route, vp, `footer credit links: ${r.credit}`);
     if (!r.manufacturer) fail(route, vp, 'approved manufacturer sentence missing');
     if (!is404 && route !== '/thank-you/' && route !== '/sitemap/' && !r.cta) fail(route, vp, 'CTA line missing');
