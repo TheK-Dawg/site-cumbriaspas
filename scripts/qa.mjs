@@ -119,8 +119,8 @@ for (const [vp, size] of [['desktop', { width: 1440, height: 900 }], ['mobile', 
         manufacturer: document.body.textContent.replace(/\s+/g, ' ').includes(MANUFACTURER),
         wa: (() => { const a = document.querySelector('a.wa'); return { present: !!a, visible: !!a && vis(a), href: !!a && a.href.startsWith('https://wa.me/447445450908') }; })(),
         footer: [...document.querySelectorAll('footer a')].map((a) => a.getAttribute('href')),
-        btnTrim: (() => { const b = document.querySelector('.hd__quote'); return b ? getComputedStyle(b).textBoxTrim || getComputedStyle(b).getPropertyValue('text-box-trim') : 'none'; })(),
-        lfPad: (() => { const b = document.querySelector('.qf__slot .lf-b'); if (!b) return null; const c = getComputedStyle(b); return [c.paddingTop, c.paddingBottom]; })(),
+        btnPad: (() => { const b = document.querySelector('.hd__quote'); if (!b) return null; const c = getComputedStyle(b); return parseFloat(c.paddingTop) - parseFloat(c.paddingBottom); })(),
+        lfPad: (() => { const b = document.querySelector('#quote .lf-b'); if (!b) return null; const c = getComputedStyle(b); return [c.paddingTop, c.paddingBottom]; })(),
         credit: document.querySelectorAll('[data-footer-credit] a').length,
         formSlot: !!document.querySelector('[data-lead-form]#quote, #quote [data-lead-form]'),
         contactId: !!document.getElementById('contact'),
@@ -145,8 +145,9 @@ for (const [vp, size] of [['desktop', { width: 1440, height: 900 }], ['mobile', 
     else if (vp === 'desktop' && r.wa.visible) fail(route, vp, 'floating WhatsApp button visible on desktop');
     const missingFooter = footerMust.filter((h) => !r.footer.includes(h));
     if (missingFooter.length) fail(route, vp, `footer missing links: ${missingFooter.join(', ')}`);
-    if (!/trim-both/.test(r.btnTrim || '')) fail(route, vp, `button label not cap-trimmed (text-box-trim: ${r.btnTrim})`);
-    if (r.lfPad && r.lfPad[0] !== r.lfPad[1]) fail(route, vp, `Formlane submit padding uneven ${r.lfPad.join(' / ')}`);
+    // Button labels: the optical nudge (top padding about 2px more than bottom) on the header pill and the form submit.
+    if (r.btnPad !== null && !(r.btnPad > 1 && r.btnPad < 3)) fail(route, vp, `header button padding not nudged (${r.btnPad}px)`);
+    if (r.lfPad) { const d = parseFloat(r.lfPad[0]) - parseFloat(r.lfPad[1]); if (!(d > 1 && d < 3)) fail(route, vp, `Formlane submit padding ${r.lfPad.join(' / ')}`); }
     if (r.credit !== 1) fail(route, vp, `footer credit links: ${r.credit}`);
     if (!r.manufacturer) fail(route, vp, 'approved manufacturer sentence missing');
     if (!is404 && route !== '/thank-you/' && route !== '/sitemap/' && !r.cta) fail(route, vp, 'CTA line missing');
