@@ -126,7 +126,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 4px); }
   justify-content: center;
   gap: 10px;
   min-height: 52px;
-  padding: 14px 26px;
+  padding: 14.25px 26px 13.75px;
   border-radius: var(--pill);
   border: 1.5px solid transparent;
   font-size: 0.9375rem;
@@ -139,15 +139,13 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 4px); }
   overflow: hidden;
   --btn-sheen: rgb(255 255 255 / 0.38);
 }
-/* Optical centring (operator, 5 Nov 2026: the label sat high). Figtree's ascent is taller than its descent, so a
-   centred line box leaves the caps about 1px above the middle. --nudge moves the label down by taking that much
-   from the bottom padding and giving it to the top, whatever a component sets its padding to (header pill, phone
-   sticky bar). text-box (cap/alphabetic trim) is not used: it does not reach the anonymous flex
-   item a button's label sits in. The Formlane submit (larger type) gets a measured 15px / 13px: its own rule
-   resolves to 12px top against 24px bottom. */
-:root { --nudge: 0.075em; }
-.btn { padding-top: calc(14px + var(--nudge)); padding-bottom: calc(14px - var(--nudge)); }
-#quote .lf-f .lf-b { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 15px 1em 13px; line-height: 1.2; }
+/* Label centring (operator, 5 Nov 2026). Figtree's caps sit centred in its own line box (ascent 0.95em, caps
+   0.70em, descent 0.25em), so flex centring with near-even padding centres them. Chromium snaps the text to whole
+   pixels, which leaves 15px labels about 0.25px high, so .btn, the phone sticky bar and the Formlane submit take
+   0.25px from the bottom padding and give it to the top (14.25px / 13.75px), pixel-measured at DPR 1/2/3. The
+   earlier 0.075em nudge (1.1px) pushed every label low. The Formlane submit's own rule resolves to 12px top
+   against 24px bottom, so the site sets it here. */
+#quote .lf-f .lf-b { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 14.25px 1em 13.75px; line-height: 1.2; }
 .btn:active { transform: translateY(1px); }
 /* Dark text on the accent, kept dark on the darkened hover fill. No glow, no shadow bloom. */
 .btn-primary { background: var(--accent); color: var(--on-accent); --btn-sheen: rgb(255 255 255 / 0.32); }
