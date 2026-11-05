@@ -142,12 +142,12 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 4px); }
 /* Optical centring (operator, 5 Nov 2026: the label sat high). Figtree's ascent is taller than its descent, so a
    centred line box leaves the caps about 1px above the middle. --nudge moves the label down by taking that much
    from the bottom padding and giving it to the top, whatever a component sets its padding to (header pill, phone
-   sticky bar, Formlane submit). text-box (cap/alphabetic trim) is not used: it does not reach the anonymous flex
-   item a button's label sits in. The Formlane submit also gets even padding: its own rule resolves to 12px top
-   against 24px bottom. */
+   sticky bar). text-box (cap/alphabetic trim) is not used: it does not reach the anonymous flex
+   item a button's label sits in. The Formlane submit (larger type, measured centred without a nudge) gets
+   even padding: its own rule resolves to 12px top against 24px bottom. */
 :root { --nudge: 0.075em; }
 .btn { padding-top: calc(14px + var(--nudge)); padding-bottom: calc(14px - var(--nudge)); }
-#quote .lf-f .lf-b { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: calc(14px + var(--nudge)) 1em calc(14px - var(--nudge)); line-height: 1.2; }
+#quote .lf-f .lf-b { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 14px 1em; line-height: 1.2; }
 .btn:active { transform: translateY(1px); }
 /* Dark text on the accent, kept dark on the darkened hover fill. No glow, no shadow bloom. */
 .btn-primary { background: var(--accent); color: var(--on-accent); --btn-sheen: rgb(255 255 255 / 0.32); }
