@@ -1,7 +1,7 @@
 {
  "cap": 900,
  "hubs": 9,
- "towns": 100,
+ "towns": 99,
  "items": [
   {
    "n": 1,
@@ -451,96 +451,6 @@
    "path": "/resources/trade-and-holiday-park-hot-tubs-bedale/",
    "title": "Trade and Holiday Park Hot Tubs in Bedale",
    "primaryPhrase": "hot tub trade suppliers bedale",
-   "status": "queued"
-  },
-  {
-   "n": 46,
-   "hub": "wood-fired-hot-tubs",
-   "town": "Ballycastle",
-   "townSlug": "ballycastle",
-   "path": "/resources/wood-fired-hot-tubs-ballycastle/",
-   "title": "Wood-Fired Hot Tubs in Ballycastle",
-   "primaryPhrase": "wood fired hot tub ballycastle",
-   "status": "queued"
-  },
-  {
-   "n": 47,
-   "hub": "hot-tub-repair-and-servicing",
-   "town": "Ballycastle",
-   "townSlug": "ballycastle",
-   "path": "/resources/hot-tub-repair-and-servicing-ballycastle/",
-   "title": "Hot Tub Repair and Servicing in Ballycastle",
-   "primaryPhrase": "hot tub repair ballycastle",
-   "status": "queued"
-  },
-  {
-   "n": 48,
-   "hub": "electric-hot-tubs",
-   "town": "Ballycastle",
-   "townSlug": "ballycastle",
-   "path": "/resources/electric-hot-tubs-ballycastle/",
-   "title": "Electric Hot Tubs in Ballycastle",
-   "primaryPhrase": "electric hot tub ballycastle",
-   "status": "queued"
-  },
-  {
-   "n": 49,
-   "hub": "hot-tub-installation",
-   "town": "Ballycastle",
-   "townSlug": "ballycastle",
-   "path": "/resources/hot-tub-installation-ballycastle/",
-   "title": "Hot Tub Installation in Ballycastle",
-   "primaryPhrase": "hot tub installation ballycastle",
-   "status": "queued"
-  },
-  {
-   "n": 50,
-   "hub": "swimming-pools-and-swim-spas",
-   "town": "Ballycastle",
-   "townSlug": "ballycastle",
-   "path": "/resources/swimming-pools-and-swim-spas-ballycastle/",
-   "title": "Swimming Pools & Swim Spas in Ballycastle",
-   "primaryPhrase": "swimming pool ballycastle",
-   "status": "queued"
-  },
-  {
-   "n": 51,
-   "hub": "saunas",
-   "town": "Ballycastle",
-   "townSlug": "ballycastle",
-   "path": "/resources/saunas-ballycastle/",
-   "title": "Saunas in Ballycastle",
-   "primaryPhrase": "sauna ballycastle",
-   "status": "queued"
-  },
-  {
-   "n": 52,
-   "hub": "arctic-spas-dealer",
-   "town": "Ballycastle",
-   "townSlug": "ballycastle",
-   "path": "/resources/arctic-spas-dealer-ballycastle/",
-   "title": "Arctic Spas Dealer in Ballycastle",
-   "primaryPhrase": "arctic spa ballycastle",
-   "status": "queued"
-  },
-  {
-   "n": 53,
-   "hub": "commercial-and-mosaic-tiled-spas",
-   "town": "Ballycastle",
-   "townSlug": "ballycastle",
-   "path": "/resources/commercial-and-mosaic-tiled-spas-ballycastle/",
-   "title": "Commercial & Mosaic-Tiled Spas in Ballycastle",
-   "primaryPhrase": "commercial hot tub ballycastle",
-   "status": "queued"
-  },
-  {
-   "n": 54,
-   "hub": "trade-and-holiday-park-hot-tubs",
-   "town": "Ballycastle",
-   "townSlug": "ballycastle",
-   "path": "/resources/trade-and-holiday-park-hot-tubs-ballycastle/",
-   "title": "Trade and Holiday Park Hot Tubs in Ballycastle",
-   "primaryPhrase": "hot tub trade suppliers ballycastle",
    "status": "queued"
   },
   {

@@ -14,32 +14,76 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import QuoteForm from '../../components/QuoteForm.astro';
 import FaqList from '../../components/FaqList.astro';
-import { publishedArticles, articleSlug, articleHref } from '../../lib/articles';
-import { business, hubBySlug, hubHref, ctaLine } from '../../data/site';
+import { publishedArticles, articleSlug, articleHref, type SiteArticle } from '../../lib/articles';
+import { business, hubBySlug, hubHref, ctaLine, customersLine } from '../../data/site';
 import { pick, picks } from '../../lib/media';
 
 export async function getStaticPaths() {
   const all = await publishedArticles();
-  return all.map((entry) => ({ params: { slug: articleSlug(entry.data) }, props: { entry } }));
+  return all.map((article) => ({ params: { slug: articleSlug(article.data) }, props: { article } }));
 }
 
-const { entry } = Astro.props;
-const d = entry.data;
-const hub = hubBySlug[d.hub];
-const { headings } = await render(entry);
-const toc = headings.filter((h) => h.depth === 2);
-const hero = d.images[0] ?? pick(d.hub, 0);
-// Law: an image above every H2, rotating through the article's own picks and then the hub's.
-const pool = [...d.images, ...picks(d.hub, 4)];
-let n = 1;
+const { article } = Astro.props as { article: SiteArticle };
+const d = article.data;
+// A hand-written article always has a hub; an engine topical may not (its pictures then come from the home picks).
+const hub = d.hub ? hubBySlug[d.hub] : null;
+const poolKey = d.hub ?? 'home';
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-const body = (entry.rendered?.html ?? '').replace(/<h2\b/g, () => {
+const plain = (s: string) => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&#39;|&rsquo;/g, "'").replace(/\s+/g, ' ').trim();
+const idOf = (s: string) => plain(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+let html: string;
+let toc: { slug: string; text: string }[];
+if (article.kind === 'town') {
+  const { headings } = await render(article.entry);
+  toc = headings.filter((h) => h.depth === 2).map((h) => ({ slug: h.slug, text: h.text }));
+  html = article.entry.rendered?.html ?? '';
+} else {
+  // THE DRIP WORKER'S FILE (the SEO engine's body_html, verbatim). Read from the raw body, as the drip-worker
+  // sites do: it is HTML, not markdown. Only addresses change, never the words:
+  //  - the engine writes absolute links on the client's own domain (www. or not): they become site-relative, so
+  //    the same body works on the workers.dev host and on cumbriaspas.co.uk, and a root-form /<slug>/ link to
+  //    an article this site serves goes to /resources/<slug>/;
+  //  - the CTA's quote button points at the article's own URL + #contact: it becomes the same-page #quote, the
+  //    form card every article ends with, where every Quick Quote Online link on this site lands (QuoteForm.astro).
+  const known = new Set((await publishedArticles()).map((a) => a.data.slug));
+  const own = d.slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  html = (article.entry.body ?? '').trim()
+    .replace(/^\s*<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, '')
+    .replace(/(href=["'])https?:\/\/(?:www\.)?cumbriaspas\.co\.uk(\/[^"']*)?(["'])/gi, (_m, a: string, p: string | undefined, z: string) => {
+      const path = p ?? '/';
+      const seg = path.match(/^\/([^/?#]+)\/?(?=[?#]|$)/)?.[1];
+      return `${a}${seg && known.has(seg) ? `/resources${path}` : path}${z}`;
+    })
+    .replace(new RegExp(`(href=["'])(?:(?:/resources)?/${own}/)?#(?:contact|quote)(["'])`, 'g'), '$1#quote$2');
+  // Contents list: every <h2> gets an id (the engine writes none).
+  toc = [];
+  const used = new Set<string>();
+  html = html.replace(/<h2\b([^>]*)>([\s\S]*?)<\/h2>/gi, (m, attrs: string, inner: string) => {
+    const has = attrs.match(/\bid=["']([^"']+)["']/);
+    let id = has ? has[1] : idOf(inner) || 'section';
+    if (!has) { const base = id; for (let i = 2; used.has(id); i++) id = `${base}-${i}`; }
+    used.add(id);
+    toc.push({ slug: id, text: plain(inner) });
+    return has ? m : `<h2${attrs} id="${id}">${inner}</h2>`;
+  });
+}
+const hero = d.images[0] ?? pick(poolKey, 0);
+// Law: an image above every H2, rotating through the article's own picks and then the hub's. A drip body that
+// already carries the worker's own <figure>s keeps them, and gets no second set.
+const pool = [...d.images, ...picks(poolKey, 4)];
+let n = 1;
+const body = article.kind === 'drip' && /<figure\b/i.test(html) ? html : html.replace(/<h2\b/g, () => {
   const im = pool[n++ % pool.length];
   return `<figure><img src="${esc(im.src)}" alt="${esc(im.alt)}" loading="lazy" decoding="async" width="1600" height="900"></figure><h2`;
 });
 const href = articleHref(d);
+const railHeading = hub && d.town ? `${hub.name} in ${d.town}` : hub ? hub.name : business.name;
+// Plan law: every article carries the residential-and-commercial line (the hand-written ones in their own words, which is
+// what the QA walk checks). An engine body that lacks it gets the site's own approved sentence under the body, not in it.
+const addCustomers = article.kind === 'drip' && !plain(body).includes(customersLine);
 // Interlinking (operator, 5 Nov 2026): across to 1 or 2 related articles, same hub first, then the nearest in publish order.
-const others = (await publishedArticles()).filter((e) => e.id !== entry.id);
+const others = (await publishedArticles()).filter((e) => e.id !== article.id);
 const related = [...others.filter((e) => e.data.hub === d.hub), ...others.filter((e) => e.data.hub !== d.hub)].slice(0, 2);
 const url = new URL(href, Astro.site).href;
 const crumbs = [{ name: 'Home', href: '/' }, { name: 'Resources', href: '/resources/' }, { name: d.title, href }];
@@ -48,13 +92,13 @@ const schema = [
     '@type': 'Article', '@id': `${url}#article`, headline: d.title, description: d.description, mainEntityOfPage: url,
     datePublished: d.publishDate.toISOString(), dateModified: (d.updatedDate ?? d.publishDate).toISOString(),
     image: hero.full ?? hero.src, author: { '@id': `${business.url}/#business` }, publisher: { '@id': `${business.url}/#business` },
-    about: { '@type': 'Service', name: hub.name, url: new URL(hubHref(d.hub), Astro.site).href },
+    ...(hub ? { about: { '@type': 'Service', name: hub.name, url: new URL(hubHref(hub.slug), Astro.site).href } } : {}),
   },
   ...(d.faqs.length ? [{ '@type': 'FAQPage', '@id': `${url}#faq`, mainEntity: d.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : []),
 ];
 ---
 
-<Base title={`${d.title} | ${business.name}`} description={d.description} page="article" crumbs={crumbs} schema={schema} ogImage={hero.full ?? hero.src}>
+<Base title={d.seoTitle ?? `${d.title} | ${business.name}`} description={d.description} page="article" crumbs={crumbs} schema={schema} ogImage={hero.full ?? hero.src}>
   <section class="ah on-dark" data-section="article-hero">
     <div class="ah__slab slab" data-hero-watch>
       <img class="ah__bg" src={hero.src} alt="" width="1600" height="900" fetchpriority="high" />
@@ -63,7 +107,7 @@ const schema = [
           <ol>{crumbs.map((c, i) => <li>{i < crumbs.length - 1 ? <a href={c.href}>{c.name}</a> : <span aria-current="page">{c.name}</span>}</li>)}</ol>
         </nav>
         <h1 class="ah__h1">{d.title}</h1>
-        <p class="ah__lead">{d.description}</p>
+        <p class="ah__lead">{d.lead ?? d.description}</p>
         <div class="btn-row">
           <a href="#quote" class="btn btn-primary" data-cta="article-hero-quote">Quick Quote Online</a>
           <a href={business.phoneHref} class="btn btn-ghost" data-cta="article-hero-call">Call {business.phone}</a>
@@ -75,12 +119,19 @@ const schema = [
   <section class="ab on-light" data-section="article-body">
     <div class="container ab__grid">
       <article class="ab__main">
-        <div class="ab__takeaways">
-          <h2 class="ab__tk-h" id="top-takeaways">Top takeaways</h2>
-          <ul class="tick-list">{d.takeaways.map((t) => <li>{t}</li>)}</ul>
-        </div>
+        {d.takeaways.length > 0 && (
+          <div class="ab__takeaways">
+            <h2 class="ab__tk-h" id="top-takeaways">Top takeaways</h2>
+            <ul class="tick-list">{d.takeaways.map((t) => <li>{t}</li>)}</ul>
+          </div>
+        )}
         <div class="prose ab__prose" set:html={body} />
-        <p class="ab__hub">More on <a href={hubHref(d.hub)}>{hub.name.toLowerCase()} from Cumbria Spas</a>, or browse <a href="/resources/">every Cumbria Spas resource</a>.</p>
+        {addCustomers && <p class="ab__customers">{customersLine}</p>}
+        {hub ? (
+          <p class="ab__hub">More on <a href={hubHref(hub.slug)}>{hub.name.toLowerCase()} from Cumbria Spas</a>, or browse <a href="/resources/">every Cumbria Spas resource</a>.</p>
+        ) : (
+          <p class="ab__hub">Browse <a href="/resources/">every Cumbria Spas resource</a>.</p>
+        )}
         {related.length > 0 && (
           <div class="ab__related">
             <p class="ab__related-h">Related resources</p>
@@ -98,7 +149,7 @@ const schema = [
             </nav>
           )}
           <div class="ab__cta on-dark">
-            <p class="ab__cta-h">{hub.name} in {d.town}</p>
+            <p class="ab__cta-h">{railHeading}</p>
             <p class="ab__cta-p">{ctaLine}</p>
             <a href="#quote" class="btn btn-primary" data-cta="article-rail-quote">Quick Quote Online</a>
             <a href={business.phoneHref} class="btn btn-ghost" data-cta="article-rail-call">Call {business.phone}</a>
@@ -109,9 +160,13 @@ const schema = [
     </div>
   </section>
 
-  {d.faqs.length > 0 && <FaqList heading={`${hub.name} in ${d.town}: questions`} items={d.faqs} />}
+  {d.faqs.length > 0 && <FaqList heading={hub && d.town ? `${hub.name} in ${d.town}: questions` : `${d.title}: questions`} items={d.faqs} />}
 
-  <QuoteForm heading={`Ask about ${hub.name.toLowerCase()} in ${d.town}`} lead={`Tell us what you need in ${d.town} and Cumbria Spas will come back to you.`} />
+  {hub && d.town ? (
+    <QuoteForm heading={`Ask about ${hub.name.toLowerCase()} in ${d.town}`} lead={`Tell us what you need in ${d.town} and Cumbria Spas will come back to you.`} />
+  ) : (
+    <QuoteForm heading="Ask Cumbria Spas a question" lead="Tell us what you need and where, and Cumbria Spas will come back to you." />
+  )}
 </Base>
 
 <style>
@@ -134,6 +189,7 @@ const schema = [
   .ab__prose :global(figure img) { width: 100%; height: 100%; object-fit: cover; }
   .ab__prose :global(h2) { color: var(--teal-deep); scroll-margin-top: calc(var(--header-h) + 16px); }
   .ab__hub { margin-top: 28px; font-weight: 600; }
+  .ab__customers { margin-top: 28px; }
   .ab__hub a, .ab__next a, .ab__related a { color: var(--teal); }
   .ab__hub a:hover, .ab__next a:hover, .ab__related a:hover { color: var(--sky-deep); }
   .ab__related { margin-top: 24px; background: var(--tint); border-radius: var(--radius-lg); padding: 20px 24px; }

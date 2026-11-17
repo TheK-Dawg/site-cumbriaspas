@@ -36,4 +36,30 @@ const articles = defineCollection({
   }),
 });
 
-export const collections = { articles };
+/**
+ * THE DRIP WORKER'S ARTICLES (2026-11-17, Kieran: this site takes the SEO engine's articles as the drip
+ * worker already writes them; the worker is not changed). The worker (TheK-Dawg/worker-drip-worker,
+ * rowToMarkdown) commits src/content/resources/<slug>.md: a JSON-valued frontmatter (title, slug,
+ * description, seo_title, hero_lead, category, related_service?, tag?, published, hero_image?,
+ * faqs [{ question, answer }]) over an HTML body. This schema is that contract, deliberately lenient:
+ * a drip commit that failed validation would stop every later build, so nothing the worker may leave
+ * out is required. src/lib/articles.ts merges both collections; a drip file at an article's URL wins.
+ */
+const resources = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/resources' }),
+  schema: z.object({
+    title: z.string().min(1),
+    slug: z.string().regex(/^[a-z0-9-]+$/),
+    description: z.string().default(''),
+    seo_title: z.string().optional(),
+    hero_lead: z.string().optional(),
+    category: z.string().optional(),
+    related_service: z.string().optional(),
+    tag: z.string().optional(),
+    published: z.coerce.date(),
+    hero_image: z.string().optional(),
+    faqs: z.array(z.object({ question: z.string(), answer: z.string() })).default([]),
+  }),
+});
+
+export const collections = { articles, resources };

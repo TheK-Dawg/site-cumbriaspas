@@ -127,7 +127,7 @@ export const hubContent: Record<string, HubContent> = {
       heading: 'Why so many hot tubs need attention now',
       body: [
         'Hot tub sales boomed in lockdown and many of those tubs were never serviced. Six or seven years on, a lot of them are leaking and in a bit of a state, and Cumbria Spas has been busier with servicing this year than for about four years.',
-        `Service and repair covers ${serviceCoverage}. Cumbria Spas services a customer in Bedale, North Yorkshire, and has serviced and repaired hot tubs at a holiday park in Ballycastle, Northern Ireland. ${customersLine}`,
+        `Service and repair covers ${serviceCoverage}. Cumbria Spas services a customer in Bedale, North Yorkshire. ${customersLine}`,
       ],
     },
     rows: [
@@ -187,7 +187,7 @@ export const hubContent: Record<string, HubContent> = {
       { q: 'What does a hot tub service involve?', a: 'Nine steps: flush the lines with the jets on full power for 45 minutes, drain, vacuum the footwell and every jet line, clean the shell, lid and steps, inspect and clean the filters, refill and balance the chemicals. It takes up to three hours.' },
       { q: 'How much does a hot tub service cost?', a: 'Servicing is from £250, depending on your location. Repairs are priced on the job: contact for a quote.' },
       { q: 'Do you service commercial hot tubs and plant rooms?', a: 'Yes. Cumbria Spas services and repairs commercial spas and their plant rooms, and installs them too.' },
-      { q: 'Which areas do you cover for repairs and servicing?', a: `${serviceCoverage}. Cumbria Spas also services a customer in Bedale and has serviced and repaired hot tubs at a holiday park in Ballycastle, Northern Ireland.` },
+      { q: 'Which areas do you cover for repairs and servicing?', a: `${serviceCoverage}. Cumbria Spas also services a customer in Bedale.` },
       { q: 'Can my hot tub balance its own chemicals?', a: 'Standard domestic tubs need manual chemical balancing. Automated dosing comes with a commercial spa and plant room, and the domestic route is Arctic Spas\' Spa Boy saltwater system.' },
     ],
     related: ['hot-tub-installation', 'arctic-spas-dealer', 'commercial-and-mosaic-tiled-spas', 'trade-and-holiday-park-hot-tubs'],

@@ -89,3 +89,47 @@ build (247 Plumbers Norwich) and were replaced.
 ## Article engine
 - Wired, not generating (brief): collection, route, template, queue of 900 in publish order. See
   `docs/ARTICLE-ENGINE.md`. Verified with a temporary fixture article that was removed before commit.
+
+## 17 Nov 2026: the SEO engine's drip articles, and Ballycastle removed
+Kieran, 17 Nov 2026: the engine side may write to this repo to wire it and fix content (claude-seo-engine
+`FIX-SITE-REPO-WIRING-2026-11-17.md`, D-2026-11-17-700). The drip worker and the engine are unchanged; this site was
+made to read what they already produce.
+- **Drip articles render here.** The drip worker (TheK-Dawg/worker-drip-worker) commits the engine's articles to
+  `src/content/resources/<slug>.md`: a JSON frontmatter (title, slug, description, seo_title, hero_lead, category,
+  published, faqs [{question, answer}], optional related_service, tag, hero_image) over an HTML body. A second
+  collection, `resources` (`src/content.config.ts`), takes that file as written, with a lenient schema so a worker
+  commit can never break the build. `src/lib/articles.ts` merges it with the hand-written `articles` collection.
+  Everything that lists articles (resources index, hub pages, sitemap, llms.txt, related links) reads that one list.
+  Both kinds render at `/resources/<slug>/` through the same template, with the same hero, rail, contents, figures,
+  FAQ and form.
+  - The hub is the slug's `<hub>-` prefix. An engine topical with no hub takes the home picks and the
+    generic quote-form heading already used on `/resources/`.
+  - The plan requires the residential-and-commercial line on every article (QA checks it). An engine body without it
+    gets the site's own `customersLine` as a paragraph under the body, never inside it.
+  - **Open conflict (claude-seo-engine B1054):** the engine's CTA line says "free quote", which `scripts/qa.mjs`
+    bans. QA will fail each engine article on that phrase until Kieran settles it at source. The site never rewrites
+    the engine's words.
+  - The body's words are untouched. The page only changes addresses:
+    - the engine's absolute `cumbriaspas.co.uk` links become site-relative, and a root-form `/<slug>/` link to an
+      article this site serves becomes `/resources/<slug>/`;
+    - the CTA's own-page `#contact` becomes `#quote`.
+- **Same URL, newest article wins.** The engine's December article `wood-fired-hot-tubs-kirkby-in-furness` has the
+  same URL as the hand-written 5 Nov article. When a drip file and a hand-written article share a slug, the drip
+  file renders and the hand-written one stops. That is the drip worker's own rule (v8: the newest article owns its
+  URL), and the URL never changes, so no link breaks. The hand-written file stays in git and serves until the
+  engine's file is committed on its date.
+- **The engine's CTA and takeaways boxes** (`.lmb-cta*`, `.lmb-takeaways*`) are styled in `src/styles/global.css`.
+  The rules are global, because set:html content never takes an Astro-scoped rule. Every value is copied from this
+  site's own article takeaways box, article rail and `.btn-primary`; no new colour. The engine's site CSS gate
+  checks these classes before it loads or releases any article.
+- **Ballycastle removed** (Kieran: dropped from the approved plan; engine D-2026-11-15-230). Removed from:
+  - `src/data/towns.json`, which leaves the 99 approved towns in the engine brief's order;
+  - the two hub sentences on Hot Tub Repair & Servicing (body and FAQ). Bedale stays.
+  - the nine queue rows in `src/data/article-queue.json` (`towns` 99).
+  The `plan/` copies are the approved plan's record and keep it. **`npm run queue` regenerates `src/data` from
+  `plan/seed.json` and would put Ballycastle back:** do not run it until site-planner drops the town and the plan is
+  re-approved (claude-seo-engine B791).
+- "Hight Bridge Lodge" stays exactly as it is (Kieran, 17 Nov: correct).
+- **Deploys.** This repo is in claude-seo-engine's drip deploy registry (`scripts/drip-deploy-sites.json`): the
+  VPS cron builds and deploys `site-cumbriaspires-preview2` whenever `main` moves. Push to `main`, and never deploy
+  this Worker from another checkout: a deploy from an older checkout rolls the site back.

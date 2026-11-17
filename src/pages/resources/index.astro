@@ -28,7 +28,7 @@ const schema = [
     hasPart: articles.map((a) => ({ '@type': 'Article', headline: a.data.title, url: new URL(articleHref(a.data), business.url).href })),
   },
 ];
-const card = (a: (typeof articles)[number]) => a.data.images[0] ?? pick(a.data.hub, 0);
+const card = (a: (typeof articles)[number]) => a.data.images[0] ?? pick(a.data.hub ?? 'home', 0);
 ---
 
 <Base title="Hot Tub Resources by Town | Cumbria Spas" description="Resources from Cumbria Spas on wood-fired and electric hot tubs, hot tub repair and servicing, saunas, pools and swim spas, town by town across Cumbria and beyond." page="resources" crumbs={crumbs} schema={schema}>
@@ -54,7 +54,7 @@ const card = (a: (typeof articles)[number]) => a.data.images[0] ?? pick(a.data.h
             <li class="rs__card">
               <figure class="rs__img"><img src={card(a).src} alt={card(a).alt} width="800" height="500" loading="lazy" decoding="async" /></figure>
               <div class="rs__body">
-                <p class="rs__hub">{hubBySlug[a.data.hub].name}</p>
+                {a.data.hub && <p class="rs__hub">{hubBySlug[a.data.hub].name}</p>}
                 <h3 class="rs__t"><a href={articleHref(a.data)}>{a.data.title}</a></h3>
                 <p class="rs__d">{a.data.description}</p>
               </div>
